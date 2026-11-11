@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cat4K | เติมเกม แอพพรีเมียม Gift Card ราคาคุ้ม</title>
+<meta name="description" content="Cat4K ร้านเติมเกมออนไลน์ แอพพรีเมียม สตรีมมิ่ง และ Gift Card ราคาคุ้ม บริการไว ตลอด 24 ชม.">
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>try{if(localStorage.getItem('cat4k_theme')==='dark')document.documentElement.dataset.theme='dark'}catch(e){}</script>
+<style>
+/* ---- สี: โทนโปสเตอร์ Cat4K (ฟ้าสด ชมพูสด เหลืองดาว) มี 2 โหมด สลับด้วย data-theme บน <html> ---- */
+:root{
+  color-scheme:light;
+  --sky:#1a82e8; --pink:#ff2d7a; --star:#ffd23f;  /* สีแบรนด์ ใช้เป็นพื้นปุ่ม/ป้าย: --sky/--pink ตั้งจากหน้าตั้งค่าร้าน */
+  --bg:#dcefff; --bg2:#86caff;                    /* พื้นหน้าเว็บ และสีท้องฟ้าด้านบน */
+  --panel:#ffffff; --panel2:#edf6ff; --line:#cfe4f8;
+  --text:#17305c; --muted:#506a8f;
+  /* เฉดสำหรับตัวหนังสือสีฟ้า/ชมพู: เข้มขึ้นในโหมดสว่าง อ่อนลงในโหมดมืด ให้อ่านชัดทั้งคู่ */
+  --sky-t:color-mix(in srgb,var(--sky) 76%,#001a4d); --pink-t:color-mix(in srgb,var(--pink) 78%,#4d0020);
+  --glow:rgba(30,110,210,.16);
+  --grad:linear-gradient(135deg,var(--pink),var(--sky));
+  --pinkgrad:linear-gradient(180deg,color-mix(in srgb,var(--pink) 78%,#fff),var(--pink));
+  --skygrad:linear-gradient(180deg,color-mix(in srgb,var(--sky) 78%,#fff),var(--sky));
+  --line-green:#06c755; --r:18px;
+}
+:root[data-theme=dark]{
+  color-scheme:dark;
+  --bg:#071226; --bg2:#123066;
+  --panel:#11224a; --panel2:#1a3063; --line:#2a4683;
+  --text:#eaf3ff; --muted:#a3b8da;
+  --sky-t:color-mix(in srgb,var(--sky) 50%,#fff); --pink-t:color-mix(in srgb,var(--pink) 58%,#fff);
+  --glow:rgba(0,0,0,.35);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{font-family:Prompt,system-ui,sans-serif;color:var(--text);line-height:1.5;background:
+  radial-gradient(760px 460px at 100% 0,color-mix(in srgb,var(--pink) 24%,transparent),transparent 70%),
+  radial-gradient(760px 520px at 0 100%,color-mix(in srgb,var(--pink) 18%,transparent),transparent 70%),
+  linear-gradient(180deg,var(--bg2),var(--bg) 620px);background-color:var(--bg);background-attachment:fixed}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+button{font:inherit;cursor:pointer;border:0;color:inherit;background:none}
+button:disabled{opacity:.5;cursor:wait}
+:focus-visible{outline:2px solid var(--sky);outline-offset:2px}
+.wrap{max-width:1180px;margin:auto;padding:0 16px}
+.muted{color:var(--muted);font-size:14px}
+.pre{white-space:pre-line}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 20px;border-radius:99px;font-weight:600;font-size:15px;white-space:nowrap;transition:filter .2s}
+.btn:hover{filter:brightness(1.08)}
+.btn-main{background:var(--pinkgrad);color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.28);box-shadow:inset 0 2px 0 rgba(255,255,255,.4),0 4px 12px color-mix(in srgb,var(--pink) 38%,transparent)}
+.btn-ghost{border:1px solid var(--line);background:var(--panel);color:var(--sky-t)}
+.btn-line{background:var(--line-green);color:#fff}
+
+/* header */
+header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--panel) 90%,transparent);backdrop-filter:blur(10px);box-shadow:0 2px 14px var(--glow)}
+header::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--grad)}
+.bar{display:flex;align-items:center;gap:16px;height:66px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:22px}
+.brand img{width:42px;height:42px;border-radius:50%;border:2px solid transparent;background:linear-gradient(var(--panel),var(--panel)) padding-box,var(--grad) border-box;object-fit:cover}
+.brand b{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+nav{display:flex;align-items:center;gap:2px;flex:1;min-width:0}
+nav a{padding:8px 10px;border-radius:99px;color:var(--muted);font-size:15px;white-space:nowrap}
+nav a:hover{color:var(--text);background:var(--panel2)}
+/* ปุ่มสลับโหมด: ติดขอบขวาของแถวเมนูเสมอ แม้แถวเมนูจะเลื่อนได้บนมือถือ */
+.themebtn{margin-left:auto;position:sticky;right:0;flex-shrink:0;width:34px;height:34px;border-radius:50%;background:var(--panel);border:1px solid var(--line);font-size:15px;box-shadow:-10px 0 8px -2px var(--panel)}
+.themebtn:hover{border-color:var(--sky)}
+.auth{display:flex;gap:8px;margin-left:auto}
+.auth .btn{display:inline-block;padding:8px 14px;font-size:14px;max-width:170px;overflow:hidden;text-overflow:ellipsis}
+/* เมนูผู้ใช้: กดปุ่มชื่อแล้วเปิดรายการ (บัญชีของฉัน / แอดมิน / ออกจากระบบ) */
+.umenu{position:relative}
+.umenu summary{list-style:none;cursor:pointer;vertical-align:top}
+.umenu summary::-webkit-details-marker{display:none}
+.umenu:not([open]) .umenu-list{display:none}
+.umenu-list{position:absolute;right:0;top:calc(100% + 8px);z-index:60;min-width:200px;display:grid;gap:2px;padding:6px;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 26px var(--glow)}
+.umenu-list a,.umenu-list button{display:block;width:100%;text-align:left;padding:9px 12px;border-radius:10px;font-size:15px;color:var(--text);white-space:nowrap}
+.umenu-list a:hover,.umenu-list button:hover{background:var(--panel2)}
+@media (max-width:980px){
+  .bar{flex-wrap:wrap;height:auto;padding:10px 0 0;gap:8px}
+  nav{order:3;flex-basis:100%;overflow-x:auto;padding-bottom:6px;scrollbar-width:none}
+  .auth .btn{max-width:120px;padding:8px 12px}
+}
+
+/* hero slider */
+.hero{position:relative;margin-top:20px}
+.slides{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;border-radius:24px;scrollbar-width:none;border:3px solid var(--panel);box-shadow:0 8px 24px var(--glow)}
+.slides::-webkit-scrollbar{display:none}
+.slide{color:#fff;flex:0 0 100%;scroll-snap-align:start;min-height:320px;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:32px 64px;
+  background:radial-gradient(circle at 80% 30%,#ffffff2e,transparent 45%),linear-gradient(120deg,color-mix(in srgb,var(--c) 40%,var(--pink)),var(--c) 55%,color-mix(in srgb,var(--c) 40%,var(--sky)))}
+.slide h1,.slide h2{font-size:clamp(24px,4vw,44px);line-height:1.2;text-shadow:0 2px 8px rgba(0,0,0,.2)}
+.slide p{color:#f2f8ff;margin:8px 0 18px;font-size:clamp(14px,1.6vw,18px)}
+.slide img{width:clamp(110px,22vw,230px);border-radius:24px;transform:rotate(4deg);box-shadow:0 20px 40px rgba(0,0,0,.35)}
+.slide .emo{font-size:clamp(70px,14vw,150px);filter:drop-shadow(0 10px 20px rgba(0,0,0,.3))}
+.slide .btn{background:#fff;color:color-mix(in srgb,var(--pink) 78%,#4d0020);box-shadow:0 4px 10px rgba(0,0,0,.15)}
+.tag{display:inline-block;background:var(--star);color:#4a3200;font-size:12px;font-weight:700;padding:2px 12px;border-radius:99px;margin-bottom:8px}
+.arrow{position:absolute;top:calc(50% - 10px);translate:0 -50%;width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.35);color:#fff}
+.arrow:hover{background:rgba(0,0,0,.6)}
+.prev{left:14px}.next{right:14px}
+.dots{display:flex;justify-content:center;gap:6px;margin-top:10px}
+.dots button{width:8px;height:8px;border-radius:99px;background:color-mix(in srgb,var(--text) 25%,transparent);transition:width .3s}
+.dots button.on{width:26px;background:var(--pinkgrad)}
+@media (max-width:640px){
+  .slide{min-height:190px;padding:22px 24px}
+  .arrow{display:none}
+}
+
+/* search */
+.search{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:99px;padding:0 20px;margin:22px 0 28px}
+.search:focus-within{border-color:var(--sky)}
+.search input{flex:1;min-width:0;background:none;border:0;color:var(--text);font:inherit;padding:14px 0;outline:none}
+
+/* headings: แคปซูลขาวตัวหนังสือชมพู แบบป้ายในโปสเตอร์ */
+.h{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:34px 0 14px}
+.h h2{font-size:21px;color:var(--pink-t);background:var(--panel);padding:6px 20px;border-radius:22px;box-shadow:0 4px 12px var(--glow)}
+.h h3{font-size:17px}
+.more{flex-shrink:0;color:var(--sky-t);font-size:14px;background:var(--panel);padding:4px 14px;border-radius:99px;box-shadow:0 2px 8px var(--glow)}
+.more:hover{filter:brightness(1.06)}
+
+/* categories */
+.cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,170px));gap:12px}  /* กล่องกว้างไม่เกิน 170px ไม่ยืดเต็มแถวเมื่อมีไม่กี่หมวด */
+.cat{background:var(--panel);border:2px solid var(--panel);border-radius:var(--r);padding:18px 8px;text-align:center;transition:transform .2s}
+.cat:hover{border-color:var(--pink);transform:translateY(-3px)}
+.cat i{font-style:normal;font-size:34px;display:block;margin-bottom:4px}
+.cat span{font-size:14px;font-weight:500}
+@media (max-width:760px){.cats{grid-template-columns:repeat(3,1fr)}}
+
+/* product rows */
+.sec{scroll-margin-top:120px}
+.row-wrap{position:relative}
+.row{display:grid;grid-auto-flow:column;grid-auto-columns:150px;gap:12px;overflow-x:auto;scroll-snap-type:x proximity;padding:4px 2px 14px;scrollbar-width:thin;scrollbar-color:color-mix(in srgb,var(--text) 25%,transparent) transparent}
+.sec.all .row{grid-auto-flow:row;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));overflow:visible}
+.rarr{position:absolute;top:38%;z-index:2;width:36px;height:36px;border-radius:50%;background:var(--panel);border:1px solid var(--line);box-shadow:0 2px 8px var(--glow)}
+.rarr:hover{border-color:var(--sky)}
+.rarr.l{left:-14px}.rarr.r{right:-14px}
+.sec.all .rarr{display:none}
+@media (max-width:760px){.rarr{display:none}.row{grid-auto-columns:128px}}
+.card{background:var(--panel);border:2px solid var(--panel);border-radius:var(--r);overflow:hidden;position:relative;scroll-snap-align:start;transition:transform .2s}
+.card:hover{border-color:var(--pink);transform:translateY(-3px)}
+.card .logo{aspect-ratio:1;display:grid;place-items:center;font-size:30px;font-weight:700;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.35);text-align:center;line-height:1.1;padding:6px}
+.card .logo img{width:100%;height:100%;object-fit:cover}
+.card:has(.logo img) .logo{padding:0}
+.card .off{position:absolute;top:8px;left:8px;background:var(--star);color:#4a3200;font-size:12px;font-weight:700;padding:2px 9px;border-radius:99px;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.card .name{padding:10px 12px;font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card .name small{display:block;color:var(--pink-t);font-weight:600}
+.empty{display:none;text-align:center;color:var(--muted);padding:40px 0}
+
+/* how-to + news */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;counter-reset:s}
+.step{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.step b{display:block;font-size:17px;margin:8px 0 4px}
+.step b::before{counter-increment:s;content:counter(s) ". ";color:var(--pink-t)}
+.step p{color:var(--muted);font-size:14px}
+.step i{font-style:normal;font-size:30px}
+.news{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.post{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:block}
+.post .th{aspect-ratio:16/8;display:grid;place-items:center;font-size:54px}
+.post div:last-child{padding:14px 16px}
+.post h3{font-size:16px;margin-bottom:4px}
+.post small{color:var(--muted)}
+
+/* member views */
+.view{min-height:60vh;padding-bottom:20px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:grid;gap:12px;align-content:start}
+.grid2{display:grid;grid-template-columns:1fr 1.4fr;gap:14px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}}
+.big{font-size:40px;font-weight:700;width:fit-content;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.f{display:grid;gap:4px;font-size:14px;color:var(--muted)}
+.f input,.f textarea,.f select{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px 12px;color:var(--text);font:inherit;width:100%}
+.f input:focus,.f textarea:focus,.f select:focus{outline:none;border-color:var(--sky)}
+.f input:disabled{opacity:.6}
+.f input[type=color]{padding:2px;height:42px}
+.f input[type=file]{border:0;background:none;padding:4px 0;font-size:13px}
+.list{display:grid;gap:8px}
+.item{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.item>div:first-child{min-width:0;overflow-wrap:anywhere}
+.item small{display:block;color:var(--muted)}
+.item .r{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end;flex-shrink:0}
+.item .note{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px 10px;color:var(--text);font:inherit;font-size:14px;width:170px}
+.item .amt{width:120px}
+.item .mo{width:104px}
+.item .bd{width:96px}
+.sel{user-select:all;color:var(--text)}
+@media (max-width:640px){.item{flex-direction:column;align-items:stretch}.item .r{justify-content:flex-start}}
+.badge{font-size:12px;font-weight:600;padding:3px 10px;border-radius:99px;white-space:nowrap}
+.badge.y{background:#fef3c7;color:#92400e}.badge.g{background:#dcfce7;color:#166534}.badge.r{background:#ffe4e6;color:#9f1239}
+:root[data-theme=dark] .badge.y{background:#fde04722;color:#fde047}
+:root[data-theme=dark] .badge.g{background:#4ade8022;color:#4ade80}
+:root[data-theme=dark] .badge.r{background:#fb718522;color:#fb7185}
+.tabs{display:flex;gap:6px;margin-bottom:16px;overflow-x:auto;padding:2px}
+.tabs button{padding:8px 16px;border-radius:99px;border:1px solid var(--line);background:var(--panel);color:var(--muted);white-space:nowrap}
+.tabs button.on{background:var(--pinkgrad);border-color:transparent;color:#fff;font-weight:600}
+
+/* page editor */
+.ed-h{font-weight:600;color:var(--sky-t);margin:18px 0 6px}
+.ed-obj{display:grid;gap:10px;padding:4px 14px 14px}
+.ed-list details{background:var(--panel);border:1px solid var(--line);border-radius:12px;margin-bottom:6px}
+.ed-list details details{background:var(--panel2)}
+.ed-list details details details{background:var(--panel)}
+.ed-list summary{padding:10px 14px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.ed-list summary span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ed-list summary i{display:flex;gap:4px;flex-shrink:0}
+.mini{border:1px solid var(--line);border-radius:8px;padding:2px 10px;font-size:13px;color:var(--muted)}
+.mini:hover{border-color:var(--sky);color:var(--text)}
+.add{margin:2px 0 6px;font-size:14px;padding:6px 14px}
+/* on-page edit mode (admin) */
+.edonly{display:none}
+.editing .edonly{display:block}
+.addtile{border:2px dashed color-mix(in srgb,var(--muted) 60%,transparent);border-radius:var(--r);color:var(--muted);min-height:64px;padding:10px;font-size:14px;width:100%}
+.addtile:hover{border-color:var(--sky);color:var(--sky-t)}
+.editing{padding-bottom:64px}
+.editing [data-edit]{outline:1px dashed var(--sky-t);outline-offset:3px;cursor:pointer;scroll-margin:130px 0 90px}
+.editing [data-edit]:hover{outline:2px solid var(--sky)}
+.editing [data-edit].picked{outline:3px solid var(--pink)}
+.editing .sec .row{grid-auto-flow:row;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));overflow:visible}
+.editing .rarr,.editing .more,.editing .fab-edit{display:none}
+.editing .fab{bottom:78px}
+.fab.off{display:none}                         /* แอดมินเว้นข้อความว่าง = ซ่อนปุ่ม */
+.editing .fab.off{display:inline-flex;opacity:.55}  /* ...แต่ตอนแก้ไขยังต้องกดได้ */
+.editing .card:hover,.editing .cat:hover{transform:none}
+#edBar{position:fixed;left:0;right:0;bottom:0;z-index:70;display:flex;align-items:center;gap:8px;min-height:60px;padding:8px 16px;background:var(--panel);border-top:3px solid var(--pink);box-shadow:0 -4px 16px var(--glow)}
+#edBar span{flex:1;font-size:14px}
+#drawer{position:fixed;top:0;right:0;bottom:60px;width:380px;z-index:65;background:var(--panel);border-left:1px solid var(--line);box-shadow:-6px 0 20px var(--glow);overflow:auto;padding:14px}
+#drBody>.ed-obj{padding:10px 0 0}
+.dr-tools{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.has-drawer{padding-right:380px}
+.has-drawer .fab{right:398px}
+.has-drawer nav{overflow:hidden}
+@media (max-width:760px){
+  #edBar span{display:none}
+  #edBar .btn{flex:1}
+  #drawer{top:auto;left:0;width:auto;height:50vh;border-left:0;border-top:2px solid var(--sky)}
+  .has-drawer{padding-right:0;padding-bottom:calc(50vh + 64px)}
+  .has-drawer .fab{right:18px;bottom:calc(50vh + 72px)}
+  .has-drawer [data-edit]{scroll-margin-bottom:calc(50vh + 80px)}
+}
+
+/* dialogs + toast */
+dialog{margin:auto;background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:22px;padding:26px;width:min(420px,92vw)}
+dialog::backdrop{background:rgba(5,20,50,.6)}
+dialog form{display:grid;gap:12px}
+dialog h3{font-size:20px;padding-right:30px}
+.x{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;color:var(--muted)}
+.x:hover{background:var(--panel2);color:var(--text)}
+#fAuth:not([data-mode=register]) .reg,#fAuth:not([data-mode=otp]) .otp,#fAuth[data-mode=otp] .cred{display:none}
+.rowb{display:flex;justify-content:space-between;gap:10px}
+.f input[name=otp]{font-size:24px;letter-spacing:8px;text-align:center}
+.linkbtn{color:var(--sky-t);font-size:14px}
+/* แพ็กเกจ: แคปซูลฟ้า + ราคาชมพู แบบตารางราคาในโปสเตอร์ */
+.pks{display:grid;gap:6px;max-height:40vh;overflow:auto;padding:2px}
+.pk{display:flex;align-items:center;gap:10px;border:2px solid var(--line);border-radius:99px;padding:6px 16px 6px 12px;cursor:pointer}
+.pk:has(:checked){border-color:var(--pink);background:var(--panel2)}
+.pk span{background:var(--skygrad);color:#fff;font-weight:600;border-radius:99px;padding:4px 14px;text-shadow:0 1px 2px rgba(0,0,0,.25)}
+.pk small{font-size:12px}
+.pk b{margin-left:auto;color:var(--pink-t);font-size:17px}
+#toast{position:fixed;inset:auto 0 26px 0;margin:auto;width:fit-content;max-width:90vw;background:#12351f;color:#d7ffe4;border:1px solid #2f7a4a;border-radius:14px;padding:12px 18px;font-size:15px;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+#toast.bad{background:#3d1220;color:#ffd9e2;border-color:#8f2f4a}
+
+/* footer */
+footer{margin-top:60px;background:var(--panel);border-top:1px solid var(--line)}
+.fcols{display:grid;grid-template-columns:2fr 1fr 1fr;gap:30px;padding:40px 16px}
+footer h4{color:var(--pink-t);margin-bottom:10px}
+footer p,footer li{color:var(--muted);font-size:14px}
+footer ul{list-style:none;display:grid;gap:6px}
+footer a:hover{color:var(--sky-t)}
+.copy{border-top:1px solid var(--line);text-align:center;padding:16px;color:var(--muted);font-size:13px}
+@media (max-width:760px){.fcols{grid-template-columns:1fr}}
+
+.fab{position:fixed;right:18px;bottom:18px;z-index:40;padding:12px 18px;box-shadow:0 8px 22px rgba(0,40,100,.28)}
+.card,.cat,.panel,.item,.step,.post,.search{box-shadow:0 6px 18px var(--glow)}
+.fab-edit{right:auto;left:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media (max-width:760px){.grid3{grid-template-columns:1fr}}
+.grid3>.btn{align-self:end}
+.rowb .r{display:flex;gap:6px;flex-shrink:0;align-items:flex-start}
+.credbox{font-size:17px;line-height:1.9;background:var(--panel2);border-radius:12px;padding:10px 16px}
+summary.linkbtn{cursor:pointer;width:fit-content}
+/* ไอคอนที่เป็นรูป (แทนอีโมจิ) */
+img.ico{display:inline-block;object-fit:contain}
+.cat i img.ico{display:block;width:46px;height:46px;margin:0 auto}
+.h h2 img.ico{height:1.25em;width:auto;vertical-align:-.25em;margin-right:4px}
+.step i img.ico{display:block;width:42px;height:42px}
+.post .th img.ico{width:100%;height:100%;object-fit:cover}
+.adm{background:var(--star);color:#4a3200;text-shadow:none;font-size:11px;font-weight:700;padding:1px 8px;border-radius:99px;letter-spacing:.5px;vertical-align:middle}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+</head>
+<body id="top">
+
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="#top" data-edit="settings"><img class="js-logo" src="logo.png" alt=""><span class="js-name">Cat<b>4K</b></span></a>
+    <nav aria-label="เมนูหลัก" data-edit="nav">
+      <a href="#top" data-nav="home">หน้าหลัก</a>
+      <a href="#wallet" data-nav="wallet">กระเป๋าตัง</a>
+      <a href="#orders" data-nav="orders">ประวัติสั่งซื้อ</a>
+      <a href="#check" data-nav="check">เช็ควันหมดอายุ</a>
+      <a href="#how" data-nav="how">วิธีสั่งซื้อ</a>
+      <a href="#contact" data-nav="contact">ติดต่อเรา</a>
+      <button class="themebtn" id="themeBtn" type="button" aria-label="สลับโหมดสว่าง/มืด"></button>
+    </nav>
+    <div class="auth" id="authBox"></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="home">
+    <section class="hero" aria-label="โปรโมชัน">
+      <div class="slides" id="slides"></div>
+      <button class="arrow prev" type="button" aria-label="สไลด์ก่อนหน้า">❮</button>
+      <button class="arrow next" type="button" aria-label="สไลด์ถัดไป">❯</button>
+      <div class="dots" id="dots"></div>
+      <button class="addtile edonly" type="button" data-add="slides">+ เพิ่มแบนเนอร์</button>
+    </section>
+
+    <label class="search"><span aria-hidden="true">🔍</span><input id="q" type="search" placeholder="ค้นหาเกม แอพ หรือ Gift Card..." aria-label="ค้นหาสินค้า"></label>
+
+    <div class="h"><h2 class="js-hcats" data-edit="settings">สินค้าแนะนำ</h2></div>
+    <div class="cats" id="cats"></div>
+
+    <div id="products"></div>
+    <button class="addtile edonly" type="button" data-add="sections" style="margin-top:20px">+ เพิ่มหมวดสินค้า</button>
+    <p class="empty" id="empty">ไม่พบสินค้าที่ค้นหา ลองทักแอดมินได้เลย 😺</p>
+
+    <section id="how" class="sec">
+      <div class="h"><h2 class="js-hhow" data-edit="settings">วิธีสั่งซื้อ</h2></div>
+      <div class="steps" id="steps"></div>
+      <button class="addtile edonly" type="button" data-add="steps" style="margin-top:12px">+ เพิ่มขั้นตอน</button>
+    </section>
+
+    <section id="news" class="sec">
+      <div class="h"><h2 class="js-hnews" data-edit="settings">บทความ-ข่าวสาร</h2></div>
+      <div class="news" id="newsList"></div>
+      <button class="addtile edonly" type="button" data-add="news" style="margin-top:12px">+ เพิ่มข่าว</button>
+    </section>
+  </div>
+
+  <section class="view" id="view-wallet" hidden>
+    <div class="h"><h2>💰 กระเป๋าตัง</h2></div>
+    <div class="grid2">
+      <div class="panel"><span class="muted">ยอดเงินคงเหลือ</span><div class="big" id="wBal">฿0.00</div><p class="muted">ใช้ซื้อสินค้าในเว็บนี้เท่านั้น</p></div>
+      <form class="panel" id="fTopup">
+        <b>แจ้งเติมเงิน</b>
+        <p class="muted pre" id="payInfo"></p>
+        <label class="f">จำนวนเงินที่โอน (บาท)<input name="amount" type="number" min="1" max="100000" step="0.01" required></label>
+        <label class="f">หมายเหตุ เช่น เวลาที่โอน หรือชื่อบัญชีผู้โอน<input name="note" maxlength="300"></label>
+        <button class="btn btn-main" type="submit">แจ้งเติมเงิน</button>
+        <a class="btn btn-line js-line" href="#" target="_blank" rel="noopener">💬 ส่งสลิปทาง LINE</a>
+      </form>
+    </div>
+    <div class="h"><h3>ประวัติเติมเงิน</h3></div>
+    <div class="list" id="wList"></div>
+  </section>
+
+  <section class="view" id="view-orders" hidden>
+    <div class="h"><h2>🧾 ประวัติสั่งซื้อ</h2></div>
+    <div class="list" id="oList"></div>
+  </section>
+
+  <section class="view" id="view-account" hidden>
+    <div class="h"><h2>👤 บัญชีของฉัน</h2></div>
+    <div class="grid2">
+      <form class="panel" id="fAcct">
+        <p class="muted" id="acctRole"></p>
+        <label class="f">อีเมล<input name="email" disabled></label>
+        <label class="f">ชื่อที่แสดง<input name="display_name" maxlength="60" required></label>
+        <label class="f">เบอร์โทร<input name="phone" maxlength="30" autocomplete="tel"></label>
+        <label class="f">LINE ID<input name="line_id" maxlength="60"></label>
+        <button class="btn btn-main" type="submit">บันทึก</button>
+      </form>
+      <div class="panel">
+        <form id="fPass" style="display:grid;gap:12px">
+          <b>เปลี่ยนรหัสผ่าน</b>
+          <label class="f">รหัสผ่านใหม่ (อย่างน้อย 6 ตัว)<input name="password" type="password" minlength="6" required autocomplete="new-password"></label>
+          <button class="btn btn-ghost" type="submit">เปลี่ยนรหัสผ่าน</button>
+        </form>
+        <button class="btn btn-ghost" id="btnLogout" type="button">ออกจากระบบ</button>
+      </div>
+    </div>
+    <div class="panel" id="acctAdmin" style="margin-top:14px" hidden>
+      <b>🛡️ เครื่องมือแอดมิน</b>
+      <div class="rowb" style="justify-content:flex-start;flex-wrap:wrap">
+        <button class="btn btn-main" type="button" data-start-edit>✏️ แก้ไขหน้าเว็บ</button>
+        <a class="btn btn-ghost" href="#admin" data-atab="topups">💰 คำขอเติมเงิน</a>
+        <a class="btn btn-ghost" href="#admin" data-atab="orders">🧾 ออเดอร์</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="view" id="view-check" hidden>
+    <div class="h"><h2>📅 เช็ควันหมดอายุ</h2></div>
+    <div class="grid2">
+      <form class="panel" id="fCheck">
+        <p class="muted">กรอกชื่อผู้ใช้และรหัสผ่านที่ได้รับจากร้านตอนซื้อแอป</p>
+        <label class="f">ชื่อผู้ใช้ หรืออีเมลที่ใช้ซื้อ<input name="username" required maxlength="200" autocomplete="username" autocapitalize="none" spellcheck="false"></label>
+        <label class="f">รหัสผ่าน<input name="password" type="password" required maxlength="40" autocomplete="current-password"></label>
+        <button class="btn btn-main" type="submit">ตรวจสอบ</button>
+      </form>
+      <div class="panel" id="checkOut"><p class="muted">ผลการตรวจสอบจะแสดงที่นี่</p></div>
+    </div>
+  </section>
+
+  <section class="view" id="view-admin" hidden>
+    <div class="h"><h2>⚙️ แอดมิน</h2></div>
+    <div class="tabs" id="aTabs">
+      <button type="button" data-tab="topups">คำขอเติมเงิน</button>
+      <button type="button" data-tab="orders">ออเดอร์</button>
+      <button type="button" data-tab="members">สมาชิก / ยอดเงิน</button>
+      <button type="button" data-tab="subs">ลูกค้าแอป</button>
+      <button type="button" data-start-edit>✏️ แก้ไขหน้าเว็บ</button>
+    </div>
+    <div class="apane list" id="a-topups"></div>
+    <div class="apane" id="a-orders">
+      <label class="f" style="max-width:220px;margin-bottom:12px">สถานะ
+        <select id="aStatus"><option value="pending">รอดำเนินการ</option><option value="done">สำเร็จ</option><option value="refunded">คืนเงินแล้ว</option></select>
+      </label>
+      <div class="list" id="aOrders"></div>
+    </div>
+    <div class="apane" id="a-members">
+      <p class="muted">เพิ่มหรือหักยอดเงินในกระเป๋าตังของสมาชิกได้โดยตรง ทุกครั้งถูกบันทึกในประวัติ และสมาชิกเห็นรายการนั้นในหน้ากระเป๋าตังของตัวเอง</p>
+      <label class="search"><span aria-hidden="true">🔍</span><input id="memQ" type="search" placeholder="ค้นหาชื่อ อีเมล เบอร์โทร หรือ LINE ของสมาชิก" aria-label="ค้นหาสมาชิก"></label>
+      <div class="list" id="memList"></div>
+      <div class="h"><h3>ประวัติการปรับยอดล่าสุด</h3></div>
+      <div class="list" id="adjList"></div>
+    </div>
+    <div class="apane" id="a-subs">
+      <form class="panel" id="fCust">
+        <b>🔑 สร้างบัญชีและเพิ่มแอปให้ลูกค้า</b>
+        <p class="muted">ใช้กับลูกค้าที่ซื้อทาง LINE (ลูกค้าที่ซื้อผ่านเว็บได้บัญชีอัตโนมัติ) ถ้าอีเมลนี้มีบัญชีอยู่แล้ว ระบบจะเพิ่มหรือต่ออายุแอปในบัญชีเดิม ไม่สร้างบัญชีซ้ำ</p>
+        <div class="grid3">
+          <label class="f">ชื่อลูกค้า<input name="name" required maxlength="80"></label>
+          <label class="f">อีเมลที่ลูกค้าใช้กับแอป (ถ้ามี)<input name="email" type="email" maxlength="200"></label>
+          <label class="f">ช่องทางติดต่อ (LINE / เบอร์)<input name="contact" maxlength="120"></label>
+          <label class="f">แอป / แพ็กเกจ<input name="app" required maxlength="100" list="appList"></label>
+          <label class="f">วันเริ่ม<input name="starts_on" type="date" required></label>
+          <label class="f">ระยะเวลา<select name="months"><option value="1">1 เดือน</option><option value="2">2 เดือน</option><option value="3">3 เดือน</option><option value="6">6 เดือน</option><option value="12">1 ปี</option><option value="">กำหนดวันเอง</option></select></label>
+          <label class="f">แถมเพิ่ม (วัน)<input name="bonus" type="number" min="0" max="365" step="1" value="0" inputmode="numeric"></label>
+          <label class="f">วันหมดอายุ<input name="expires_on" type="date" required></label>
+          <label class="f">ข้อความถึงลูกค้า (ไม่บังคับ)<input name="subnote" maxlength="300"></label>
+          <label class="f">โน้ตภายใน (ลูกค้าไม่เห็น)<input name="note" maxlength="300"></label>
+        </div>
+        <button class="btn btn-main" type="submit">สร้างบัญชีและเพิ่มแอป</button>
+      </form>
+      <div id="custNew"></div>
+      <label class="search"><span aria-hidden="true">🔍</span><input id="custQ" type="search" placeholder="ค้นหาชื่อลูกค้า ชื่อผู้ใช้ อีเมล หรือช่องทางติดต่อ" aria-label="ค้นหาลูกค้า"></label>
+      <div class="list" id="custList"></div>
+      <datalist id="appList"></datalist>
+    </div>
+  </section>
+</main>
+
+<footer id="contact">
+  <div class="wrap fcols">
+    <div>
+      <a class="brand" href="#top" data-edit="settings"><img class="js-logo" src="logo.png" alt=""><span class="js-name">Cat<b>4K</b></span></a>
+      <p class="pre" id="about" style="margin-top:12px" data-edit="settings"></p>
+    </div>
+    <div data-edit="footer">
+      <h4 class="js-hcontact">ติดต่อเรา</h4>
+      <ul data-edit="settings">
+        <li><a class="js-line" href="#" target="_blank" rel="noopener">LINE: <span class="js-line-id"></span></a></li>
+        <li><a class="js-fb" href="#" target="_blank" rel="noopener">Facebook</a></li>
+      </ul>
+    </div>
+    <div data-edit="footer">
+      <h4 class="js-hhelp">ช่วยเหลือ</h4>
+      <ul id="fLinks"></ul>
+    </div>
+  </div>
+  <div class="copy" data-edit="footer"><span class="js-name">Cat4K</span> © <span id="yr"></span> <span id="fCopy">สงวนสิทธิ์</span></div>
+</footer>
+
+<a class="btn btn-line fab" id="fabContact" data-edit="fab" href="#" target="_blank" rel="noopener">💬 ติดต่อเรา</a>
+<button class="btn btn-main fab fab-edit" id="fabEdit" type="button" data-start-edit hidden>✏️ แก้ไขหน้าเว็บ</button>
+
+<div id="edBar" hidden>
+  <span>✏️ <b>โหมดแก้ไข</b> กดส่วนที่อยากแก้บนหน้าเว็บได้เลย</span>
+  <button class="btn btn-ghost" id="edSettings" type="button">⚙️ ตั้งค่าร้าน</button>
+  <button class="btn btn-main" id="edSave" type="button">💾 บันทึก</button>
+  <button class="btn btn-ghost" id="edExit" type="button">ออก</button>
+</div>
+<aside id="drawer" aria-label="แก้ไขส่วนที่เลือก" hidden>
+  <div class="rowb" style="align-items:center"><b id="drTitle"></b><button class="mini" id="drClose" type="button" aria-label="ปิดแผงแก้ไข">✕</button></div>
+  <div id="drBody"></div>
+</aside>
+
+<dialog id="dlgAuth" aria-labelledby="authTitle">
+  <form id="fAuth" data-mode="login">
+    <button class="x" type="button" aria-label="ปิด">✕</button>
+    <h3 id="authTitle">เข้าสู่ระบบ</h3>
+    <label class="f reg">ชื่อที่แสดง<input name="display_name" maxlength="60" autocomplete="nickname"></label>
+    <label class="f cred">อีเมล<input name="email" type="email" required autocomplete="email"></label>
+    <label class="f cred">รหัสผ่าน (อย่างน้อย 6 ตัว)<input name="password" type="password" required minlength="6"></label>
+    <label class="f reg">เบอร์โทร (ไม่บังคับ)<input name="phone" maxlength="30" autocomplete="tel"></label>
+    <p class="muted otp" id="otpMsg"></p>
+    <label class="f otp">รหัส OTP จากอีเมล<input name="otp" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6,10}" maxlength="10" title="กรอกตัวเลขรหัส OTP จากอีเมล"></label>
+    <button class="btn btn-main" type="submit">เข้าสู่ระบบ</button>
+    <div class="rowb cred">
+      <button class="linkbtn" type="button" id="authSwitch">ยังไม่มีบัญชี? สมัครสมาชิก</button>
+      <button class="linkbtn" type="button" id="authForgot">ลืมรหัสผ่าน</button>
+    </div>
+    <div class="rowb otp">
+      <button class="linkbtn" type="button" id="otpResend">ส่งรหัสอีกครั้ง</button>
+      <button class="linkbtn" type="button" id="otpBack">ใช้อีเมลอื่น</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="dlgOrder" aria-labelledby="oName">
+  <form id="fOrder">
+    <button class="x" type="button" aria-label="ปิด">✕</button>
+    <h3 id="oName"></h3>
+    <div class="pks" id="oPk"></div>
+    <label class="f"><span id="oHint"></span><input name="info" required maxlength="500" autocomplete="off"></label>
+    <p class="muted" id="oSubNote" hidden></p>
+    <p class="muted">ยอดเงินคงเหลือ: <b id="oBal"></b></p>
+    <button class="btn btn-main" type="submit">ชำระด้วยกระเป๋าตัง</button>
+    <a class="btn btn-line" id="oLine" href="#" target="_blank" rel="noopener">หรือสั่งซื้อทาง LINE</a>
+  </form>
+</dialog>
+
+<dialog id="dlgDone" aria-labelledby="doneTitle">
+  <form method="dialog">
+    <h3 id="doneTitle">🎉 สั่งซื้อสำเร็จ</h3>
+    <div id="doneBody" style="display:grid;gap:12px"></div>
+    <button class="btn btn-main" type="submit">รับทราบ</button>
+  </form>
+</dialog>
+
+<div id="toast" popover="manual" role="status"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// โปรเจกต์ Supabase ของหน้าร้าน (publishable key เปิดเผยได้ สิทธิ์คุมด้วย RLS ใน supabase-shop.sql)
+const SUPABASE_URL = 'https://gbkjzwdrauyuhtsbczug.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_ytySGP-EX1EVtVXZBQRofg_Z2yKfccx';
+const sb = window.supabase?.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// เนื้อหาเริ่มต้น ใช้จนกว่าแอดมินจะกดบันทึกครั้งแรกในเมนู แอดมิน > แก้ไขหน้าเว็บ (หลังจากนั้นอ่านจากฐานข้อมูล)
+const DEFAULT = {
+  settings: {
+    shop: 'Cat4K', logo: 'logo.png', accent: '#1a82e8', accent2: '#ff2d7a', lineId: '@cat4k', fbUrl: 'https://facebook.com/',
+    payInfo: 'ธนาคาร: (ใส่ชื่อธนาคาร)\nเลขบัญชี: (ใส่เลขบัญชี)\nชื่อบัญชี: (ใส่ชื่อบัญชี)\nโอนแล้วกรอกยอดด้านล่าง และส่งสลิปให้แอดมินทาง LINE',
+    about: 'Cat4K เป็นตัวแทนจำหน่ายสินค้าดิจิทัลเท่านั้น ไม่มีส่วนเกี่ยวข้องกับเจ้าของเกมหรือแอพใดๆ เครดิตในเว็บใช้ซื้อสินค้าภายในเว็บเท่านั้น ชำระเงินผ่านช่องทางที่ระบุในเว็บหรือ LINE ทางการเท่านั้น ระวังมิจฉาชีพแอบอ้าง',
+    hCats: 'สินค้าแนะนำ', hHow: 'วิธีสั่งซื้อ', hNews: 'บทความ-ข่าวสาร',
+    lapseDays: 15,  // ลูกค้าที่ทุกแอปหมดอายุมาเกินกี่วัน จะได้รหัสผ่านใหม่เมื่อกลับมาซื้อ/ต่ออายุ
+  },
+  nav: {home: 'หน้าหลัก', wallet: 'กระเป๋าตัง', orders: 'ประวัติสั่งซื้อ', account: 'บัญชีของฉัน', check: 'เช็ควันหมดอายุ', how: 'วิธีสั่งซื้อ', contact: 'ติดต่อเรา'},
+  fab: {fabText: '💬 ติดต่อเรา', fabUrl: '', fabColor: '#06c755'},  // ปุ่มลอยมุมขวาล่าง
+  footer: {hContact: 'ติดต่อเรา', hHelp: 'ช่วยเหลือ', copy: 'สงวนสิทธิ์', links: [
+    {label: 'วิธีสั่งซื้อ', url: '#how'}, {label: 'วิธีเติมเงิน', url: '#wallet'}, {label: 'เช็ควันหมดอายุ', url: '#check'}, {label: 'ระบบเบิกโค้ด (ทีมงาน)', url: 'Cat4K-Giftcard.html'},
+  ]},
+  slides: [
+    {tag: 'ขายดี', title: 'Cat4K Gift Card', text: 'ซื้อง่าย ได้โค้ดไว พร้อมบริการตลอด 24 ชม.', btn: 'ดูราคาเลย', link: '#sec-card', color: '#1f8fd1', emoji: '', img: 'logo.png'},
+    {tag: 'โปรเด็ด', title: 'แอพพรีเมียมราคาคุ้ม', text: 'ChatGPT, Claude, Canva, Netflix และอีกมากมาย', btn: 'เลือกแอพ', link: '#sec-premium', color: '#e11d63', emoji: '✨', img: ''},
+    {tag: 'HOT', title: 'เติมเกมยอดฮิต', text: 'Free Fire, RoV, Roblox, Valorant เติมไว ไม่ต้องรอ', btn: 'เติมเกม', link: '#sec-game', color: '#7c3aed', emoji: '🎮', img: ''},
+  ],
+  sections: [
+    {id: 'card', icon: '🎁', title: 'Gift Card / บัตรเติมเงิน', hint: 'อีเมลหรือ LINE ID สำหรับรับโค้ด', items: [
+      {n: 'Cat4K Gift Card 100', d: 'ขายดี', t: '😺 100', img: '', packages: [{name: 'Gift Card 100', price: 100}]},
+      {n: 'Cat4K Gift Card 300', d: '', t: '😺 300', img: '', packages: [{name: 'Gift Card 300', price: 300}]},
+      {n: 'Cat4K Gift Card 400', d: '', t: '😺 400', img: '', packages: [{name: 'Gift Card 400', price: 400}]},
+      {n: 'Cat4K Gift Card 800', d: 'คุ้มสุด', t: '😺 800', img: '', packages: [{name: 'Gift Card 800', price: 800}]},
+      {n: 'Garena Shells'}, {n: 'Steam Wallet'}, {n: 'Google Play Gift Card', t: 'GP'},
+    ]},
+    {id: 'game', icon: '🎮', title: 'เติมเกม UID', hint: 'UID ในเกม (และเซิร์ฟเวอร์ ถ้ามี)', items: [
+      {n: 'Free Fire', d: 'ลด 3%', packages: [{name: '100 เพชร', price: 35}, {name: '310 เพชร', price: 105}, {name: '520 เพชร', price: 175}]},
+      {n: 'RoV Mobile', d: 'ลด 3%'}, {n: 'Roblox', d: 'ลด 10%'}, {n: 'Valorant', d: 'ลด 7%'}, {n: 'PUBG Mobile', d: 'ลด 10%'},
+      {n: 'Genshin Impact', d: 'ลด 5%'}, {n: 'Honkai: Star Rail', d: 'ลด 5%'}, {n: 'Call of Duty Mobile', d: 'ลด 10%'}, {n: 'Mobile Legends', d: 'ลด 5%'},
+    ]},
+    {id: 'idpass', icon: '🔐', title: 'เติมเกม ID-PASS', hint: 'ช่องทางล็อกอิน / ID เกม (รายละเอียดอื่นแอดมินจะทักไปขอ)', items: [
+      {n: 'Clash of Clans'}, {n: 'Clash Royale'}, {n: 'Brawl Stars'}, {n: 'Ragnarok M'}, {n: 'Summoners War'},
+    ]},
+    {id: 'stream', icon: '🎬', title: 'แอพสตรีมมิ่ง', hint: 'อีเมลหรือ LINE ID สำหรับรับบัญชี', items: [
+      {n: 'Netflix'}, {n: 'YouTube Premium'}, {n: 'Disney+ Hotstar', t: 'D+'}, {n: 'WeTV'}, {n: 'iQIYI'}, {n: 'Viu'}, {n: 'Spotify'}, {n: 'HBO Max'},
+    ]},
+    {id: 'premium', icon: '✨', title: 'แอพพรีเมียม', hint: 'อีเมลที่ต้องการอัปเกรด', items: [
+      {n: 'ChatGPT Plus'}, {n: 'Claude Pro'}, {n: 'Gemini Advanced'}, {n: 'Canva Pro'}, {n: 'CapCut Pro'}, {n: 'Notion Plus'}, {n: 'Google One'}, {n: 'Microsoft 365', t: '365'},
+    ]},
+    {id: 'ebook', icon: '📚', title: 'eBook & แอพดัง', hint: 'ID / ชื่อผู้ใช้ในแอพ', items: [
+      {n: 'Webtoon Coin'}, {n: 'LINE Sticker'}, {n: 'TikTok Coin'}, {n: 'Discord Nitro'}, {n: 'Joylada'}, {n: 'meb'}, {n: 'ReadAWrite'},
+    ]},
+  ],
+  steps: [
+    {icon: '👤', title: 'สมัครสมาชิก', text: 'สมัครฟรีด้วยอีเมล แล้วเข้าสู่ระบบ'},
+    {icon: '💰', title: 'เติมเงินเข้ากระเป๋าตัง', text: 'โอนเงินตามบัญชีในหน้ากระเป๋าตัง แจ้งยอด แล้วส่งสลิปให้แอดมินทาง LINE'},
+    {icon: '⚡', title: 'เลือกสินค้า กดสั่งซื้อ', text: 'เลือกแพ็กเกจ กรอกข้อมูล กดชำระ แอดมินดำเนินการให้ภายในไม่กี่นาที หรือจะสั่งทาง LINE ก็ได้'},
+  ],
+  news: [
+    {icon: '🎁', title: 'Cat4K Gift Card มาแล้ว!', date: '11 พ.ย. 2569', link: ''},
+    {icon: '🤖', title: 'เปิดขาย AI พรีเมียม ราคาพิเศษ', date: '5 พ.ย. 2569', link: ''},
+    {icon: '🔥', title: 'โปรเติมเกมลดสูงสุด 10%', date: '1 พ.ย. 2569', link: ''},
+  ],
+};
+
+// ===== helpers =====
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => `&#${c.charCodeAt(0)};`);
+const baht = n => '฿' + Number(n || 0).toLocaleString('th-TH', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+const when = s => new Date(s).toLocaleString('th-TH', {dateStyle: 'short', timeStyle: 'short'});
+const hue = s => 195 + [...s].reduce((h, c) => (h * 31 + c.charCodeAt(0)) % 150, 7);  // 195-345 = ฟ้า > ม่วง > ชมพู ให้เข้ากับธีม
+// ไอคอน: ถ้าค่าเป็นลิงก์รูป (http, data:, หรือชื่อไฟล์รูป) แสดงเป็นรูป ไม่งั้นถือว่าเป็นอีโมจิ/ตัวหนังสือ
+const isImg = v => /^(https?:|data:image\/)|\.(png|jpe?g|webp|gif|svg)(\?.*)?$/i.test(String(v || '').trim());
+const ico = v => isImg(v) ? `<img class="ico" src="${esc(String(v).trim())}" alt="">` : esc(v);
+const abbr = s => { const w = s.match(/[A-Za-z0-9]+/g) || [s]; return (w.length > 1 ? w[0][0] + w[1][0] : w[0].slice(0, 2)).toUpperCase(); };
+const secId = (s, i) => String(s.id || i).replace(/[^\w-]/g, '');
+const lineUrl = msg => { const id = encodeURIComponent(view().settings.lineId); return `https://line.me/R/${msg ? `oaMessage/${id}/?${encodeURIComponent(msg)}` : `ti/p/${id}`}`; };
+const ok = ({data, error}) => { if (error) throw error; return data; };
+const h = (tag, props = {}, ...kids) => { const e = Object.assign(document.createElement(tag), props); e.append(...kids); return e; };
+const here = location.origin + location.pathname;
+const EMPTY = '<p class="muted" style="padding:16px 0">ยังไม่มีรายการ</p>';
+const ST = {pending: ['รอดำเนินการ', 'y'], approved: ['อนุมัติแล้ว', 'g'], done: ['สำเร็จ', 'g'], rejected: ['ปฏิเสธ', 'r'], refunded: ['คืนเงินแล้ว', 'r']};
+const badge = s => `<span class="badge ${ST[s]?.[1] || ''}">${ST[s]?.[0] || esc(s)}</span>`;
+const item = (title, sub, right = '') => `<div class="item"><div><b>${title}</b><small>${sub}</small></div><div class="r">${right}</div></div>`;  // ผู้เรียกต้อง esc เอง
+
+const TH = {'invalid login credentials': 'อีเมลหรือรหัสผ่านไม่ถูกต้อง', 'user already registered': 'อีเมลนี้สมัครสมาชิกแล้ว', 'email not confirmed': 'อีเมลนี้ยังไม่ได้ยืนยัน',
+  'token has expired or is invalid': 'รหัส OTP ไม่ถูกต้องหรือหมดอายุ ลองใหม่ หรือกด "ส่งรหัสอีกครั้ง"', 'email rate limit exceeded': 'ส่งอีเมลบ่อยเกินไป กรุณารอสักครู่แล้วลองใหม่',
+  'error sending confirmation email': 'ระบบส่งอีเมลยืนยันไม่สำเร็จ กรุณาลองใหม่ภายหลัง หรือติดต่อแอดมินทาง LINE'};  // SMTP ของร้านมีปัญหา ดูสาเหตุที่ Supabase > Logs > Auth
+let toastT;
+function toast(msg, bad) {
+  const t = $('#toast'); t.textContent = msg; t.classList.toggle('bad', !!bad);
+  if (t.matches(':popover-open')) t.hidePopover();
+  t.showPopover();  // popover อยู่ top layer เลยลอยเหนือ <dialog> ได้
+  clearTimeout(toastT); toastT = setTimeout(() => t.hidePopover(), 4500);
+}
+const fail = e => {
+  const m = e?.message || '', sec = m.match(/after (\d+) seconds/);  // Supabase จำกัดการขออีเมลซ้ำ
+  toast(sec ? `ขอรหัสใหม่ได้ในอีก ${sec[1]} วินาที` : TH[m.toLowerCase()] || m || 'เกิดข้อผิดพลาด ลองใหม่อีกครั้ง', true);
+};
+// ครอบ handler: กันกดซ้ำระหว่างรอ + โชว์ error
+const act = fn => async e => {
+  if (e.type === 'submit') e.preventDefault();
+  const b = e.submitter || e.target.closest?.('button');
+  if (b) b.disabled = true;
+  try { await fn(e); } catch (err) { fail(err); } finally { if (b) b.disabled = false; }
+};
+
+// ===== เนื้อหาหน้าเว็บ =====
+// รูปร่างข้อมูล: เพิ่ม field ใหม่แค่เติมใน BLANK + LABEL แล้วแผงแก้ไขจะมีช่องนั้นเอง
+const LABEL = {settings: 'ตั้งค่าร้าน', shop: 'ชื่อร้าน', logo: 'โลโก้ (ลิงก์รูป หรืออัปโหลด)', accent: 'สีฟ้าของธีม (พื้นปุ่มและป้าย)', accent2: 'สีชมพูของธีม (พื้นปุ่มและป้าย)', lineId: 'LINE ID ร้าน (มี @)', fbUrl: 'ลิงก์ Facebook',
+  payInfo: 'ข้อมูลบัญชีรับโอน (แสดงในหน้ากระเป๋าตัง)', about: 'ข้อความท้ายเว็บ', hCats: 'หัวข้อเหนือหมวดสินค้า', hHow: 'หัวข้อส่วนวิธีสั่งซื้อ', hNews: 'หัวข้อส่วนข่าวสาร', lapseDays: 'ออกรหัสผ่านใหม่ให้ลูกค้าที่ขาดต่ออายุเกินกี่วัน',
+  slides: 'แบนเนอร์', tag: 'ป้ายเล็ก', title: 'หัวข้อ', text: 'ข้อความ', btn: 'ข้อความบนปุ่ม',
+  link: 'ลิงก์ (เช่น #sec-game หรือ https://...)', color: 'สีพื้น', emoji: 'อีโมจิ (ใช้เมื่อไม่มีรูป)', img: 'รูป (ลิงก์รูป หรืออัปโหลด)', sections: 'หมวดสินค้า',
+  id: 'รหัสหมวด ภาษาอังกฤษ (ใช้ทำลิงก์ #sec-รหัส)', icon: 'ไอคอน (พิมพ์อีโมจิ หรือใส่รูป: วางลิงก์รูป หรืออัปโหลด)', hint: 'ข้อมูลที่ให้ลูกค้ากรอกตอนสั่งซื้อ', items: 'สินค้า', n: 'ชื่อสินค้า', d: 'ป้ายมุมรูป (เช่น ลด 5%)',
+  t: 'ตัวหนังสือบนรูป (ใช้เมื่อไม่มีรูป)', packages: 'แพ็กเกจ / ราคา', name: 'ชื่อแพ็กเกจ', price: 'ราคา (บาท)', months: 'อายุการใช้งาน (เดือน) ใส่ 0 ถ้าแพ็กเกจนี้ไม่มีวันหมดอายุ', bonus: 'แถมเพิ่ม (วัน)',
+  app: 'ชื่อแอปในหน้าเช็ควันหมดอายุ (เว้นว่าง = ใช้ชื่อสินค้า)', steps: 'วิธีสั่งซื้อ', news: 'ข่าวสาร', date: 'วันที่',
+  nav: 'เมนูด้านบน', home: 'เมนู: หน้าหลัก', wallet: 'เมนู: กระเป๋าตัง (ใช้เป็นหัวข้อหน้านั้นด้วย)', orders: 'เมนู: ประวัติสั่งซื้อ (ใช้เป็นหัวข้อหน้านั้นด้วย)', account: 'บัญชีของฉัน (อยู่ในเมนูผู้ใช้มุมขวา และเป็นหัวข้อหน้านั้น)', check: 'เมนู: เช็ควันหมดอายุ (ใช้เป็นหัวข้อหน้านั้นด้วย)',
+  how: 'เมนู: วิธีสั่งซื้อ', contact: 'เมนู: ติดต่อเรา', footer: 'ท้ายเว็บ', hContact: 'หัวข้อคอลัมน์ติดต่อ', hHelp: 'หัวข้อคอลัมน์ลิงก์', copy: 'ข้อความลิขสิทธิ์ (ต่อท้ายชื่อร้านและปี)',
+  links: 'ลิงก์ท้ายเว็บ', label: 'ข้อความลิงก์', url: 'ลิงก์ (เช่น #how หรือ https://...)',
+  fab: 'ปุ่มลอยมุมขวาล่าง', fabText: 'ข้อความบนปุ่ม (เว้นว่าง = ซ่อนปุ่ม)', fabUrl: 'ลิงก์เมื่อกดปุ่ม (เว้นว่าง = เปิดแชต LINE ของร้าน)', fabColor: 'สีปุ่ม'};
+const BLANK = {
+  settings: DEFAULT.settings, nav: DEFAULT.nav, footer: DEFAULT.footer, fab: DEFAULT.fab,
+  links: {label: '', url: ''},
+  slides: {tag: '', title: '', text: '', btn: '', link: '', color: '#1f8fd1', emoji: '', img: ''},
+  sections: {id: '', icon: '', title: '', hint: '', items: []},
+  items: {n: '', d: '', t: '', img: '', packages: []},
+  packages: {name: '', price: 0, months: 0, bonus: 0, app: ''},
+  steps: {icon: '', title: '', text: ''},
+  news: {icon: '', title: '', date: '', link: ''},
+};
+const NUM = new Set(['price', 'months', 'bonus', 'lapseDays']), LONG = new Set(['text', 'about', 'payInfo']), IMG = new Set(['img', 'logo', 'icon']), COLOR = new Set(['color', 'accent', 'accent2', 'fabColor']), TITLE = new Set(['n', 'title', 'name', 'label']);
+const LISTS = ['slides', 'sections', 'steps', 'news'], OBJS = ['settings', 'nav', 'footer', 'fab'];
+// เติม field ที่ขาดให้ครบตามแม่แบบ (เนื้อหาที่บันทึกไว้ก่อนมี field ใหม่จะไม่พัง)
+const fillT = (o, k) => {
+  for (const [f, v] of Object.entries(BLANK[k])) {
+    if (!(f in o) || (Array.isArray(v) && !Array.isArray(o[f]))) o[f] = structuredClone(v);
+    if (Array.isArray(o[f]) && BLANK[f]) o[f].forEach(x => fillT(x, f));
+  }
+};
+const norm = c => {
+  const o = structuredClone({...Object.fromEntries(OBJS.map(k => [k, {...DEFAULT[k], ...c?.[k]}])), ...Object.fromEntries(LISTS.map(k => [k, Array.isArray(c?.[k]) ? c[k] : []]))});
+  LISTS.forEach(k => o[k].forEach(x => fillT(x, k)));
+  OBJS.forEach(k => fillT(o[k], k));
+  // สีเริ่มต้นของธีมรุ่นก่อน -> ใช้ค่าเริ่มต้นของธีมปัจจุบัน; สีที่แอดมินเลือกเองไม่ถูกแตะ
+  const OLD = {accent: ['#5db4e6', '#2fb4f5', '#0b7ad6', '#0a72cc'], accent2: ['#ff3d7a', '#ea1a63', '#dc125a']};
+  for (const k in OLD) if (OLD[k].includes(o.settings[k])) o.settings[k] = DEFAULT.settings[k];
+  return o;
+};
+let C = norm(DEFAULT), user = null, me = null, dbOk = false;
+let editing = false, draft = null, picked = null, pickedNth = 0;  // โหมดแก้ไข: หน้าเว็บวาดจาก draft แทน C
+const view = () => editing ? draft : C;
+
+function renderSite() {
+  const c = view(), s = c.settings, m = String(s.shop).match(/^(.*?)(\d\w*)?$/), ph = t => editing ? t : '';
+  document.documentElement.style.setProperty('--sky', s.accent || DEFAULT.settings.accent);
+  document.documentElement.style.setProperty('--pink', s.accent2 || DEFAULT.settings.accent2);
+  $$('.js-name').forEach(e => e.innerHTML = esc(m[1]) + (m[2] ? `<b>${esc(m[2])}</b>` : ''));
+  $$('.js-logo').forEach(e => e.src = s.logo || 'logo.png');
+  $('link[rel=icon]').href = s.logo || 'logo.png';
+  $$('.js-line').forEach(a => a.href = lineUrl());
+  const fabEl = $('#fabContact');
+  fabEl.textContent = c.fab.fabText || ph('(ปุ่มลอยถูกซ่อน กดเพื่อแก้)');
+  fabEl.href = c.fab.fabUrl || lineUrl();
+  fabEl.style.background = c.fab.fabColor || '';
+  fabEl.classList.toggle('off', !c.fab.fabText);
+  $$('.js-fb').forEach(a => a.href = s.fbUrl || '#');
+  $$('.js-line-id').forEach(e => e.textContent = s.lineId);
+  $('.js-hcats').textContent = s.hCats; $('.js-hhow').textContent = s.hHow; $('.js-hnews').textContent = s.hNews;
+  $('#about').textContent = s.about;
+  $('#payInfo').textContent = s.payInfo;
+  $$('[data-nav]').forEach(a => a.textContent = c.nav[a.dataset.nav]);
+  $('#view-wallet h2').textContent = '💰 ' + c.nav.wallet; $('#view-orders h2').textContent = '🧾 ' + c.nav.orders; $('#view-account h2').textContent = '👤 ' + c.nav.account; $('#view-check h2').textContent = '📅 ' + c.nav.check;
+  $('.js-hcontact').textContent = c.footer.hContact; $('.js-hhelp').textContent = c.footer.hHelp; $('#fCopy').textContent = c.footer.copy;
+  $('#fLinks').innerHTML = c.footer.links.map(l => `<li><a href="${esc(l.url || '#')}"${/^https?:/.test(l.url) ? ' target="_blank" rel="noopener"' : ''}>${esc(l.label)}</a></li>`).join('');
+
+  const sl = $('#slides'), x0 = sl.scrollLeft;  // วาดใหม่แล้วอยู่แบนเนอร์เดิม
+  $('.hero').hidden = !c.slides.length && !editing;
+  sl.innerHTML = c.slides.map((x, i) => `
+    <div class="slide" data-edit="slides.${i}" style="--c:${esc(x.color || '#1f8fd1')}">
+      <div>${x.tag ? `<span class="tag">${esc(x.tag)}</span>` : ''}<h${i ? 2 : 1}>${esc(x.title) || ph('(ยังไม่มีหัวข้อ)')}</h${i ? 2 : 1}><p>${esc(x.text)}</p>${x.btn ? `<a class="btn" href="${esc(x.link || '#products')}">${esc(x.btn)}</a>` : ''}</div>
+      ${x.img ? `<img src="${esc(x.img)}" alt="">` : `<span class="emo" aria-hidden="true">${esc(x.emoji)}</span>`}
+    </div>`).join('');
+  sl.scrollLeft = x0;
+  $('#dots').innerHTML = c.slides.map((_, i) => `<button type="button" aria-label="สไลด์ ${i + 1}"></button>`).join('');
+  mark();
+
+  $('#cats').innerHTML = c.sections.map((x, i) => `<a class="cat" data-edit="sections.${i}" href="#sec-${secId(x, i)}"><i>${ico(x.icon)}</i><span>${esc(x.title) || ph('(หมวดใหม่)')}</span></a>`).join('');
+  $('#products').innerHTML = c.sections.map((x, si) => `
+    <section class="sec" id="sec-${secId(x, si)}">
+      <div class="h" data-edit="sections.${si}"><h2>${ico(x.icon)} ${esc(x.title) || ph('(หมวดใหม่)')}</h2><button class="more" type="button">ดูทั้งหมด</button></div>
+      <div class="row-wrap">
+        <button class="rarr l" type="button" aria-label="เลื่อนซ้าย">❮</button>
+        <div class="row">${x.items.map((p, pi) => {
+          const n = p.n || '', hu = hue(n), min = Math.min(...p.packages.map(k => +k.price).filter(v => v > 0));
+          return `
+          <a class="card" data-edit="sections.${si}.items.${pi}" data-s="${si}" data-i="${pi}" data-name="${esc(n.toLowerCase())}" href="${esc(lineUrl('สนใจสั่งซื้อ: ' + n))}" target="_blank" rel="noopener">
+            <div class="logo" style="background:linear-gradient(135deg,hsl(${hu} 78% 54%),hsl(${(hu + 30) % 360} 70% 30%))">${p.img ? `<img src="${esc(p.img)}" alt="" loading="lazy">` : esc(p.t || abbr(n))}</div>
+            ${p.d ? `<span class="off">${esc(p.d)}</span>` : ''}
+            <div class="name">${esc(n) || ph('(ยังไม่มีชื่อ)')}${isFinite(min) ? `<small>เริ่ม ${baht(min)}</small>` : ''}</div>
+          </a>`; }).join('')}
+          <button class="addtile edonly" type="button" data-add="sections.${si}.items">+ เพิ่มสินค้า</button>
+        </div>
+        <button class="rarr r" type="button" aria-label="เลื่อนขวา">❯</button>
+      </div>
+    </section>`).join('');
+
+  $('#how').hidden = !c.steps.length && !editing;
+  $('#steps').innerHTML = c.steps.map((x, i) => `<div class="step" data-edit="steps.${i}"><i>${ico(x.icon)}</i><b>${esc(x.title)}</b><p>${esc(x.text)}</p></div>`).join('');
+  $('#news').hidden = !c.news.length && !editing;
+  $('#newsList').innerHTML = c.news.map((x, i) => {
+    const hu = hue(x.title || ''), body = `<div class="th" style="background:linear-gradient(135deg,hsl(${hu} 65% 42%),hsl(${(hu + 30) % 360} 62% 24%))">${ico(x.icon)}</div><div><h3>${esc(x.title)}</h3><small>${esc(x.date)}</small></div>`;
+    return x.link ? `<a class="post" data-edit="news.${i}" href="${esc(x.link)}" target="_blank" rel="noopener">${body}</a>` : `<article class="post" data-edit="news.${i}">${body}</article>`;
+  }).join('');
+  $$('[data-edit]').forEach(e => e.classList.toggle('picked', editing && e.dataset.edit === picked));
+  $('#q').dispatchEvent(new Event('input'));
+}
+function setContent(c) { C = norm(c); renderSite(); }
+const cacheContent = c => { try { localStorage.setItem('cat4k_content', JSON.stringify(c)); } catch {} };
+
+// product rows: ดูทั้งหมด / ลูกศร / กดสินค้า
+$('#products').addEventListener('click', e => {
+  const t = e.target, sec = t.closest('.sec'), row = sec?.querySelector('.row'), c = t.closest('.card');
+  if (t.closest('.more')) t.textContent = sec.classList.toggle('all') ? 'ย่อ' : 'ดูทั้งหมด';
+  else if (t.closest('.rarr')) row.scrollBy({left: row.clientWidth * (t.closest('.l') ? -.8 : .8), behavior: 'smooth'});
+  else if (c) {
+    const x = C.sections[c.dataset.s], p = x?.items?.[c.dataset.i];
+    if (p?.packages?.some(k => k.price > 0)) { e.preventDefault(); openOrder(x, p); }  // ไม่มีแพ็กเกจ = ปล่อยให้ลิงก์พาไป LINE
+  }
+});
+
+$('#q').addEventListener('input', e => {
+  const q = e.target.value.trim().toLowerCase();
+  let any = !view().sections.length;
+  $$('#products .sec').forEach(sec => {
+    let hit = 0;
+    sec.querySelectorAll('.card').forEach(c => { const yes = c.dataset.name.includes(q); c.hidden = !yes; hit += yes; });
+    sec.hidden = !hit && !(editing && !q); sec.classList.toggle('all', !!q); any ||= hit > 0;
+    sec.querySelector('.more').textContent = q ? 'ย่อ' : 'ดูทั้งหมด';
+  });
+  $('#empty').style.display = any ? 'none' : 'block';
+});
+
+// hero slider
+const slides = $('#slides');
+let cur = 0, paused = false;
+const go = k => { const n = slides.children.length; if (n) slides.scrollTo({left: ((k + n) % n) * slides.clientWidth, behavior: 'smooth'}); };
+function mark() { cur = Math.round(slides.scrollLeft / (slides.clientWidth || 1)); $$('#dots button').forEach((d, i) => d.classList.toggle('on', i === cur)); }
+slides.addEventListener('scroll', mark, {passive: true});
+$('#dots').onclick = e => { const i = $$('#dots button').indexOf(e.target); if (i >= 0) go(i); };
+$('.prev').onclick = () => go(cur - 1);
+$('.next').onclick = () => go(cur + 1);
+$('.hero').onmouseenter = () => paused = true;
+$('.hero').onmouseleave = () => paused = false;
+if (!matchMedia('(prefers-reduced-motion: reduce)').matches) setInterval(() => paused || editing || go(cur + 1), 5000);
+
+$$('dialog .x').forEach(b => b.onclick = () => b.closest('dialog').close());
+$('#yr').textContent = new Date().getFullYear() + 543;
+
+// โหมดสว่าง/มืด: จำไว้ในเครื่องของผู้ชม (สคริปต์ใน <head> ใส่ data-theme ก่อนวาดหน้า กันกะพริบ)
+const paintTheme = () => { const d = document.documentElement.dataset.theme === 'dark'; $('#themeBtn').textContent = d ? '☀️' : '🌙'; $('#themeBtn').title = d ? 'เปลี่ยนเป็นโหมดสว่าง' : 'เปลี่ยนเป็นโหมดมืด'; };
+$('#themeBtn').onclick = () => {
+  const root = document.documentElement, dark = root.dataset.theme !== 'dark';
+  if (dark) root.dataset.theme = 'dark'; else delete root.dataset.theme;
+  try { localStorage.setItem('cat4k_theme', dark ? 'dark' : 'light'); } catch {}
+  paintTheme();
+};
+paintTheme();
+
+// ===== สมาชิก =====
+function paintAuth() {
+  $('#authBox').innerHTML = user
+    ? `<a class="btn btn-ghost" href="#wallet">💰 ${baht(me?.balance)}</a>
+       <details class="umenu"><summary class="btn btn-main" aria-label="เมนูผู้ใช้">${me?.is_admin ? '<b class="adm">ADMIN</b>' : '👤'} ${esc(me?.display_name || 'บัญชี')} ▾</summary>
+         <div class="umenu-list">
+           <a href="#account">👤 <span data-nav="account">${esc(view().nav.account)}</span></a>
+           ${me?.is_admin ? '<a href="#admin">⚙️ แอดมิน</a>' : ''}
+           <button type="button" data-logout>🚪 ออกจากระบบ</button>
+         </div>
+       </details>`
+    : `<button class="btn btn-ghost" type="button" data-auth="login">เข้าสู่ระบบ</button><button class="btn btn-main" type="button" data-auth="register">สมัครสมาชิก</button>`;
+  adminFab();
+}
+// ปุ่มลอย "แก้ไขหน้าเว็บ" เห็นเฉพาะแอดมิน ตอนอยู่หน้าหลักและยังไม่ได้เข้าโหมดแก้ไข
+function adminFab() { $('#fabEdit').hidden = !me?.is_admin || editing || $('#home').hidden; }
+// ลิงก์ที่มี data-atab = เปิดหน้าแอดมินที่แท็บนั้นเลย
+document.addEventListener('click', e => {
+  const a = e.target.closest('[data-atab]'); if (!a) return;
+  e.preventDefault();
+  $('#view-admin').dataset.tab = a.dataset.atab;
+  if (location.hash === '#admin') showTab(a.dataset.atab).catch(fail); else location.hash = '#admin';
+});
+$('#authBox').onclick = e => {
+  const m = e.target.closest('[data-auth]')?.dataset.auth;
+  if (m) openAuth(m);
+  else if (e.target.closest('[data-logout]')) act(async () => { location.hash = ''; await sb.auth.signOut(); })(e);
+};
+// เมนูผู้ใช้ปิดเองเมื่อกดข้างนอก กดรายการในเมนู หรือกด Esc
+document.addEventListener('click', e => { const u = $('.umenu'); if (u?.open && (!e.target.closest('.umenu') || e.target.closest('.umenu-list'))) u.open = false; });
+addEventListener('keydown', e => { if (e.key === 'Escape') $('.umenu')?.removeAttribute('open'); });
+
+// โหมด: login | register | otp (ยืนยันสมัครด้วยรหัสจากอีเมล)
+// OTP ต้องตั้งเทมเพลตอีเมล "Confirm signup" ใน Supabase ให้มี {{ .Token }} ไม่งั้นลูกค้าจะได้ลิงก์แทนรหัส
+let otpEmail = '';
+function openAuth(mode) {
+  const f = $('#fAuth'), el = f.elements, reg = mode === 'register', otp = mode === 'otp';
+  f.dataset.mode = mode;
+  $('#authTitle').textContent = otp ? 'ยืนยันอีเมล' : reg ? 'สมัครสมาชิก' : 'เข้าสู่ระบบ';
+  f.querySelector('[type=submit]').textContent = otp ? 'ยืนยันรหัส OTP' : reg ? 'สมัครสมาชิก' : 'เข้าสู่ระบบ';
+  $('#authSwitch').textContent = reg ? 'มีบัญชีแล้ว? เข้าสู่ระบบ' : 'ยังไม่มีบัญชี? สมัครสมาชิก';
+  el.display_name.required = reg; el.email.required = el.password.required = !otp; el.otp.required = otp;
+  el.password.autocomplete = reg ? 'new-password' : 'current-password';
+  if (otp) { $('#otpMsg').textContent = `เราส่งรหัส OTP ไปที่ ${otpEmail} แล้ว กรอกรหัสเพื่อยืนยันการสมัคร (ถ้าไม่เจอ ลองดูในกล่องสแปม)`; el.otp.value = ''; }
+  if (!$('#dlgAuth').open) { f.reset(); $('#dlgAuth').showModal(); }  // เปิดใหม่ = ฟอร์มว่างเสมอ
+  if (otp) el.otp.focus();
+}
+// ไม่ทิ้งรหัสผ่านค้างในฟอร์มหลังปิด (เช็ค open กัน event มาช้าแล้วไปล้างของที่เพิ่งพิมพ์ใหม่)
+$('#dlgAuth').addEventListener('close', () => { if (!$('#dlgAuth').open) $('#fAuth').reset(); });
+$('#otpBack').onclick = () => openAuth('register');
+$('#otpResend').onclick = act(async () => {
+  ok(await sb.auth.resend({type: 'signup', email: otpEmail}));
+  toast('ส่งรหัสใหม่ไปที่อีเมลแล้ว');
+});
+$('#authSwitch').onclick = () => openAuth($('#fAuth').dataset.mode === 'register' ? 'login' : 'register');
+$('#authForgot').onclick = act(async () => {
+  const email = $('#fAuth').elements.email.value.trim();
+  if (!email) throw new Error('กรอกอีเมลก่อน แล้วกด "ลืมรหัสผ่าน" อีกครั้ง');
+  ok(await sb.auth.resetPasswordForEmail(email, {redirectTo: here}));
+  toast('ส่งลิงก์ตั้งรหัสผ่านใหม่ไปที่อีเมลแล้ว');
+});
+$('#fAuth').onsubmit = act(async e => {
+  const f = e.target, d = Object.fromEntries(new FormData(f)), mode = f.dataset.mode;
+  if (mode === 'otp') {
+    ok(await sb.auth.verifyOtp({email: otpEmail, token: d.otp.trim(), type: 'email'}));
+    toast('ยืนยันอีเมลสำเร็จ ยินดีต้อนรับ!');
+  } else if (mode === 'register') {
+    const r = ok(await sb.auth.signUp({email: d.email, password: d.password, options: {data: {display_name: d.display_name, phone: d.phone}, emailRedirectTo: here}}));
+    if (r.user && !r.user.identities?.length) throw new Error('User already registered');
+    if (!r.session) { otpEmail = d.email; return openAuth('otp'); }  // ต้องยืนยันอีเมลก่อน
+    toast('สมัครสมาชิกสำเร็จ ยินดีต้อนรับ!');
+  } else {
+    const r = await sb.auth.signInWithPassword({email: d.email, password: d.password});
+    if (r.error?.code === 'email_not_confirmed' || r.error?.message === 'Email not confirmed') {
+      // สมัครค้างไว้ยังไม่ได้ยืนยัน: พาไปหน้ากรอกรหัส แล้วส่งรหัสใหม่ให้
+      otpEmail = d.email; openAuth('otp');
+      ok(await sb.auth.resend({type: 'signup', email: otpEmail}));
+      return;
+    }
+    ok(r);
+  }
+  $('#dlgAuth').close();
+});
+
+async function loadMe() {
+  try { me = user ? ok(await sb.from('shop_members').select('*').eq('id', user.id).maybeSingle()) : null; } catch { me = null; }
+}
+
+// ===== router: #wallet #orders #account #admin เป็นหน้า, hash อื่นคือ anchor ในหน้าหลัก =====
+let pending = null;
+function route() {
+  let v = location.hash.slice(1);
+  if (VIEWS[v] && v !== 'check' && !user) { pending = v; history.replaceState(null, '', here); openAuth('login'); v = ''; }
+  if (v === 'admin' && !me?.is_admin) v = '';
+  if (editing && VIEWS[v]) { history.replaceState(null, '', here); v = ''; }  // กด back ระหว่างแก้ไข: อยู่หน้าเดิม งานที่แก้ไม่หาย
+  const wasHome = !$('#home').hidden;
+  $('#home').hidden = !!VIEWS[v];
+  $$('.view').forEach(x => x.hidden = x.id !== 'view-' + v);
+  $('.fab').hidden = v === 'admin';  // ไม่ให้บังปุ่มบันทึก
+  adminFab();
+  if (VIEWS[v]) { scrollTo(0, 0); VIEWS[v]().catch(fail); }
+  else if (!wasHome) document.getElementById(location.hash.slice(1))?.scrollIntoView({behavior: 'instant'});
+}
+addEventListener('hashchange', route);
+
+let uid;
+sb?.auth.onAuthStateChange((ev, session) => {
+  user = session?.user ?? null;
+  // token refresh / กลับมาที่แท็บ ยิง event ซ้ำ: ถ้าเป็นคนเดิมไม่ต้อง route ใหม่ (ไม่งั้นฟอร์มที่แก้ค้างไว้หาย)
+  if (ev !== 'INITIAL_SESSION' && ev !== 'PASSWORD_RECOVERY' && user?.id === uid) return;
+  uid = user?.id;
+  setTimeout(async () => {  // ห้ามเรียก supabase ใน callback นี้ตรงๆ (deadlock)
+    await loadMe(); paintAuth();
+    if (ev === 'PASSWORD_RECOVERY') { location.hash = '#account'; toast('ตั้งรหัสผ่านใหม่ได้ที่ช่อง "เปลี่ยนรหัสผ่าน"'); }
+    else if (user && pending) { location.hash = '#' + pending; pending = null; }
+    else route();
+  }, 0);
+});
+
+// ===== กระเป๋าตัง =====
+async function loadWallet() {
+  await loadMe(); paintAuth();
+  $('#wBal').textContent = baht(me?.balance);
+  const [tops, adj] = await Promise.all([
+    sb.from('shop_topups').select('*').eq('member_id', user.id).order('created_at', {ascending: false}).limit(50),
+    sb.from('shop_adjustments').select('*').eq('member_id', user.id).order('created_at', {ascending: false}).limit(50)]);
+  // adj.data ว่างได้ถ้ายังไม่ได้รัน supabase-wallet-admin.sql: ประวัติเติมเงินต้องยังแสดงได้
+  const rows = [...ok(tops), ...(adj.data || []).map(a => ({...a, adj: true}))].sort((a, b) => b.created_at.localeCompare(a.created_at));
+  $('#wList').innerHTML = rows.map(r => r.adj
+    ? item(adjAmt(r.amount), `${when(r.created_at)} · ปรับยอดโดยแอดมิน · คงเหลือ ${baht(r.balance_after)}${r.note ? ' · ' + esc(r.note) : ''}`, adjBadge(r.amount))
+    : item(baht(r.amount), `#${r.id} · ${when(r.created_at)}${r.note ? ' · ' + esc(r.note) : ''}`, badge(r.status))).join('') || EMPTY;
+}
+$('#fTopup').onsubmit = act(async e => {
+  const d = new FormData(e.target);
+  ok(await sb.rpc('shop_request_topup', {p_amount: +d.get('amount'), p_note: d.get('note')}));
+  e.target.reset(); toast('แจ้งเติมเงินแล้ว ส่งสลิปให้แอดมินทาง LINE ได้เลย');
+  await loadWallet();
+});
+
+// ===== สั่งซื้อ =====
+let orderItem;
+// แพ็กเกจที่ตั้งอายุไว้ (months / bonus) = มีวันหมดอายุ: ต้องกรอกอีเมล แล้วระบบสร้างหรือต่ออายุบัญชีเช็ควันหมดอายุให้ (ดู supabase-subs.sql)
+const pkDur = k => [k.months > 0 ? `${k.months} เดือน` : '', k.bonus > 0 ? `แถม ${k.bonus} วัน` : ''].filter(Boolean).join(' + ');
+const orderPks = () => orderItem.packages.filter(k => k.price > 0);
+function syncOrderField() {
+  const k = orderPks()[new FormData($('#fOrder')).get('pk')], timed = !!(k && pkDur(k));
+  $('#fOrder').elements.info.type = timed ? 'email' : 'text';
+  $('#oSubNote').hidden = !timed;
+  $('#oSubNote').textContent = timed ? `แพ็กเกจนี้ใช้ได้ ${pkDur(k)} ระบบใช้อีเมลนี้อ้างอิงวันหมดอายุ ซื้อครั้งแรกจะได้ชื่อผู้ใช้และรหัสผ่านสำหรับเช็ควันหมดอายุทันที ซื้อครั้งต่อไปด้วยอีเมลเดิมจะต่ออายุให้` : '';
+}
+function openOrder(sec, p) {
+  orderItem = p;
+  $('#oName').textContent = p.n;
+  $('#oPk').innerHTML = orderPks().map((k, i) =>
+    `<label class="pk"><input type="radio" name="pk" value="${i}" ${i ? '' : 'checked'}><span>${esc(k.name)}</span>${pkDur(k) ? `<small class="muted">${pkDur(k)}</small>` : ''}<b>${baht(k.price)}</b></label>`).join('');
+  $('#oHint').textContent = sec.hint || 'ข้อมูลสำหรับเติม (UID / อีเมล)';
+  $('#oBal').textContent = user ? baht(me?.balance) : 'ยังไม่ได้เข้าสู่ระบบ';
+  $('#oLine').href = lineUrl('สนใจสั่งซื้อ: ' + p.n);
+  $('#fOrder').elements.info.value = '';
+  syncOrderField();
+  $('#dlgOrder').showModal();
+}
+$('#oPk').addEventListener('change', syncOrderField);
+$('#fOrder').onsubmit = act(async e => {
+  const d = new FormData(e.target), k = orderPks()[d.get('pk')];
+  if (!user) { $('#dlgOrder').close(); return openAuth('login'); }
+  if (!confirm(`ยืนยันสั่งซื้อ ${orderItem.n} — ${k.name}${pkDur(k) ? ` (${pkDur(k)})` : ''}\nราคา ${baht(k.price)} (หักจากกระเป๋าตัง)`)) return;
+  const r = ok(await sb.rpc('shop_place_order', {p_product: orderItem.n, p_package: k.name, p_price: k.price, p_info: d.get('info')}));
+  if (me) me.balance = r.balance;
+  paintAuth(); $('#dlgOrder').close();
+  if (r.sub) return showDone(r.sub, String(d.get('info')).trim().toLowerCase());
+  toast('สั่งซื้อสำเร็จ! แอดมินจะดำเนินการให้เร็วที่สุด');
+  location.hash = '#orders';
+});
+// หลังซื้อแพ็กเกจที่มีวันหมดอายุ: บอกวันหมดอายุ และโชว์ user/password (เห็นได้ครั้งเดียว) เมื่อเป็นการซื้อครั้งแรกของอีเมลนี้
+// หรือเมื่อลูกค้าขาดต่ออายุเกินกำหนดแล้วระบบออกรหัสผ่านใหม่
+function showDone(sub, email) {
+  const msg = `ชื่อผู้ใช้: ${sub.username}\nรหัสผ่าน: ${sub.password}\nเช็ควันหมดอายุได้ที่ ${here}#check`;
+  $('#doneBody').innerHTML = `<p><b>${esc(sub.app)}</b><br>ใช้ได้ถึง <b>${thDate(sub.expires_on)}</b> ${expBadge(daysLeft(sub.expires_on))}</p>` + (sub.password
+    ? `<div class="credbox">ชื่อผู้ใช้: <b class="sel">${esc(sub.username)}</b><br>รหัสผ่าน: <b class="sel">${esc(sub.password)}</b></div>
+       <p class="muted">${sub.is_new ? `นี่คือบัญชีสำหรับเช็ควันหมดอายุ สร้างจากอีเมล ${esc(email)}` : `บัญชีของอีเมล ${esc(email)} ขาดการต่ออายุเกิน ${+sub.grace} วัน ระบบจึงออกรหัสผ่านใหม่ให้ รหัสเดิมใช้ไม่ได้แล้ว`} (ใช้อีเมลแทนชื่อผู้ใช้ได้) <b>รหัสผ่านแสดงครั้งนี้ครั้งเดียว</b> กรุณาคัดลอกเก็บไว้</p>
+       <button class="btn btn-ghost" type="button" id="doneCopy">📋 คัดลอกชื่อผู้ใช้และรหัสผ่าน</button>`
+    : `<p class="muted">ต่ออายุในบัญชีเช็ควันหมดอายุเดิมของอีเมล ${esc(email)} แล้ว ใช้ชื่อผู้ใช้ (หรืออีเมล) กับรหัสผ่านชุดเดิม ถ้าลืมรหัสผ่าน ทักแอดมินได้</p>`)
+    + `<a class="btn btn-ghost" href="#check">📅 ไปหน้าเช็ควันหมดอายุ</a>`;
+  if (sub.password) $('#doneCopy').onclick = act(async () => { await navigator.clipboard.writeText(msg); toast('คัดลอกแล้ว'); });
+  $('#dlgDone').showModal();
+}
+$('#doneBody').addEventListener('click', e => { if (e.target.closest('a')) $('#dlgDone').close(); });
+$('#dlgDone').addEventListener('close', () => { if (location.hash !== '#check') location.hash = '#orders'; });
+
+async function loadOrders() {
+  const rows = ok(await sb.from('shop_orders').select('*').eq('member_id', user.id).order('created_at', {ascending: false}).limit(100));
+  $('#oList').innerHTML = rows.map(r => item(`${esc(r.product)} — ${esc(r.package_name)}`,
+    `#${r.id} · ${when(r.created_at)} · ${esc(r.info)}${r.admin_note ? '<br>แอดมิน: ' + esc(r.admin_note) : ''}`,
+    `<b>${baht(r.price)}</b>${badge(r.status)}`)).join('') || EMPTY;
+}
+
+// ===== บัญชี =====
+async function loadAccount() {
+  await loadMe(); paintAuth();  // โหลดใหม่ เผื่อเพิ่งถูกตั้งเป็นแอดมิน จะได้เห็นโดยไม่ต้องรีเฟรช
+  const f = $('#fAcct').elements;
+  f.email.value = user.email; f.display_name.value = me?.display_name || ''; f.phone.value = me?.phone || ''; f.line_id.value = me?.line_id || '';
+  $('#acctRole').innerHTML = me?.is_admin ? 'สถานะ: <b class="adm">ADMIN</b> ผู้ดูแลร้าน' : 'สถานะ: สมาชิก';
+  $('#acctAdmin').hidden = !me?.is_admin;
+}
+$('#fAcct').onsubmit = act(async e => {
+  const d = Object.fromEntries(new FormData(e.target));
+  ok(await sb.from('shop_members').update({display_name: d.display_name, phone: d.phone, line_id: d.line_id}).eq('id', user.id));
+  await loadMe(); paintAuth(); toast('บันทึกแล้ว');
+});
+$('#fPass').onsubmit = act(async e => {
+  ok(await sb.auth.updateUser({password: e.target.elements.password.value}));
+  e.target.reset(); toast('เปลี่ยนรหัสผ่านแล้ว');
+});
+$('#btnLogout').onclick = act(async () => { location.hash = ''; await sb.auth.signOut(); });
+
+// ===== แอดมิน =====
+const who = m => [m?.display_name, m?.email, m?.phone, m?.line_id].filter(Boolean).map(esc).join(' · ');
+async function adminTopups() {
+  const rows = ok(await sb.from('shop_topups').select('*, m:shop_members(display_name, email, phone, line_id)').eq('status', 'pending').order('created_at').limit(100));
+  $('#a-topups').innerHTML = rows.map(r => item(`${baht(r.amount)} <span class="muted">#${r.id}</span>`,
+    `${when(r.created_at)} · ${who(r.m)}${r.note ? '<br>หมายเหตุ: ' + esc(r.note) : ''}`,
+    `<button class="btn btn-main" type="button" data-id="${r.id}" data-ok="1">อนุมัติ</button><button class="btn btn-ghost" type="button" data-id="${r.id}" data-ok="0">ปฏิเสธ</button>`)).join('') || EMPTY;
+}
+$('#a-topups').onclick = act(async e => {
+  const b = e.target.closest('button[data-id]'); if (!b) return;
+  const yes = b.dataset.ok === '1';
+  if (!confirm(yes ? 'ตรวจสลิปแล้ว? อนุมัติและเพิ่มเงินเข้ากระเป๋าลูกค้า' : 'ปฏิเสธรายการนี้?')) return;
+  ok(await sb.rpc('shop_review_topup', {p_id: +b.dataset.id, p_approve: yes}));
+  toast('บันทึกแล้ว'); await adminTopups();
+});
+
+async function adminOrders() {
+  const st = $('#aStatus').value;
+  const rows = ok(await sb.from('shop_orders').select('*, m:shop_members(display_name, email, phone, line_id)').eq('status', st).order('created_at', {ascending: st === 'pending'}).limit(100));
+  $('#aOrders').innerHTML = rows.map(r => item(`#${r.id} ${esc(r.product)} — ${esc(r.package_name)} (${baht(r.price)})`,
+    `${when(r.created_at)} · ${who(r.m)}<br>ข้อมูลเติม: <span class="sel">${esc(r.info)}</span>${r.admin_note ? '<br>โน้ต: ' + esc(r.admin_note) : ''}`,
+    st === 'refunded' ? badge(st) : `<input class="note" placeholder="โน้ตถึงลูกค้า" maxlength="500" aria-label="โน้ตถึงลูกค้า">${st === 'pending' ? `<button class="btn btn-main" type="button" data-id="${r.id}" data-st="done">เสร็จแล้ว</button>` : ''}<button class="btn btn-ghost" type="button" data-id="${r.id}" data-st="refunded">คืนเงิน</button>`)).join('') || EMPTY;
+}
+$('#aStatus').onchange = act(adminOrders);
+$('#aOrders').onclick = act(async e => {
+  const b = e.target.closest('button[data-id]'); if (!b) return;
+  if (b.dataset.st === 'refunded' && !confirm('คืนเงินเข้ากระเป๋าลูกค้า? (ย้อนกลับไม่ได้)\nถ้าออเดอร์นี้เป็นแพ็กเกจที่มีวันหมดอายุ ให้แก้วันหมดอายุที่แท็บ "ลูกค้าแอป" เองด้วย')) return;
+  ok(await sb.rpc('shop_update_order', {p_id: +b.dataset.id, p_status: b.dataset.st, p_note: b.closest('.item').querySelector('.note').value}));
+  toast('บันทึกแล้ว'); await adminOrders();
+});
+
+// ===== สมาชิก / ยอดเงิน: แอดมินเพิ่มหรือหักเงินในกระเป๋าตังของสมาชิกเอง (ดู supabase-wallet-admin.sql) =====
+const adjAmt = n => `${n > 0 ? '＋' : '－'}${baht(Math.abs(n))}`;
+const adjBadge = n => `<span class="badge ${n > 0 ? 'g' : 'r'}">${n > 0 ? 'เพิ่มโดยแอดมิน' : 'หักโดยแอดมิน'}</span>`;
+let memRows = [];
+async function adminMembers() {
+  // ponytail: ดึงสมาชิกมาทั้งหมดแล้วค้นในเบราว์เซอร์ ถ้าเกิน 1,000 คนค่อยย้ายการค้นไปฝั่งฐานข้อมูล
+  memRows = ok(await sb.from('shop_members').select('id, email, display_name, phone, line_id, balance, is_admin, created_at').order('created_at', {ascending: false}).limit(1000));
+  paintMembers();
+  const adj = (await sb.from('shop_adjustments').select('*').order('created_at', {ascending: false}).limit(50)).data;
+  const who = id => { const m = memRows.find(x => x.id === id); return m ? esc(m.display_name || m.email) : ''; };
+  $('#adjList').innerHTML = !adj ? '<p class="muted">ยังไม่ได้ติดตั้งส่วนนี้ ให้รันไฟล์ supabase-wallet-admin.sql ใน Supabase ก่อน</p>'
+    : adj.map(a => item(`${adjAmt(a.amount)} · ${who(a.member_id) || 'สมาชิกที่ถูกลบ'}`,
+        `${when(a.created_at)} · คงเหลือ ${baht(a.balance_after)}${a.note ? ' · ' + esc(a.note) : ''}${who(a.admin_id) ? ' · โดย ' + who(a.admin_id) : ''}`, adjBadge(a.amount))).join('') || EMPTY;
+}
+function paintMembers() {
+  const q = $('#memQ').value.trim().toLowerCase();
+  $('#memList').innerHTML = memRows.filter(m => !q || [m.display_name, m.email, m.phone, m.line_id].some(v => (v || '').toLowerCase().includes(q))).map(m => `
+    <div class="item" data-mid="${esc(m.id)}">
+      <div><b>${esc(m.display_name || m.email)}</b>${m.is_admin ? ' <b class="adm">ADMIN</b>' : ''}<small>${[m.email, m.phone, m.line_id].filter(Boolean).map(esc).join(' · ')}</small></div>
+      <div class="r"><b>${baht(m.balance)}</b>
+        <input class="note amt" type="number" min="0.01" max="100000" step="0.01" placeholder="จำนวนเงิน" aria-label="จำนวนเงิน">
+        <input class="note why" placeholder="เหตุผล (ไม่บังคับ)" maxlength="300" aria-label="เหตุผล">
+        <button class="btn btn-main" type="button" data-sign="1">＋ เพิ่ม</button><button class="btn btn-ghost" type="button" data-sign="-1">－ หัก</button></div>
+    </div>`).join('') || EMPTY;
+}
+$('#memQ').addEventListener('input', paintMembers);
+$('#memList').onclick = act(async e => {
+  const b = e.target.closest('button[data-sign]'); if (!b) return;
+  const row = b.closest('[data-mid]'), m = memRows.find(x => x.id === row.dataset.mid), amt = Math.round(+row.querySelector('.amt').value * 100) / 100;
+  if (!(amt > 0)) throw new Error('กรอกจำนวนเงินก่อน');
+  const signed = amt * +b.dataset.sign, name = m.display_name || m.email;
+  if (!confirm(`${signed > 0 ? 'เพิ่มเงิน' : 'หักเงิน'} ${baht(amt)} ${signed > 0 ? 'ให้' : 'จาก'} ${name}?\nยอดเงิน ${baht(m.balance)} → ${baht(+m.balance + signed)}`)) return;
+  ok(await sb.rpc('shop_adjust_balance', {p_member: m.id, p_amount: signed, p_note: row.querySelector('.why').value}));
+  toast(`${signed > 0 ? 'เพิ่มเงิน' : 'หักเงิน'}ให้ ${name} แล้ว`);
+  if (m.id === user.id) { await loadMe(); paintAuth(); }
+  await adminMembers();
+});
+
+// ===== ลูกค้าแอป: บัญชีที่ร้านสร้างให้ลูกค้าไว้เช็ควันหมดอายุ (แยกจากสมาชิกเว็บ ดู supabase-subs.sql) =====
+const today = () => new Date().toLocaleDateString('en-CA');  // YYYY-MM-DD ตามเวลาเครื่อง
+// 31 ม.ค. + 1 เดือน = วันสุดท้ายของ ก.พ. (ไม่ล้นไปเดือนมีนา)
+const addMonths = (d, n) => { const x = new Date(d + 'T00:00:00'), day = x.getDate(); x.setMonth(x.getMonth() + n); if (x.getDate() !== day) x.setDate(0); return x.toLocaleDateString('en-CA'); };
+const addDays = (d, n) => { const x = new Date(d + 'T00:00:00'); x.setDate(x.getDate() + n); return x.toLocaleDateString('en-CA'); };
+const bonusOf = inp => Math.min(365, Math.max(0, Math.floor(+inp.value || 0)));  // วันแถม: จำนวนเต็ม 0-365
+const daysLeft = d => Math.round((new Date(d + 'T00:00:00') - new Date(today() + 'T00:00:00')) / 864e5);
+const thDate = d => new Date(d + 'T00:00:00').toLocaleDateString('th-TH', {dateStyle: 'medium'});
+const expBadge = n => `<span class="badge ${n < 0 ? 'r' : n <= 7 ? 'y' : 'g'}">${n < 0 ? 'หมดอายุแล้ว' : n === 0 ? 'หมดอายุวันนี้' : (n <= 7 ? 'ใกล้หมด ' : '') + `เหลือ ${n} วัน`}</span>`;
+
+// ฝั่งลูกค้า
+$('#fCheck').onsubmit = act(async e => {
+  const f = e.target.elements, name = f.username.value.trim();
+  const r = ok(await sb.rpc('shop_check_subs', {p_username: name, p_password: f.password.value}));
+  f.password.value = '';
+  if (!r.ok) { $('#checkOut').innerHTML = '<p class="muted">ผลการตรวจสอบจะแสดงที่นี่</p>'; throw new Error(r.error); }
+  toast('พบข้อมูลบัญชีแล้ว');
+  $('#checkOut').innerHTML = `<b>👤 ${esc(r.name)} <span class="badge g">${esc(r.username)}</span></b>`
+    + (r.subs.map(x => item(esc(x.app), `${x.account ? esc(x.account) + '<br>' : ''}หมดอายุ ${thDate(x.expires_on)}${x.note ? '<br>' + esc(x.note) : ''}`, expBadge(x.days_left))).join('') || '<p class="muted">ยังไม่มีแอปในบัญชีนี้</p>')
+    + `<a class="btn btn-line" href="${esc(lineUrl('สนใจต่ออายุแอป (ชื่อผู้ใช้ ' + r.username + ')'))}" target="_blank" rel="noopener">💬 ต่ออายุทาง LINE</a>`;
+});
+
+// ฝั่งแอดมิน
+let custRows = [];
+// กฎขาดต่ออายุ (ใช้กับทุกแอป): ทุกแอปของลูกค้าหมดอายุมาเกิน N วัน แล้วกลับมาต่ออายุ/เพิ่มแอป -> ออกรหัสผ่านใหม่ รหัสเดิมใช้ไม่ได้
+// ฝั่งซื้อผ่านเว็บทำใน shop_place_order (supabase-subs.sql) ด้วยเงื่อนไขเดียวกัน
+const lapseDays = () => Number(C.settings.lapseDays ?? 15);
+const isLapsed = c => c.subs.length > 0 && c.subs.every(x => daysLeft(x.expires_on) < -lapseDays());
+async function afterRenew(cid, wasLapsed, newExp) {
+  if (wasLapsed && daysLeft(newExp) >= 0) showCreds(ok(await sb.rpc('shop_reset_customer_pass', {p_id: cid})), `ลูกค้าขาดต่ออายุเกิน ${lapseDays()} วัน ออกรหัสผ่านใหม่แล้ว`);
+  await adminSubs();
+}
+async function adminSubs() {
+  // ponytail: ดึงลูกค้ามาทั้งหมดแล้วค้นในเบราว์เซอร์ พอสำหรับลูกค้าหลักร้อย ถ้าเกิน 1,000 คนค่อยย้ายการค้นไปฝั่งฐานข้อมูล
+  custRows = ok(await sb.from('shop_customers').select('id, username, email, name, contact, note, created_at, subs:shop_subs(id, app, account, starts_on, expires_on, note)').order('created_at', {ascending: false}).limit(1000));
+  $('#appList').innerHTML = C.sections.flatMap(x => x.items).map(i => `<option value="${esc(i.n)}">`).join('');
+  paintCust();
+}
+function paintCust() {
+  const q = $('#custQ').value.trim().toLowerCase();
+  $('#custList').innerHTML = custRows.filter(c => !q || [c.name, c.username, c.email, c.contact].some(v => (v || '').toLowerCase().includes(q))).map(c => `
+    <div class="panel" data-cid="${c.id}">
+      <div class="rowb">
+        <div><b>${esc(c.name)}</b> <span class="badge g sel">${esc(c.username)}</span>${isLapsed(c) ? ` <span class="badge r">ขาดต่ออายุเกิน ${lapseDays()} วัน</span>` : ''}<div class="muted">${[c.email, c.contact, c.note].filter(Boolean).map(esc).join(' · ')}</div></div>
+        <div class="r"><button class="mini" type="button" data-act="reset">รีเซ็ตรหัสผ่าน</button><button class="mini" type="button" data-act="delc">ลบลูกค้า</button></div>
+      </div>
+      ${[...c.subs].sort((a, b) => a.expires_on.localeCompare(b.expires_on)).map(x => `
+      <div class="item" data-sid="${x.id}">
+        <div><b>${esc(x.app)}</b><small>${[x.account, x.note].filter(Boolean).map(esc).join(' · ')}</small></div>
+        <div class="r">${expBadge(daysLeft(x.expires_on))}
+          <select class="note mo" aria-label="ระยะเวลาที่ต่ออายุ"><option value="1">1 เดือน</option><option value="2">2 เดือน</option><option value="3">3 เดือน</option><option value="6">6 เดือน</option><option value="12">1 ปี</option></select>
+          <input class="note bd" type="number" min="0" max="365" step="1" inputmode="numeric" placeholder="แถม (วัน)" aria-label="แถมเพิ่ม (วัน)">
+          <button class="btn btn-main" type="button" data-act="renew">ต่ออายุ</button>
+          <input class="note" type="date" value="${esc(x.expires_on)}" data-exp aria-label="วันหมดอายุ (แก้วันที่เองได้)"><button class="mini" type="button" data-act="dels">ลบ</button></div>
+      </div>`).join('')}
+      <details>
+        <summary class="linkbtn">＋ เพิ่มแอปให้ลูกค้านี้</summary>
+        <form class="subadd grid3" style="margin-top:10px">
+          <label class="f">แอป / แพ็กเกจ<input name="app" required maxlength="100" list="appList"></label>
+          <label class="f">อีเมลหรือบัญชีที่ใช้กับแอป<input name="account" maxlength="200" value="${esc(c.email || '')}"></label>
+          <label class="f">ข้อความถึงลูกค้า (ไม่บังคับ)<input name="note" maxlength="300"></label>
+          <label class="f">วันเริ่ม<input name="starts_on" type="date" value="${today()}" required></label>
+          <label class="f">ระยะเวลา<select name="months"><option value="1">1 เดือน</option><option value="2">2 เดือน</option><option value="3">3 เดือน</option><option value="6">6 เดือน</option><option value="12">1 ปี</option><option value="">กำหนดวันเอง</option></select></label>
+          <label class="f">แถมเพิ่ม (วัน)<input name="bonus" type="number" min="0" max="365" step="1" value="0" inputmode="numeric"></label>
+          <label class="f">วันหมดอายุ<input name="expires_on" type="date" value="${addMonths(today(), 1)}" required></label>
+          <button class="btn btn-main" type="submit">เพิ่มแอป</button>
+        </form>
+      </details>
+    </div>`).join('') || EMPTY;
+}
+function showCreds(r, title, sub) {
+  const msg = `${sub ? `${sub.app} ใช้ได้ถึง ${thDate(sub.expires_on)}\n` : ''}ชื่อผู้ใช้: ${r.username}${r.email ? ` (หรือใช้อีเมล ${r.email})` : ''}\nรหัสผ่าน: ${r.password}\nเช็ควันหมดอายุได้ที่ ${here}#check`;
+  $('#custNew').innerHTML = `<div class="panel" style="margin-top:14px;border-color:var(--pink)"><b>${title}: ${esc(r.name)}</b>
+    <div class="credbox">ชื่อผู้ใช้: <b class="sel">${esc(r.username)}</b><br>รหัสผ่าน: <b class="sel">${esc(r.password)}</b></div>
+    <p class="muted">รหัสผ่านแสดงให้เห็นครั้งนี้ครั้งเดียว ระบบไม่ได้เก็บรหัสจริงไว้ ถ้าลูกค้าทำหายให้กด "รีเซ็ตรหัสผ่าน"</p>
+    <button class="btn btn-ghost" type="button" id="credCopy">📋 คัดลอกข้อความส่งให้ลูกค้า</button></div>`;
+  $('#credCopy').onclick = act(async () => { await navigator.clipboard.writeText(msg); toast('คัดลอกแล้ว วางในแชต LINE ได้เลย'); });
+  $('#custNew').scrollIntoView({block: 'nearest', behavior: 'instant'});
+}
+$('#custQ').addEventListener('input', paintCust);
+// ฟอร์มเพิ่มแอป (ทั้งฟอร์มบนสุดและฟอร์มในรายการลูกค้า): วันหมดอายุ = วันเริ่ม + ระยะเวลา + วันแถม; แก้วันหมดอายุเอง -> "กำหนดวันเอง"
+function dateSync(t) {
+  const el = t.form.elements;
+  if (t.name === 'expires_on') el.months.value = '';
+  else if (['months', 'starts_on', 'bonus'].includes(t.name) && el.months.value && el.starts_on.value) el.expires_on.value = addDays(addMonths(el.starts_on.value, +el.months.value), bonusOf(el.bonus));
+}
+function initCustForm() {
+  const el = $('#fCust').elements;
+  el.starts_on.value = today(); el.months.value = '1'; el.expires_on.value = addMonths(today(), 1);
+}
+initCustForm();
+$('#fCust').addEventListener('change', e => dateSync(e.target));
+// พิมพ์วันแถมแล้ววันหมดอายุขยับทันที ไม่ต้องรอออกจากช่อง
+$('#fCust').addEventListener('input', e => { if (e.target.name === 'bonus') dateSync(e.target); });
+$('#custList').addEventListener('input', e => { if (e.target.name === 'bonus') dateSync(e.target); });
+// กรอกครั้งเดียว: ลูกค้าใหม่ = สร้างบัญชี (user / password) + แอปแรก; อีเมลที่มีบัญชีแล้ว = เพิ่มหรือต่ออายุแอปในบัญชีเดิม
+$('#fCust').onsubmit = act(async e => {
+  const f = e.target, d = Object.fromEntries(new FormData(f)), email = d.email.trim().toLowerCase();
+  const sub = {app: d.app.trim(), account: email || null, note: d.subnote.trim() || null, starts_on: d.starts_on, expires_on: d.expires_on};
+  const old = email && custRows.find(c => c.email === email);
+  if (old) {
+    const was = isLapsed(old), same = old.subs.find(x => x.app.toLowerCase() === sub.app.toLowerCase());
+    const {app, ...dates} = sub;  // ต่ออายุแอปเดิม: คงชื่อแอปที่บันทึกไว้
+    ok(same ? await sb.from('shop_subs').update(dates).eq('id', same.id) : await sb.from('shop_subs').insert({customer_id: old.id, ...sub}));
+    $('#custNew').innerHTML = '';
+    toast(`อีเมลนี้มีบัญชีอยู่แล้ว (${old.username}) ${same ? 'ต่ออายุ' : 'เพิ่ม'}แอปในบัญชีเดิมให้แล้ว`);
+    f.reset(); initCustForm();
+    return afterRenew(old.id, was, sub.expires_on);
+  }
+  const r = ok(await sb.rpc('shop_create_customer', {p_name: d.name, p_contact: d.contact, p_note: d.note, p_email: d.email}));
+  showCreds(r, 'สร้างบัญชีแล้ว', sub);  // โชว์รหัสก่อน: ถึงขั้นถัดไปพลาด รหัสผ่าน (เห็นได้ครั้งเดียว) ก็ไม่หาย
+  try {
+    const x = await sb.from('shop_subs').insert({customer_id: r.id, ...sub});
+    if (x.error) throw new Error(`สร้างบัญชีแล้ว แต่เพิ่มแอปไม่สำเร็จ (${x.error.message}) ให้เพิ่มแอปที่รายการลูกค้าด้านล่างแทน`);
+    f.reset(); initCustForm();
+  } finally { await adminSubs(); }
+});
+// ปุ่มในรายการลูกค้า (ไม่ครอบ act ทั้งกล่อง: act ปิดปุ่มชั่วคราว ซึ่งจะทำให้ปุ่ม submit ของฟอร์มเพิ่มแอปไม่ทำงาน)
+$('#custList').addEventListener('click', e => {
+  const b = e.target.closest('button[data-act]'); if (!b) return;
+  act(async () => {
+    const cid = +b.closest('[data-cid]').dataset.cid, c = custRows.find(x => x.id === cid), a = b.dataset.act;
+    if (a === 'reset') {
+      if (!confirm(`ออกรหัสผ่านใหม่ให้ ${c.name}? รหัสเดิมจะใช้ไม่ได้ทันที`)) return;
+      return showCreds(ok(await sb.rpc('shop_reset_customer_pass', {p_id: cid})), 'รหัสผ่านใหม่');
+    }
+    if (a === 'renew') {
+      const row = b.closest('[data-sid]'), x = c.subs.find(v => v.id === +row.dataset.sid), n = +row.querySelector('.mo').value, bonus = bonusOf(row.querySelector('.bd'));
+      const live = daysLeft(x.expires_on) >= 0, exp = addDays(addMonths(live ? x.expires_on : today(), n), bonus);
+      if (!confirm(`ต่ออายุ ${x.app} ของ ${c.name} อีก ${n === 12 ? '1 ปี' : n + ' เดือน'}${bonus ? ` + แถม ${bonus} วัน` : ''}?\nวันหมดอายุ ${thDate(x.expires_on)} → ${thDate(exp)}${live ? '' : ' (หมดอายุไปแล้ว เริ่มนับจากวันนี้)'}`)) return;
+      const was = isLapsed(c);
+      ok(await sb.from('shop_subs').update(live ? {expires_on: exp} : {starts_on: today(), expires_on: exp}).eq('id', x.id));
+      toast(`ต่ออายุ ${x.app} ถึง ${thDate(exp)} แล้ว`);
+      return afterRenew(cid, was, exp);
+    }
+    if (a === 'delc') {
+      if (!confirm(`ลบลูกค้า ${c.name} และแอปทั้งหมดของลูกค้านี้? (กู้คืนไม่ได้)`)) return;
+      ok(await sb.from('shop_customers').delete().eq('id', cid));
+    } else {
+      if (!confirm('ลบแอปนี้ออกจากบัญชีลูกค้า?')) return;
+      ok(await sb.from('shop_subs').delete().eq('id', +b.closest('[data-sid]').dataset.sid));
+    }
+    toast('บันทึกแล้ว'); await adminSubs();
+  })(e);
+});
+$('#custList').addEventListener('submit', act(async e => {
+  const f = e.target, d = Object.fromEntries(new FormData(f)), cid = +f.closest('[data-cid]').dataset.cid, was = isLapsed(custRows.find(x => x.id === cid));
+  ok(await sb.from('shop_subs').insert({customer_id: cid, app: d.app.trim(), account: d.account.trim() || null, note: d.note.trim() || null, starts_on: d.starts_on, expires_on: d.expires_on}));
+  toast('เพิ่มแอปแล้ว'); await afterRenew(cid, was, d.expires_on);
+}));
+$('#custList').addEventListener('change', act(async e => {
+  const t = e.target, f = t.closest('.subadd');
+  if (f) dateSync(t);
+  else if (t.matches('[data-exp]') && t.value) {  // แก้วันหมดอายุของแอปที่มีอยู่ = ต่ออายุ
+    const cid = +t.closest('[data-cid]').dataset.cid, was = isLapsed(custRows.find(x => x.id === cid));
+    ok(await sb.from('shop_subs').update({expires_on: t.value}).eq('id', +t.closest('[data-sid]').dataset.sid));
+    toast('เปลี่ยนวันหมดอายุแล้ว'); await afterRenew(cid, was, t.value);
+  }
+}));
+
+async function showTab(t) {
+  $('#view-admin').dataset.tab = t;
+  $$('#aTabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === t));
+  $$('.apane').forEach(p => p.hidden = p.id !== 'a-' + t);
+  await ({topups: adminTopups, orders: adminOrders, members: adminMembers, subs: adminSubs})[t]();
+}
+$('#aTabs').onclick = act(async e => { const t = e.target.closest('button')?.dataset.tab; if (t) await showTab(t); });
+const loadAdmin = () => showTab($('#view-admin').dataset.tab || 'topups');
+
+const VIEWS = {wallet: loadWallet, orders: loadOrders, account: loadAccount, admin: loadAdmin, check: async () => {}};
+
+// ===== โหมดแก้ไขบนหน้าเว็บ (แอดมิน): กดส่วนที่อยากแก้ -> แผงแก้ไขเปิดข้างๆ -> หน้าเว็บเปลี่ยนตามทันที =====
+const openSet = new WeakSet();
+async function upload(file) {
+  const path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${(file.name.split('.').pop() || 'png').toLowerCase().replace(/[^a-z0-9]/g, '')}`;
+  ok(await sb.storage.from('site').upload(path, file));
+  return sb.storage.from('site').getPublicUrl(path).data.publicUrl;
+}
+function field(obj, k) {
+  if (Array.isArray(obj[k])) return listEd(obj[k], k);
+  const inp = h(LONG.has(k) ? 'textarea' : 'input');
+  if (LONG.has(k)) inp.rows = 3; else inp.type = NUM.has(k) ? 'number' : COLOR.has(k) ? 'color' : 'text';
+  if (NUM.has(k)) { inp.min = 0; inp.step = k === 'price' ? 'any' : 1; }
+  inp.value = obj[k] ?? '';
+  inp.oninput = () => {
+    obj[k] = NUM.has(k) ? +inp.value || 0 : inp.value;
+    if (TITLE.has(k)) { const s = inp.closest('details')?.querySelector(':scope > summary > span'); if (s) s.textContent = inp.value || '(ยังไม่มีชื่อ)'; }
+  };
+  const wrap = h('label', {className: 'f'}, LABEL[k] || k, inp);
+  if (IMG.has(k)) {
+    const up = h('input', {type: 'file', accept: 'image/png,image/jpeg,image/webp,image/gif', ariaLabel: 'อัปโหลดรูป'});
+    up.onchange = act(async () => {
+      if (!up.files[0]) return;
+      inp.value = await upload(up.files[0]); up.value = '';
+      inp.dispatchEvent(new Event('input', {bubbles: true}));  // ให้หน้าเว็บวาดรูปใหม่ทันที
+      toast('อัปโหลดรูปแล้ว อย่าลืมกดบันทึก');
+    });
+    wrap.append(up);
+  }
+  return wrap;
+}
+function objEd(obj, tpl) {
+  const d = h('div', {className: 'ed-obj'});
+  for (const k of Object.keys(tpl)) { if (!(k in obj)) obj[k] = structuredClone(tpl[k]); d.append(field(obj, k)); }
+  return d;
+}
+function listEd(arr, k) {
+  const box = h('div', {className: 'ed-list'});
+  const btn = (text, fn, className = 'mini', ariaLabel = text) => { const b = h('button', {type: 'button', className, textContent: text, ariaLabel}); b.onclick = e => { e.preventDefault(); fn(); draw(); }; return b; };
+  const draw = () => box.replaceChildren(
+    h('div', {className: 'ed-h', textContent: `${LABEL[k] || k} (${arr.length})`}),
+    ...arr.map((it, i) => {
+      const det = h('details', {open: openSet.has(it)});
+      det.ontoggle = () => det.open ? openSet.add(it) : openSet.delete(it);
+      det.append(h('summary', {}, h('span', {textContent: it.n || it.title || it.name || it.label || '(ยังไม่มีชื่อ)'}), h('i', {},
+        btn('↑', () => i && arr.splice(i - 1, 2, arr[i], arr[i - 1]), 'mini', 'เลื่อนขึ้น'),
+        btn('↓', () => i < arr.length - 1 && arr.splice(i, 2, arr[i + 1], arr[i]), 'mini', 'เลื่อนลง'),
+        btn('ลบ', () => confirm('ลบรายการนี้?') && arr.splice(i, 1)))), objEd(it, BLANK[k]));
+      return det;
+    }),
+    btn('+ เพิ่ม' + (LABEL[k] || '').split(' ')[0], () => { const n = structuredClone(BLANK[k]); arr.push(n); openSet.add(n); }, 'btn btn-ghost add'));
+  draw();
+  return box;
+}
+
+// path เช่น 'slides.0', 'sections.1.items.3', 'settings' ชี้เข้าไปใน draft
+const at = path => path.split('.').reduce((o, k) => o?.[k], draft);
+function openDrawer(path, nth = pickedNth) {
+  const parts = path.split('.'), inList = parts.length > 1, i = +parts.at(-1), kind = inList ? parts.at(-2) : path;
+  const listPath = parts.slice(0, -1).join('.'), arr = inList ? at(listPath) : null, obj = at(path);
+  if (!obj) return closeDrawer();
+  picked = path; pickedNth = nth;
+  const tool = (text, fn) => { const b = h('button', {type: 'button', className: 'mini', textContent: text}); b.onclick = fn; return b; };
+  const move = d => { const j = i + d; if (j < 0 || j >= arr.length) return; [arr[i], arr[j]] = [arr[j], arr[i]]; openDrawer(`${listPath}.${j}`); };
+  $('#drTitle').textContent = 'แก้ไข' + (LABEL[kind] || '').split(' ')[0];
+  $('#drBody').replaceChildren(
+    ...(inList ? [h('div', {className: 'dr-tools'},
+      tool('← ย้ายไปก่อนหน้า', () => move(-1)), tool('ย้ายไปข้างหลัง →', () => move(1)),
+      tool('🗑 ลบ', () => { if (confirm('ลบรายการนี้?')) { arr.splice(i, 1); closeDrawer(); } }))] : []),
+    objEd(obj, BLANK[kind]));
+  $('#drawer').hidden = false; document.body.classList.add('has-drawer');
+  $('#drawer').scrollTop = 0;
+  renderSite();
+  // เลื่อนให้เห็นชิ้นที่กำลังแก้ (หมวดสินค้ามี 2 ที่: ไอคอนหมวดกับหัวข้อหมวด เลยจำว่ากดอันไหน)
+  $$(`[data-edit="${path}"]`).at(nth)?.scrollIntoView({block: 'nearest', inline: 'nearest', behavior: 'instant'});
+}
+function closeDrawer() {
+  picked = null; $('#drawer').hidden = true; document.body.classList.remove('has-drawer');
+  renderSite();
+}
+
+async function startEdit() {
+  await ready;
+  if (!me?.is_admin) return;
+  // กันเซฟทับของจริงด้วยข้อมูลเก่า/ค่าเริ่มต้น ถ้าโหลดจากฐานข้อมูลไม่สำเร็จ
+  if (!dbOk) return toast('โหลดเนื้อหาจากฐานข้อมูลไม่สำเร็จ รีเฟรชหน้าแล้วลองใหม่', true);
+  if ($('#home').hidden) { history.replaceState(null, '', here); route(); }
+  draft = structuredClone(C); editing = true;
+  document.body.classList.add('editing'); $('#edBar').hidden = false;
+  adminFab(); renderSite(); scrollTo(0, 0);
+}
+function exitEdit() {
+  editing = false; draft = picked = null;
+  document.body.classList.remove('editing', 'has-drawer'); $('#edBar').hidden = $('#drawer').hidden = true;
+  adminFab(); renderSite();
+}
+const dirty = () => editing && JSON.stringify(draft) !== JSON.stringify(C);
+
+document.addEventListener('click', e => { if (e.target.closest('[data-start-edit]')) startEdit().catch(fail); });
+// ระหว่างแก้ไข: คลิกบนหน้าเว็บ = เลือกชิ้นนั้นมาแก้ ลิงก์/ปุ่มอื่นไม่ทำงาน (ยกเว้นแผงแก้ไข และปุ่มเลื่อนแบนเนอร์)
+document.addEventListener('click', e => {
+  if (!editing || e.target.closest('#drawer, #edBar, .arrow, #dots, #themeBtn')) return;
+  e.preventDefault(); e.stopPropagation();
+  const add = e.target.closest('[data-add]'), blk = e.target.closest('[data-edit]');
+  if (add) {
+    const arr = at(add.dataset.add);
+    arr.push(structuredClone(BLANK[add.dataset.add.split('.').at(-1)]));
+    openDrawer(`${add.dataset.add}.${arr.length - 1}`, -1);
+  } else if (blk) openDrawer(blk.dataset.edit, $$(`[data-edit="${blk.dataset.edit}"]`).indexOf(blk));
+}, true);
+$('#drBody').addEventListener('input', renderSite);
+$('#drBody').addEventListener('click', e => { if (e.target.closest('button')) renderSite(); });  // เพิ่ม/ลบ/สลับ ในรายการย่อย
+$('#drClose').onclick = closeDrawer;
+$('#edSettings').onclick = () => openDrawer('settings', 0);
+$('#edExit').onclick = () => { if (!dirty() || confirm('ออกโดยไม่บันทึก? สิ่งที่แก้ไว้จะหายไป')) exitEdit(); };
+// ponytail: แอดมิน 2 คนแก้พร้อมกัน คนเซฟทีหลังทับ ถ้าทีมใหญ่ขึ้นค่อยเพิ่มเช็ค updated_at
+$('#edSave').onclick = act(async () => {
+  ok(await sb.from('shop_content').upsert({id: 1, content: draft, updated_at: new Date().toISOString(), updated_by: user.id}));
+  C = structuredClone(draft); cacheContent(C);
+  toast('บันทึกแล้ว ลูกค้าเห็นหน้าเว็บใหม่ทันที');
+});
+addEventListener('beforeunload', e => { if (dirty()) e.preventDefault(); });
+
+// ===== เริ่มต้น: โชว์ของที่ cache ไว้ทันที แล้วอัปเดตจากฐานข้อมูล =====
+paintAuth();
+const ready = (async () => {
+  let raw = null; try { raw = JSON.parse(localStorage.getItem('cat4k_content')); } catch {}
+  const fresh = (async () => { const d = ok(await sb.from('shop_content').select('content').eq('id', 1).maybeSingle()); dbOk = true; return d?.content || null; })().catch(() => null);
+  if (!raw) raw = await Promise.race([fresh, new Promise(r => setTimeout(r, 2500, null))]);
+  setContent(raw || DEFAULT);
+  if (!VIEWS[location.hash.slice(1)]) document.getElementById(location.hash.slice(1))?.scrollIntoView({behavior: 'instant'});  // เปิดลิงก์ #sec-xxx ตรงๆ
+  const c = await fresh;
+  if (c && JSON.stringify(c) !== JSON.stringify(raw)) setContent(c);
+  if (c) cacheContent(c);
+})();
+</script>
+</body>
+</html>
