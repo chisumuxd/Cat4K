@@ -255,6 +255,49 @@ button:disabled{opacity:.5;cursor:wait}
 .tabs button{padding:8px 16px;border-radius:99px;border:1px solid var(--line);background:var(--panel);color:var(--muted);white-space:nowrap}
 .tabs button.on{background:var(--pinkgrad);border-color:transparent;color:#fff;font-weight:600}
 
+/* ===== แอดมิน: ภาพรวม (ตัวเลขสรุป + กราฟ) ===== */
+/* สีกราฟ: เติมเงิน=ฟ้า ยอดขาย=ส้ม สมาชิกใหม่=เขียว — ตรวจกับพื้น --panel ทั้งสองโหมดแล้วว่าคนตาบอดสีก็แยกออก ถ้าเปลี่ยนสีต้องตรวจใหม่ */
+:root{--s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--up:#166534;--down:#9f1239}
+:root[data-theme=dark]{--s1:#3987e5;--s2:#d95926;--s3:#199e70;--up:#4ade80;--down:#fb7185}
+#a-stats{display:grid;gap:14px;transition:opacity .15s}
+#a-stats.busy{opacity:.55}  /* ระหว่างโหลดช่วงใหม่: คงภาพเดิมไว้ ไม่กระพริบ */
+#a-stats .tabs{margin:0}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:grid;gap:2px;align-content:start;color:var(--text)}
+.stat span{font-size:14px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.stat b{font-size:26px;font-weight:700;line-height:1.25;overflow-wrap:anywhere}
+.stat small{font-size:13px;color:var(--muted)}
+.stat small.up{color:var(--up)}.stat small.down{color:var(--down)}
+a.stat:hover,.stat.warn{border-color:var(--pink)}
+.key{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+.st-now{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media (max-width:760px){.st-now{grid-template-columns:1fr 1fr}}
+.st-nav{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.st-nav b{min-width:150px;text-align:center}
+.st-nav input{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:8px 12px;color:var(--text);font:inherit}
+#stCharts{position:relative}
+#stPlots{display:grid;gap:12px}
+#stPlots summary{cursor:pointer;color:var(--sky-t);font-size:14px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:6px}
+/* กราฟแท่ง: แกนซ้ายกว้างเท่ากันทุกกราฟ แท่งของช่วงเดียวกันจะตรงกันทั้งสองกราฟ */
+.chart{display:grid;grid-template-columns:44px 1fr;gap:0 8px;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.chart .yax{height:170px;display:flex;flex-direction:column-reverse;justify-content:space-between}
+.chart .yax span{height:0;display:flex;align-items:center;justify-content:flex-end}
+.chart .plot{height:170px;display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);border-bottom:1px solid color-mix(in srgb,var(--muted) 55%,transparent);
+  background:linear-gradient(var(--line),var(--line)) 0 0/100% 1px no-repeat,linear-gradient(var(--line),var(--line)) 0 50%/100% 1px no-repeat}
+.chart .col{display:flex;align-items:flex-end;justify-content:center;gap:2px;padding:0 1px}
+.chart .col.hot{background:color-mix(in srgb,var(--muted) 16%,transparent)}
+.chart .col i{flex:1;max-width:24px;border-radius:4px 4px 0 0}
+.chart .xax{grid-column:2;display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);padding-top:6px;white-space:nowrap}
+.chart .xax span{display:flex;justify-content:center}
+#stTip{position:absolute;z-index:2;pointer-events:none;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:13px;box-shadow:0 6px 18px var(--glow);display:grid;gap:2px;white-space:nowrap}
+#stTip div{display:flex;align-items:center;gap:6px;color:var(--muted)}
+#stTip div b{color:var(--text)}
+#stTip i{width:12px;height:2px;border-radius:2px}
+.st-table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums;margin-top:8px}
+.st-table th,.st-table td{padding:5px 8px;text-align:right;border-bottom:1px solid var(--line)}
+.st-table th:first-child,.st-table td:first-child{text-align:left}
+
 /* page editor */
 .ed-h{font-weight:600;color:var(--sky-t);margin:18px 0 6px}
 .ed-obj{display:grid;gap:10px;padding:4px 14px 14px}
@@ -457,6 +500,7 @@ img.ico{display:inline-block;object-fit:contain}
       <b>🛡️ เครื่องมือแอดมิน</b>
       <div class="rowb" style="justify-content:flex-start;flex-wrap:wrap">
         <button class="btn btn-main" type="button" data-start-edit>✏️ แก้ไขหน้าเว็บ</button>
+        <a class="btn btn-ghost" href="#admin" data-atab="stats">📊 ภาพรวม</a>
         <a class="btn btn-ghost" href="#admin" data-atab="topups">💰 คำขอเติมเงิน</a>
         <a class="btn btn-ghost" href="#admin" data-atab="orders">🧾 ออเดอร์</a>
       </div>
@@ -479,11 +523,37 @@ img.ico{display:inline-block;object-fit:contain}
   <section class="view" id="view-admin" hidden>
     <div class="h"><h2>⚙️ แอดมิน</h2></div>
     <div class="tabs" id="aTabs">
+      <button type="button" data-tab="stats">ภาพรวม</button>
       <button type="button" data-tab="topups">คำขอเติมเงิน</button>
       <button type="button" data-tab="orders">ออเดอร์</button>
       <button type="button" data-tab="members">สมาชิก / ยอดเงิน</button>
       <button type="button" data-tab="subs">ลูกค้าแอป</button>
       <button type="button" data-start-edit>✏️ แก้ไขหน้าเว็บ</button>
+    </div>
+    <div class="apane" id="a-stats">
+      <div class="st-now" id="stNow"></div>
+      <div class="tabs" id="stMode">
+        <button type="button" data-m="hour">รายชั่วโมง</button>
+        <button type="button" data-m="day">รายวัน</button>
+        <button type="button" data-m="month">รายเดือน</button>
+        <button type="button" data-m="year">รายปี</button>
+      </div>
+      <div class="st-nav">
+        <button class="rarr" type="button" data-step="-1" aria-label="ช่วงก่อนหน้า">‹</button>
+        <b id="stLabel"></b>
+        <button class="rarr" type="button" data-step="1" aria-label="ช่วงถัดไป">›</button>
+        <input type="date" id="stDate" aria-label="เลือกวันที่">
+      </div>
+      <div class="tabs" id="stJump">
+        <button type="button" data-ago="0">วันนี้</button>
+        <button type="button" data-ago="1">เมื่อวาน</button>
+        <button type="button" data-ago="2">2 วันก่อน</button>
+        <button type="button" data-ago="7">7 วันก่อน</button>
+        <button type="button" data-ago="14">14 วันก่อน</button>
+        <button type="button" data-ago="30">30 วันก่อน</button>
+      </div>
+      <div class="grid3" id="stTiles"></div>
+      <div class="panel" id="stCharts"><div id="stPlots"></div><div id="stTip" hidden></div></div>
     </div>
     <div class="apane list" id="a-topups"></div>
     <div class="apane" id="a-orders">
@@ -1361,14 +1431,110 @@ $('#custList').addEventListener('change', act(async e => {
   }
 }));
 
+// ===== แอดมิน: ภาพรวม — ยอดเติมเงิน (ที่อนุมัติแล้ว) / ยอดขาย (ไม่นับที่คืนเงิน) / สมาชิกใหม่ ตามช่วงเวลา (เวลาเครื่องของแอดมิน) =====
+let stMode = 'hour', stDay = today(), stSeq = 0, stData = null;
+const ST_STEP = {day: 1, month: 12, year: 60};  // ปุ่ม ‹ › เลื่อนทีละกี่เดือน (รายชั่วโมงเลื่อนทีละวัน)
+const stShift = (day, k) => stMode === 'hour' ? addDays(day, k) : addMonths(day, k * ST_STEP[stMode]);
+// ช่วงเวลาที่วัน day อยู่: [from, to) แบ่งเป็น n แท่ง — idx = เวลานี้อยู่แท่งไหน, lab = ชื่อแท่งใต้กราฟ, full = ชื่อแท่งแบบเต็ม
+function stPeriod(day) {
+  const [y, m, d] = day.split('-').map(Number), D = (...a) => new Date(...a), fmt = (x, o) => x.toLocaleDateString('th-TH', o), hh = i => String(i).padStart(2, '0');
+  if (stMode === 'hour') return {from: D(y, m - 1, d), to: D(y, m - 1, d + 1), n: 24, idx: t => t.getHours(), lab: hh, full: i => `${hh(i)}:00–${hh(i)}:59`,
+    title: fmt(D(y, m - 1, d), {weekday: 'short', day: 'numeric', month: 'short', year: 'numeric'})};
+  if (stMode === 'day') return {from: D(y, m - 1, 1), to: D(y, m, 1), n: D(y, m, 0).getDate(), idx: t => t.getDate() - 1, lab: i => i + 1,
+    full: i => fmt(D(y, m - 1, i + 1), {day: 'numeric', month: 'short', year: 'numeric'}), title: fmt(D(y, m - 1, 1), {month: 'long', year: 'numeric'})};
+  if (stMode === 'month') return {from: D(y, 0, 1), to: D(y + 1, 0, 1), n: 12, idx: t => t.getMonth(), lab: i => fmt(D(y, i, 1), {month: 'short'}),
+    full: i => fmt(D(y, i, 1), {month: 'long', year: 'numeric'}), title: 'ปี ' + (y + 543)};
+  return {from: D(y - 4, 0, 1), to: D(y + 1, 0, 1), n: 5, idx: t => t.getFullYear() - (y - 4), lab: i => y + 539 + i, full: i => 'ปี ' + (y + 539 + i), title: `ปี ${y + 539} – ${y + 543}`};
+}
+// ponytail: ดึงแถวของช่วงที่เลือกมารวมยอดในเบราว์เซอร์ (หน้าละ 1,000 แถว) ถ้าออเดอร์ถึงหลักหมื่นต่อช่วงจนช้า ค่อยย้ายไปรวมยอดใน SQL (date_trunc + group by)
+async function stRows(table, cols, from, to, where = q => q) {
+  const out = [];
+  for (let i = 0; ; i += 1000) {
+    const page = ok(await where(sb.from(table).select(cols)).gte('created_at', from.toISOString()).lt('created_at', to.toISOString()).order('created_at').order('id').range(i, i + 999));
+    out.push(...page);
+    if (page.length < 1000) return out;
+  }
+}
+const stCount = async q => { const {count, error} = await q; if (error) throw error; return count || 0; };
+// เพดานแกนตั้ง: เลขกลมที่หารสองลงตัว (เส้นกลางจะเป็นเลขกลมด้วย) เช่น 37 -> 40, 5,200 -> 6,000
+const stTop = v => { const x = Math.max(v, 2), p = 10 ** Math.floor(Math.log10(x)), f = x / p; return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 4 ? 4 : f <= 6 ? 6 : f <= 8 ? 8 : 10) * p; };
+console.assert(stTop(0) === 2 && stTop(37) === 40 && stTop(5200) === 6000 && stTop(10000) === 10000, 'stTop ผิด');
+function stChart(title, series) {  // series = [[ตัวแปรสี, ชื่อ, ค่าของแต่ละแท่ง], ...] ทุกชุดใช้หน่วยเดียวกัน (แกนตั้งเดียว)
+  const p = stData.p, top = stTop(Math.max(...series.flatMap(s => s[2]))), tick = v => top >= 1e4 ? v / 1e3 + 'K' : v.toLocaleString('th-TH'), every = p.n > 12 ? 2 : 1;
+  const cols = fn => Array.from({length: p.n}, (_, i) => fn(i)).join('');
+  return `<div><b>${title}</b>${series.length > 1 ? `<div class="legend">${series.map(([k, name]) => `<span><i class="key" style="background:var(--${k})"></i>${name}</span>`).join('')}</div>` : ''}</div>
+    <div class="chart"><div class="yax"><span>0</span><span>${tick(top / 2)}</span><span>${tick(top)}</span></div>
+      <div class="plot">${cols(i => `<div class="col" data-i="${i}">${series.map(([k, , bars]) => `<i style="background:var(--${k});height:${bars[i] ? `max(2px,${bars[i] / top * 100}%)` : 0}"></i>`).join('')}</div>`)}</div>
+      <div class="xax">${cols(i => `<span>${i % every ? '' : p.lab(i)}</span>`)}</div></div>`;
+}
+async function adminStats() {
+  const my = ++stSeq, box = $('#a-stats'), p = stPeriod(stDay), prev = stMode === 'year' ? null : stPeriod(stShift(stDay, -1)), from = (prev || p).from;
+  $$('#stMode button').forEach(b => b.classList.toggle('on', b.dataset.m === stMode));
+  $('#stJump').hidden = stMode !== 'hour';
+  $$('#stJump button').forEach(b => b.classList.toggle('on', addDays(today(), -b.dataset.ago) === stDay));
+  $('#stLabel').textContent = p.title; $('#stDate').value = stDay;
+  box.classList.add('busy');
+  try {
+    const head = {count: 'exact', head: true};
+    const [top, ord, mem, ...now] = await Promise.all([
+      stRows('shop_topups', 'amount, created_at', from, p.to, q => q.eq('status', 'approved')),
+      stRows('shop_orders', 'price, created_at', from, p.to, q => q.neq('status', 'refunded')),
+      stRows('shop_members', 'created_at', from, p.to),
+      stCount(sb.from('shop_topups').select('id', head).eq('status', 'pending')),
+      stCount(sb.from('shop_orders').select('id', head).eq('status', 'pending')),
+      stCount(sb.from('shop_members').select('id', head)),
+      stCount(sb.from('shop_members').select('id', head).eq('is_admin', true))]);
+    if (my !== stSeq) return;  // กดเปลี่ยนช่วงไปแล้วระหว่างรอ: ทิ้งผลชุดเก่า
+    // ช่วงก่อนหน้านับเท่าที่เวลาผ่านมาเท่ากัน (9 โมงวันนี้ เทียบกับ ถึง 9 โมงเมื่อวาน) ไม่งั้นตอนเช้าจะดูเหมือนยอดตกทุกวัน
+    const cut = Math.min(Date.now(), p.to) - p.from;
+    const sum = (rows, val) => {
+      const bars = Array(p.n).fill(0); let was = 0, count = 0;
+      for (const r of rows) { const t = new Date(r.created_at); if (t >= p.from) { bars[p.idx(t)] += val(r); count++; } else if (t - from < cut) was += val(r); }
+      return {bars, total: bars.reduce((a, b) => a + b, 0), was, count};
+    };
+    const d = stData = {p, top: sum(top, r => +r.amount), ord: sum(ord, r => +r.price), mem: sum(mem, () => 1)};
+    $('#stNow').innerHTML = [['เติมเงินรอตรวจ', 'topups'], ['ออเดอร์รอดำเนินการ', 'orders'], ['สมาชิกทั้งหมด', 'members'], ['แอดมิน', 'members']]
+      .map(([label, tab], i) => `<a class="stat${i < 2 && now[i] ? ' warn' : ''}" href="#admin" data-atab="${tab}"><span>${label}</span><b>${now[i].toLocaleString('th-TH')}</b></a>`).join('');
+    const delta = s => !prev || !s.was ? '' : `<small class="${s.total >= s.was ? 'up' : 'down'}">${s.total >= s.was ? '▲' : '▼'} ${Math.abs((s.total - s.was) / s.was * 100).toFixed(1)}% จากช่วงก่อน</small>`;
+    const tile = (k, label, value, s) => `<div class="stat"><span><i class="key" style="background:var(--${k})"></i>${label}</span><b>${value}</b>${delta(s)}</div>`;
+    $('#stTiles').innerHTML = tile('s1', 'ยอดเติมเงิน', baht(d.top.total), d.top) + tile('s2', `ยอดขาย · ${d.ord.count.toLocaleString('th-TH')} ออเดอร์`, baht(d.ord.total), d.ord) + tile('s3', 'สมาชิกใหม่', d.mem.total.toLocaleString('th-TH') + ' คน', d.mem);
+    const open = $('#stPlots details')?.open;
+    $('#stPlots').innerHTML = stChart('ยอดเติมเงินและยอดขาย (บาท)', [['s1', 'ยอดเติมเงิน', d.top.bars], ['s2', 'ยอดขาย', d.ord.bars]]) + stChart('สมาชิกใหม่ (คน)', [['s3', 'สมาชิกใหม่', d.mem.bars]])
+      + `<details${open ? ' open' : ''}><summary>ดูเป็นตาราง</summary><table class="st-table"><tr><th>ช่วง</th><th>ยอดเติมเงิน</th><th>ยอดขาย</th><th>สมาชิกใหม่</th></tr>${
+        d.top.bars.map((v, i) => `<tr><td>${p.full(i)}</td><td>${baht(v)}</td><td>${baht(d.ord.bars[i])}</td><td>${d.mem.bars[i]}</td></tr>`).join('')}</table></details>`;
+    $('#stTip').hidden = true;
+  } finally { if (my === stSeq) box.classList.remove('busy'); }
+}
+$('#a-stats').addEventListener('click', act(async e => {
+  const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.m) stMode = b.dataset.m; else if (b.dataset.step) stDay = stShift(stDay, +b.dataset.step); else if (b.dataset.ago) stDay = addDays(today(), -b.dataset.ago); else return;
+  await adminStats();
+}));
+$('#stDate').onchange = act(async e => { if (e.target.value) { stDay = e.target.value; await adminStats(); } });
+// ชี้/แตะแท่งไหน: โชว์ตัวเลขทุกชุดของช่วงนั้นในกล่องเดียว และไฮไลต์แท่งของช่วงเดียวกันทั้งสองกราฟ (ตัวเลขทั้งหมดดูได้ใน "ดูเป็นตาราง" ด้วย)
+$('#stCharts').addEventListener('pointerover', e => {
+  const col = e.target.closest('.col'), tip = $('#stTip'), d = stData; if (!col) return;
+  const i = +col.dataset.i, box = $('#stCharts').getBoundingClientRect(), c = col.getBoundingClientRect();
+  $$('#stPlots .col').forEach(x => x.classList.toggle('hot', +x.dataset.i === i));
+  tip.innerHTML = `<b>${d.p.full(i)}</b>` + [['s1', baht(d.top.bars[i]), 'ยอดเติมเงิน'], ['s2', baht(d.ord.bars[i]), 'ยอดขาย'], ['s3', d.mem.bars[i] + ' คน', 'สมาชิกใหม่']]
+    .map(([k, v, name]) => `<div><i style="background:var(--${k})"></i><b>${v}</b>${name}</div>`).join('');
+  tip.hidden = false;
+  const left = c.right + 8 + tip.offsetWidth > box.right ? c.left - 8 - tip.offsetWidth : c.right + 8;  // ชิดขวาเกินไป = ย้ายไปอยู่ซ้ายของแท่ง
+  tip.style.left = Math.max(0, left - box.left) + 'px'; tip.style.top = col.parentElement.getBoundingClientRect().top - box.top + 'px';
+});
+$('#stCharts').addEventListener('pointerleave', e => {
+  if (e.pointerType !== 'mouse') return;  // จอสัมผัส: ยกนิ้วแล้วให้ตัวเลขค้างไว้อ่าน
+  $('#stTip').hidden = true; $$('#stPlots .col.hot').forEach(x => x.classList.remove('hot'));
+});
+
 async function showTab(t) {
   $('#view-admin').dataset.tab = t;
   $$('#aTabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === t));
   $$('.apane').forEach(p => p.hidden = p.id !== 'a-' + t);
-  await ({topups: adminTopups, orders: adminOrders, members: adminMembers, subs: adminSubs})[t]();
+  await ({stats: adminStats, topups: adminTopups, orders: adminOrders, members: adminMembers, subs: adminSubs})[t]();
 }
 $('#aTabs').onclick = act(async e => { const t = e.target.closest('button')?.dataset.tab; if (t) await showTab(t); });
-const loadAdmin = () => showTab($('#view-admin').dataset.tab || 'topups');
+const loadAdmin = () => showTab($('#view-admin').dataset.tab || 'stats');
 
 const VIEWS = {wallet: loadWallet, orders: loadOrders, account: loadAccount, admin: loadAdmin, check: async () => {}};
 
