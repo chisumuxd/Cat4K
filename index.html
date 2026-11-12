@@ -401,21 +401,27 @@ dialog h3{font-size:20px;padding-right:30px}
 .linkbtn{color:var(--sky-t);font-size:14px}
 /* แพ็กเกจ: แคปซูลฟ้า + ราคาชมพู */
 /* แพ็กเกจในกล่องสั่งซื้อ: กล่องเรียงเป็นตาราง (ชื่อ / ราคา / อายุการใช้งาน) กล่องที่เลือกอยู่มีขอบชมพู */
-.pks{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:8px;max-height:44vh;overflow:auto;padding:2px}
-.pk{position:relative;display:grid;gap:2px;justify-items:center;align-content:start;text-align:center;border:2px solid var(--line);border-radius:14px;padding:10px 6px;cursor:pointer;background:var(--panel)}
+.pks{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;padding:2px}
+.pk{position:relative;display:grid;grid-template-columns:52px 1fr;gap:2px 10px;align-content:center;align-items:center;border:2px solid var(--line);border-radius:14px;padding:10px;cursor:pointer;background:var(--panel)}
+.pk .oimg{grid-row:1/4;width:52px;height:52px;border-radius:12px;font-size:13px}
 .pk input{position:absolute;opacity:0;pointer-events:none}
 .pk:has(:checked){border-color:var(--pink);background:var(--panel2);box-shadow:0 0 0 3px color-mix(in srgb,var(--pink) 22%,transparent)}
 .pk:has(:focus-visible){outline:2px solid var(--sky);outline-offset:2px}
 .pk span{font-weight:700;line-height:1.3;overflow-wrap:anywhere}
 .pk small{font-size:12px}
-.pk b{color:var(--pink-t);font-size:17px}
+.pk b{color:var(--pink-t);font-size:18px}
+.pk span,.pk b,.pk small{grid-column:2}
 /* หน้าชำระเงิน (กล่องสั่งซื้อ): หัวสินค้า > แพ็กเกจ > ช่องข้อมูล > วิธีชำระเงิน > โค้ดส่วนลดและสรุปยอด */
-#dlgOrder{width:min(520px,94vw)}
-.ohead{display:flex;align-items:center;gap:12px;padding-right:34px}
-.ohead>div{flex:1;min-width:0}
-.ohead h3{padding:0}
-.ohead small{display:block}
-.ohead>b{font-size:22px;color:var(--pink-t);white-space:nowrap}
+#dlgOrder{width:min(1040px,96vw)}
+.ogrid{display:grid;grid-template-columns:250px 1fr;gap:18px;align-items:start}
+.oleft,.oright{display:grid;gap:12px;min-width:0}
+.oleft{position:sticky;top:0}
+.oleft>.oimg{width:100%;height:auto;aspect-ratio:1;border-radius:20px;font-size:54px}
+.obox{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:grid;gap:8px}
+.obox h3{padding:0}
+.ostep{display:flex;align-items:center;gap:8px;font-size:17px}
+.ostep i{font-style:normal;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--pinkgrad);color:#fff;font-size:14px}
+@media (max-width:760px){.ogrid{grid-template-columns:1fr}.oleft{position:static;grid-template-columns:96px 1fr;align-items:center}.oleft>.oimg{font-size:26px}.oleft #oKindBox{grid-column:1/-1}.obox h3{padding-right:30px}}
 .oimg{width:56px;height:56px;border-radius:14px;overflow:hidden;flex-shrink:0;display:grid;place-items:center;color:#fff;font-weight:800;font-size:15px}
 .oimg img{width:100%;height:100%;object-fit:cover}
 /* ปุ่มเลือกประเภทของสินค้า (เช่น มือถือ / TV) เหนือรายการแพ็กเกจ */
@@ -777,13 +783,19 @@ img.ico{display:inline-block;object-fit:contain}
 <dialog id="dlgOrder" aria-labelledby="oName">
   <form id="fOrder">
     <button class="x" type="button" aria-label="ปิด">✕</button>
-    <div class="ohead"><span class="oimg" id="oImg"></span><div><h3 id="oName"></h3><small class="muted" id="oPkName"></small></div><b id="oPrice"></b></div>
-    <div class="kinds" id="oKinds" hidden></div>
-    <div class="pks" id="oPk"></div>
-    <p class="muted pre" id="oDesc" hidden></p>
-    <div id="oFields" style="display:grid;gap:12px"></div>
-    <p class="muted" id="oSubNote" hidden></p>
-    <b>เลือกวิธีการชำระเงิน</b>
+    <div class="ogrid">
+      <div class="oleft">
+        <span class="oimg" id="oImg"></span>
+        <div class="obox"><h3 id="oName"></h3><p class="muted pre" id="oDesc" hidden></p></div>
+        <div class="obox" id="oKindBox" hidden><b>เลือกประเภท</b><div class="kinds" id="oKinds"></div></div>
+      </div>
+      <div class="oright">
+        <b class="ostep"><i>1</i>เลือกแพ็กเกจ</b>
+        <div class="pks" id="oPk"></div>
+        <b class="ostep"><i>2</i>กรอกข้อมูล</b>
+        <div id="oFields" style="display:grid;gap:12px"></div>
+        <p class="muted" id="oSubNote" hidden></p>
+        <b class="ostep"><i>3</i>เลือกวิธีการชำระเงิน</b>
     <div class="pms">
       <label class="pm"><input type="radio" name="pm" value="wallet" checked><i>💰</i><span><b>เงินในกระเป๋า</b><small class="muted">หักจากกระเป๋าตัง ได้รับออเดอร์ทันที</small></span><span class="r"><small class="muted">ยอดเงินคงเหลือ</small><b id="oBal"></b><a href="#wallet" id="oTopup">เติมเงิน</a></span></label>
       <label class="pm"><input type="radio" name="pm" value="line"><i>🏦</i><span><b>โอนเงิน / พร้อมเพย์</b><small class="muted">โอนแล้วส่งสลิปให้แอดมินทาง LINE</small></span></label>
@@ -791,11 +803,13 @@ img.ico{display:inline-block;object-fit:contain}
     <div id="oPay" hidden><div class="payrows" id="oPayRows"></div><p class="muted">โอนตามยอดชำระเงินด้านล่าง แล้วกดปุ่ม "ส่งคำสั่งซื้อทาง LINE" และแนบสลิปในแชต แอดมินจะตรวจสลิปแล้วดำเนินการให้</p></div>
     <div class="osum">
       <label class="f">โค้ดส่วนลด<span class="rowb"><input name="code" maxlength="30" autocomplete="off" autocapitalize="characters" placeholder="กรอกโค้ดส่วนลด"><button class="btn btn-ghost" type="button" id="oApply">ใช้โค้ด</button></span></label>
-      <div><span>ยอดสั่งซื้อ</span><span id="oSub"></span></div>
+      <div><span id="oPkName"></span><span id="oSub"></span></div>
       <div><span>ส่วนลด</span><span id="oDisc"></span></div>
       <div class="tot"><b>ยอดชำระเงิน</b><b id="oTotal"></b></div>
     </div>
     <div class="rowb"><button class="btn btn-ghost" type="button" id="oCancel">ยกเลิก</button><button class="btn btn-main" type="submit" id="oSubmit" style="flex:1">ชำระเงิน</button></div>
+      </div>
+    </div>
   </form>
 </dialog>
 
@@ -1349,11 +1363,12 @@ const askFields = ask => String(ask || '').split(',').map(s => s.trim()).filter(
 // ประเภท (kind ของแพ็กเกจ เช่น TV / มือถือ): ลูกค้าเลือกประเภทก่อน แล้วเห็นเฉพาะแพ็กเกจของประเภทนั้น; value ของแพ็กเกจ = ลำดับใน orderPks()
 function paintPks(ki = 0) {
   const pks = orderPks(), kinds = [...new Set(pks.map(k => k.kind.trim()))], kind = kinds[ki < kinds.length ? ki : 0];
-  $('#oKinds').hidden = kinds.length < 2 && !kinds[0];  // ไม่มีประเภทเลย = ไม่ต้องมีปุ่ม
+  $('#oKindBox').hidden = kinds.length < 2 && !kinds[0];  // ไม่มีประเภทเลย = ไม่ต้องมีปุ่ม
   $('#oKinds').innerHTML = kinds.map((kd, i) => `<label class="kind"><input type="radio" name="kind" value="${i}"${kd === kind ? ' checked' : ''}><span>${esc(kd || 'ทั่วไป')}</span></label>`).join('');
   let first = true;
+  const thumb = `<i class="oimg" style="background:${$('#oImg').style.background}">${$('#oImg').innerHTML}</i>`;  // รูปสินค้าเล็กในการ์ดแพ็กเกจ
   $('#oPk').innerHTML = pks.map((k, i) => k.kind.trim() !== kind ? '' :
-    `<label class="pk"><input type="radio" name="pk" value="${i}"${first ? ' checked' : ''}><span>${esc(pkShort(k) || k.name)}</span><b>${baht(k.price)}</b>${k.label.trim() && pkDur(k) ? `<small class="muted">${pkDur(k)}</small>` : ''}</label>${first = false, ''}`).join('');
+    `<label class="pk"><input type="radio" name="pk" value="${i}"${first ? ' checked' : ''}>${thumb}<span>${esc(pkShort(k) || k.name)}</span><b>${baht(k.price)}</b>${k.label.trim() && pkDur(k) ? `<small class="muted">${pkDur(k)}</small>` : ''}</label>${first = false, ''}`).join('');
 }
 // แพ็กเกจที่มีวันหมดอายุต้องมีอีเมลไว้อ้างอิง: ใช้ช่องอีเมลช่องแรก ถ้าสินค้านี้ไม่มีช่องอีเมล ช่องแรกจะกลายเป็นช่องอีเมล
 const emailIdx = () => Math.max(0, orderFs.findIndex(f => f.fkind === 'email'));
@@ -1366,7 +1381,7 @@ function syncOrder() {
   inp.type = timed ? 'email' : f.fkind; inp.required = timed || !f.fopt;
   $('#oSubNote').hidden = !timed;
   $('#oSubNote').textContent = timed ? `แพ็กเกจนี้ใช้ได้ ${pkDur(k)} ระบบใช้อีเมลนี้อ้างอิงวันหมดอายุ ซื้อครั้งแรกจะได้ชื่อผู้ใช้และรหัสผ่านสำหรับเช็ควันหมดอายุทันที ซื้อครั้งต่อไปด้วยอีเมลเดิมจะต่ออายุให้` : '';
-  $('#oPkName').textContent = k.name + (timed && k.label.trim() ? ` · ${pkDur(k)}` : '');  // ไม่ได้กรอกชื่อเอง = ชื่อคืออายุการใช้งานอยู่แล้ว $('#oPrice').textContent = baht(k.price);
+  $('#oPkName').textContent = k.name + (timed && k.label.trim() ? ` · ${pkDur(k)}` : '');  // ไม่ได้กรอกชื่อเอง = ชื่อคืออายุการใช้งานอยู่แล้ว 
   $('#oSub').textContent = baht(k.price); $('#oDisc').textContent = (disc ? '−' : '') + baht(disc); $('#oTotal').textContent = baht(k.price - disc);
   $('#oPay').hidden = !line; $('#oSubmit').textContent = line ? '💬 ส่งคำสั่งซื้อทาง LINE' : 'ชำระเงิน';
 }
