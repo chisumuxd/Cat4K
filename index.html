@@ -402,6 +402,12 @@ dialog h3{font-size:20px;padding-right:30px}
 .ohead>b{font-size:22px;color:var(--pink-t);white-space:nowrap}
 .oimg{width:56px;height:56px;border-radius:14px;overflow:hidden;flex-shrink:0;display:grid;place-items:center;color:#fff;font-weight:800;font-size:15px}
 .oimg img{width:100%;height:100%;object-fit:cover}
+/* ปุ่มเลือกประเภทของสินค้า (เช่น มือถือ / TV) เหนือรายการแพ็กเกจ */
+.kinds{display:flex;gap:6px;flex-wrap:wrap}
+.kind input{position:absolute;opacity:0;pointer-events:none}
+.kind span{display:block;padding:7px 18px;border-radius:99px;border:2px solid var(--line);font-weight:600;cursor:pointer}
+.kind:has(:checked) span{background:var(--pinkgrad);border-color:transparent;color:#fff}
+.kind input:focus-visible+span{outline:2px solid var(--sky);outline-offset:2px}
 .pms{display:grid;gap:6px}
 .pm{display:flex;align-items:center;gap:10px;border:2px solid var(--line);border-radius:16px;padding:10px 14px;cursor:pointer}
 .pm:has(:checked){border-color:var(--pink);background:var(--panel2)}
@@ -633,7 +639,7 @@ img.ico{display:inline-block;object-fit:contain}
     <div class="apane" id="a-products">
       <form class="panel" id="fTypes" style="margin-bottom:14px">
         <b>🧩 ประเภทสินค้า และช่องที่ให้ลูกค้ากรอกตอนสั่งซื้อ</b>
-        <p class="muted">สร้างประเภท (เช่น เติมเกม, แอปสตรีมมิ่ง) แล้วเพิ่มช่องที่ลูกค้าต้องกรอก เช่น UID, อีเมล, LINE ID จากนั้นกด "แก้ไข" ที่สินค้าในตารางด้านล่างเพื่อเลือกประเภทให้สินค้า สินค้าที่ไม่ได้เลือกประเภทจะมีช่องเดียวตามที่ตั้งไว้ในหมวด</p>
+        <p class="muted">สร้างประเภท (เช่น เติมเกม, แอปสตรีมมิ่ง) แล้วเพิ่มช่องที่ลูกค้าต้องกรอก เช่น UID, อีเมล, LINE ID จากนั้นกด "แก้ไข" ที่สินค้าในตารางด้านล่างเพื่อเลือกประเภทให้สินค้า ถ้าสินค้าเดียวมีหลายประเภท (เช่น Netflix มือถือ กับ Netflix TV) ให้เลือกประเภทที่แต่ละแพ็กเกจ ลูกค้าจะเลือกประเภทก่อนแล้วเห็นแพ็กเกจของประเภทนั้น สินค้าที่ไม่ได้เลือกประเภทจะมีช่องเดียวตามที่ตั้งไว้ในหมวด</p>
         <div id="typeFields"></div>
         <button class="btn btn-main" type="submit">บันทึกประเภท</button>
       </form>
@@ -763,6 +769,7 @@ img.ico{display:inline-block;object-fit:contain}
   <form id="fOrder">
     <button class="x" type="button" aria-label="ปิด">✕</button>
     <div class="ohead"><span class="oimg" id="oImg"></span><div><h3 id="oName"></h3><small class="muted" id="oPkName"></small></div><b id="oPrice"></b></div>
+    <div class="kinds" id="oKinds" hidden></div>
     <div class="pks" id="oPk"></div>
     <p class="muted pre" id="oDesc" hidden></p>
     <div id="oFields" style="display:grid;gap:12px"></div>
@@ -933,7 +940,8 @@ const act = fn => async e => {
 const LABEL = {settings: 'ตั้งค่าร้าน', shop: 'ชื่อร้าน', logo: 'โลโก้ (ลิงก์รูป หรืออัปโหลด)', accent: 'สีฟ้าของธีม (พื้นปุ่มและป้าย)', accent2: 'สีชมพูของธีม (พื้นปุ่มและป้าย)', lineId: 'LINE ID ร้าน (มี @)', fbUrl: 'ลิงก์ Facebook',
   payInfo: 'ข้อความถึงลูกค้าในหน้ากระเป๋าตัง (แสดงใต้ข้อมูลบัญชีรับโอน)', pay: 'ช่องทางชำระเงิน', payBank: 'ธนาคาร (เช่น กสิกรไทย)', payNo: 'เลขบัญชี', payName: 'ชื่อบัญชี', payPromptpay: 'เบอร์พร้อมเพย์',
   types: 'ประเภทสินค้า', tname: 'ชื่อประเภท (เช่น เติมเกม, แอปสตรีมมิ่ง)', fields: 'ช่องข้อมูล (ที่ลูกค้ากรอกตอนสั่งซื้อ)', fname: 'ชื่อช่อง (เช่น UID, อีเมล, LINE ID)', fkind: 'ชนิดข้อมูล', fopt: 'ไม่บังคับกรอก',
-  type: 'ประเภทสินค้า (กำหนดช่องที่ลูกค้าต้องกรอกตอนสั่งซื้อ)',
+  type: 'ประเภทของสินค้านี้ทั้งตัว (ถ้าแต่ละแพ็กเกจคนละประเภท ให้เลือกที่แพ็กเกจแทน)',
+  ptype: 'ประเภทของแพ็กเกจนี้ เช่น มือถือ, TV (สร้างประเภทที่ แอดมิน > สินค้า / แพ็กเกจ)',
   payQr: 'QR สำหรับสแกนจ่าย (ลิงก์รูป หรืออัปโหลด)', desc: 'รายละเอียดสินค้า (ลูกค้าเห็นตอนกดสั่งซื้อ)', closed: 'ปิดการขายชั่วคราว (ซ่อนสินค้านี้จากหน้าร้าน)', about: 'ข้อความท้ายเว็บ', hCats: 'หัวข้อเหนือหมวดสินค้า', hHow: 'หัวข้อส่วนวิธีสั่งซื้อ', hNews: 'หัวข้อส่วนข่าวสาร', lapseDays: 'ออกรหัสผ่านใหม่ให้ลูกค้าที่ขาดต่ออายุเกินกี่วัน',
   slides: 'แบนเนอร์', tag: 'ป้ายเล็ก', title: 'หัวข้อ (ในแบนเนอร์ ใส่ *คำ* เพื่อเน้นสี)', text: 'ข้อความ', btn: 'ข้อความบนปุ่ม',
   link: 'ลิงก์ (เช่น #sec-game หรือ https://...)', color: 'สีพื้น', emoji: 'อีโมจิ (ใช้เมื่อไม่มีรูป)', img: 'รูป (ลิงก์รูป หรืออัปโหลด)', sections: 'หมวดสินค้า',
@@ -955,7 +963,7 @@ const BLANK = {
   // ประเภทสินค้า: แอดมินสร้างที่ แอดมิน > สินค้า / แพ็กเกจ แล้วเลือกให้สินค้า (items.type เก็บ uid ของประเภท เปลี่ยนชื่อประเภทแล้วสินค้าไม่หลุด)
   types: {uid: '', tname: '', fields: []},
   fields: {fname: '', fkind: 'text', fopt: false},
-  packages: {name: '', price: 0, months: 0, bonus: 0, app: ''},
+  packages: {name: '', ptype: '', price: 0, months: 0, bonus: 0, app: ''},
   steps: {icon: '', title: '', text: ''},
   news: {icon: '', title: '', date: '', link: ''},
 };
@@ -1283,12 +1291,32 @@ let orderItem;
 // แพ็กเกจที่ตั้งอายุไว้ (months / bonus) = มีวันหมดอายุ: ต้องกรอกอีเมล แล้วระบบสร้างหรือต่ออายุบัญชีเช็ควันหมดอายุให้ (ดู supabase-subs.sql)
 const pkDur = k => [k.months > 0 ? `${k.months} เดือน` : '', k.bonus > 0 ? `แถม ${k.bonus} วัน` : ''].filter(Boolean).join(' + ');
 const orderPks = () => orderItem.packages.filter(k => k.price > 0);
-// ช่องที่ลูกค้าต้องกรอก: ตามประเภทของสินค้า (แอดมิน > สินค้า / แพ็กเกจ) สินค้าที่ไม่มีประเภท หรือประเภทยังไม่มีช่อง = ช่องเดียวตามที่ตั้งไว้ในหมวด
-let orderFs = [];
-const orderFields = (sec, p) => {
-  const fs = (C.types.find(t => t.uid && t.uid === p.type)?.fields || []).filter(f => f.fname.trim());
-  return fs.length ? fs : [{fname: sec.hint || 'ข้อมูลสำหรับเติม (UID / อีเมล)', fkind: 'text', fopt: false}];
+// ประเภท (แอดมิน > สินค้า / แพ็กเกจ): ตั้งชื่อเองได้ เช่น มือถือ / TV และกำหนดช่องที่ลูกค้าต้องกรอก
+// เลือกได้ทั้งที่สินค้า (ทั้งตัว) และที่แต่ละแพ็กเกจ — สินค้าที่แพ็กเกจมีมากกว่าหนึ่งประเภท ลูกค้าจะเลือกประเภทก่อนแล้วเห็นเฉพาะแพ็กเกจของประเภทนั้น
+const typeOf = uid => C.types.find(t => t.uid && t.uid === uid);
+const kindOf = k => typeOf(k.ptype) ? k.ptype : '';  // ประเภทที่ถูกลบไปแล้ว = ถือว่าไม่แบ่งประเภท
+// ช่องที่ลูกค้าต้องกรอก: ตามประเภทของแพ็กเกจ > ประเภทของสินค้า > ช่องเดียวตามที่ตั้งไว้ในหมวด
+let orderFs = [], orderSec;
+const orderFields = k => {
+  const fs = (typeOf(kindOf(k) || orderItem.type)?.fields || []).filter(f => f.fname.trim());
+  return fs.length ? fs : [{fname: orderSec.hint || 'ข้อมูลสำหรับเติม (UID / อีเมล)', fkind: 'text', fopt: false}];
 };
+// ชื่อแพ็กเกจแบบสั้นใต้ปุ่มประเภท: ตัดชื่อประเภทและชื่อสินค้าออกจากชื่อเต็ม ("Netflix มือถือ 7 วัน" -> "7 วัน")
+// ชื่อเต็มไม่ถูกแก้: ยังแสดงที่หัวกล่อง ใช้ตอนสั่งซื้อ และอยู่ในออเดอร์
+const cut = (s, w) => { const i = w ? s.toLowerCase().indexOf(w.toLowerCase()) : -1; return i < 0 ? s : s.slice(0, i) + s.slice(i + w.length); };
+const pkShort = k => cut(cut(k.name, typeOf(k.ptype)?.tname.trim()), orderItem.n.trim()).replace(/\s+/g, ' ').replace(/^[\s\-–·:|]+|[\s\-–·:|]+$/g, '') || k.name;
+// วาดปุ่มประเภท + แพ็กเกจของประเภทที่เลือก + ช่องข้อมูลของประเภทนั้น (ค่า value ของแพ็กเกจ = ลำดับใน orderPks() เหมือนเดิม)
+function paintPks(kind) {
+  const pks = orderPks(), kinds = [...new Set(pks.map(kindOf))];
+  if (!kinds.includes(kind)) kind = kinds[0];
+  $('#oKinds').hidden = kinds.length < 2;
+  $('#oKinds').innerHTML = kinds.map(u => `<label class="kind"><input type="radio" name="kind" value="${esc(u)}"${u === kind ? ' checked' : ''}><span>${esc(typeOf(u)?.tname || 'ทั่วไป')}</span></label>`).join('');
+  let first = true;
+  $('#oPk').innerHTML = pks.map((k, i) => kindOf(k) !== kind ? '' :
+    `<label class="pk"><input type="radio" name="pk" value="${i}"${first ? ' checked' : ''}><span>${esc(kinds.length < 2 ? k.name : pkShort(k))}</span>${pkDur(k) ? `<small class="muted">${pkDur(k)}</small>` : ''}<b>${baht(k.price)}</b></label>${first = false, ''}`).join('');
+  orderFs = orderFields(orderPk());
+  $('#oFields').innerHTML = orderFs.map((f, i) => `<label class="f">${esc(f.fname)}${f.fopt ? ' (ไม่บังคับ)' : ''}<input name="f${i}" type="${esc(f.fkind)}" maxlength="200" autocomplete="off"${f.fopt ? '' : ' required'}></label>`).join('');
+}
 // แพ็กเกจที่มีวันหมดอายุต้องมีอีเมลไว้อ้างอิง: ใช้ช่องชนิดอีเมลช่องแรก ถ้าประเภทนี้ไม่มีช่องอีเมล ช่องแรกจะกลายเป็นช่องอีเมล
 const emailIdx = () => Math.max(0, orderFs.findIndex(f => f.fkind === 'email'));
 let orderDisc = null;  // {code, amount} = โค้ดส่วนลดที่ฐานข้อมูลตรวจแล้วสำหรับแพ็กเกจที่เลือกอยู่ (เปลี่ยนแพ็กเกจหรือแก้โค้ด = ต้องใช้โค้ดใหม่)
@@ -1315,23 +1343,21 @@ async function applyCode() {
   } finally { syncOrder(); }
 }
 function openOrder(sec, p) {
-  orderItem = p; orderDisc = null;
+  orderItem = p; orderSec = sec; orderDisc = null;
   $('#oName').textContent = p.n;
   const hu = hue(p.n || '');
   $('#oImg').style.background = `linear-gradient(160deg,hsl(${hu} 78% 54%),hsl(${(hu + 30) % 360} 70% 26%))`;
   $('#oImg').innerHTML = p.img ? `<img src="${esc(p.img)}" alt="">` : esc(p.t || abbr(p.n || ''));
   $('#fOrder').elements.pm.value = 'wallet';
-  $('#oPk').innerHTML = orderPks().map((k, i) =>
-    `<label class="pk"><input type="radio" name="pk" value="${i}" ${i ? '' : 'checked'}><span>${esc(k.name)}</span>${pkDur(k) ? `<small class="muted">${pkDur(k)}</small>` : ''}<b>${baht(k.price)}</b></label>`).join('');
+  paintPks();
   $('#oDesc').textContent = p.desc; $('#oDesc').hidden = !p.desc;
   $('#fOrder').elements.code.value = '';
-  orderFs = orderFields(sec, p);
-  $('#oFields').innerHTML = orderFs.map((f, i) => `<label class="f">${esc(f.fname)}${f.fopt ? ' (ไม่บังคับ)' : ''}<input name="f${i}" type="${esc(f.fkind)}" maxlength="200" autocomplete="off"${f.fopt ? '' : ' required'}></label>`).join('');
   $('#oBal').textContent = user ? baht(me?.balance) : 'ยังไม่ได้เข้าสู่ระบบ';
   syncOrder();
   $('#dlgOrder').showModal();
 }
 $('#oPk').addEventListener('change', () => { orderDisc = null; syncOrder(); });  // ส่วนลดคิดจากราคาแพ็กเกจ เปลี่ยนแพ็กเกจต้องใช้โค้ดใหม่
+$('#oKinds').addEventListener('change', e => { orderDisc = null; paintPks(e.target.value); syncOrder(); });
 $('#fOrder').elements.code.addEventListener('input', () => { orderDisc = null; syncOrder(); });
 $('.pms').addEventListener('change', syncOrder);
 $('#oApply').onclick = act(async () => { await applyCode(); toast(`ใช้โค้ด ${orderDisc.code} แล้ว ลด ${baht(orderDisc.amount)}`); });
@@ -1835,7 +1861,7 @@ $('#codeList').onclick = act(async e => {
 // ===== แอดมิน: สินค้า / แพ็กเกจ — ตารางรวมสินค้าทุกหมวด กดแก้ไขแล้วเปิดสินค้านั้นในโหมดแก้ไขหน้าเว็บ (ใช้แผงแก้ไขเดิม ไม่มีฟอร์มซ้ำ) =====
 // ประเภทสินค้า: แก้ในฟอร์มด้านบนของแท็บนี้ (ใช้ตัวสร้างฟอร์มรายการเดียวกับแผงแก้ไขหน้าเว็บ) แล้วกดบันทึกประเภท
 let typeDraft = null;
-const typeName = p => C.types.find(t => t.uid && t.uid === p.type)?.tname || '';
+const typeName = p => [...new Set([p.type, ...p.packages.map(k => k.ptype)].map(u => typeOf(u)?.tname).filter(Boolean))].join(', ');
 $('#fTypes').onsubmit = act(async () => {
   await savePart(c => { c.types = typeDraft; });
   typeDraft = null; adminProducts();
@@ -1886,7 +1912,7 @@ async function upload(file) {
 function field(obj, k) {
   if (Array.isArray(obj[k])) return listEd(obj[k], k);
   // ตัวเลือก: ตายตัวจาก OPTS ยกเว้น "ประเภทสินค้า" ที่มาจากรายการประเภทที่แอดมินสร้างไว้
-  const opts = k === 'type' ? [['', 'ไม่เลือก (ใช้ช่องเดียวตามที่ตั้งไว้ในหมวด)'], ...view().types.filter(t => t.uid).map(t => [t.uid, t.tname || '(ประเภทยังไม่มีชื่อ)'])] : OPTS[k];
+  const opts = k === 'type' || k === 'ptype' ? [['', k === 'type' ? 'ไม่เลือก' : 'ไม่แบ่งประเภท (ใช้ประเภทของสินค้า)'], ...view().types.filter(t => t.uid).map(t => [t.uid, t.tname || '(ประเภทยังไม่มีชื่อ)'])] : OPTS[k];
   if (opts) {
     const sel = h('select', {}, ...opts.map(([value, textContent]) => h('option', {value, textContent})));
     sel.value = obj[k]; sel.oninput = () => obj[k] = sel.value;
