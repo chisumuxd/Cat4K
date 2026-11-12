@@ -101,6 +101,7 @@ button:disabled{opacity:.5;cursor:wait}
 .auth{display:flex;gap:8px;flex-shrink:0}
 .auth .btn{display:inline-block;padding:8px 14px;font-size:14px;max-width:170px;overflow:hidden;text-overflow:ellipsis;border-radius:10px}
 /* เมนูผู้ใช้: กดปุ่มชื่อแล้วเปิดรายการ (บัญชีของฉัน / แอดมิน / ออกจากระบบ) */
+@media (min-width:981px){.auth .umenu summary{max-width:360px}}  /* จอกว้าง: ชื่อผู้ใช้แสดงเต็ม (จอแคบยังตัดเพื่อไม่ให้แถบบนล้น) */
 .umenu{position:relative}
 .umenu summary{list-style:none;cursor:pointer;vertical-align:top}
 .umenu summary::-webkit-details-marker{display:none}
@@ -477,6 +478,7 @@ footer a:hover{color:var(--sky-t)}
 .fab-edit{right:auto;left:calc(var(--side) + 18px)}
 /* ===== แชท: กล่องแชท (หัว / ข้อความ / ช่องพิมพ์) ใช้ทั้งหน้าร้านและแท็บแชทของแอดมิน ===== */
 .fab-chat{bottom:72px}
+.is-admin .fab-chat{display:none}
 .cbadge{background:#fff;color:var(--pink);border-radius:99px;font-size:12px;min-width:20px;padding:0 6px;line-height:20px;text-align:center;text-shadow:none}
 .cbox{display:flex;flex-direction:column;min-height:0;background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden}
 .chatbox{position:fixed;right:18px;bottom:18px;z-index:70;width:min(380px,calc(100vw - 24px));height:min(540px,calc(100vh - 90px));box-shadow:0 14px 40px rgba(0,0,0,.45)}
@@ -1317,7 +1319,8 @@ function paintAuth() {
        </details>`
     : `<button class="btn btn-ghost" type="button" data-auth="login">เข้าสู่ระบบ</button><button class="btn btn-main" type="button" data-auth="register">สมัครสมาชิก</button>`;
   adminFab(); paintPromo();
-  if (!user) chatOpen(false); chatBadges().catch(() => {});  // ออกจากระบบ = ปิดแชท
+  if (!user || me?.is_admin) chatOpen(false); chatBadges().catch(() => {});  // ออกจากระบบ = ปิดแชท
+  document.body.classList.toggle('is-admin', !!me?.is_admin);  // แอดมินไม่มีปุ่ม "แชทกับแอดมิน" (ใช้แท็บแชทในหน้าแอดมิน)
 }
 // กล่องล่างสุดของแถบซ้าย: คำชวนสมัครสมาชิก (แอดมินแก้ข้อความได้) — เห็นเฉพาะคนที่ยังไม่เข้าสู่ระบบ และตอนแอดมินกำลังแก้ไขหน้าเว็บ
 function paintPromo() {
