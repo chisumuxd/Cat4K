@@ -75,6 +75,13 @@ button:disabled{opacity:.5;cursor:wait}
 .slink span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .slink img.ico{width:22px;height:22px;margin:auto}
 .side nav a:hover,.slink:hover{background:var(--panel2);color:var(--text)}
+/* โหมดหลังร้าน (html.back จาก ?admin): เมนูซ้ายเป็นงานแอดมิน ซ่อนทุกอย่างของหน้าร้าน */
+#backNav{display:none}
+.back #backNav:not([hidden]){display:grid}
+.back .side nav[data-edit],.back .js-hside,.back #sideCats,.back #sidePromo,.back #topCats,.back .tb-search,.back #aTabs,.back #home,.back #contact,.back .fab,.back #acctAdmin{display:none!important}
+#backNav .cbadge{margin-left:auto;background:var(--pink);color:#fff}
+#backNav a.on .cbadge{background:#fff;color:var(--pink)}
+#backNav .sep{margin-top:10px;border-top:1px solid var(--line);border-radius:0 0 12px 12px;padding-top:14px}
 .side nav a.on{background:var(--pinkgrad);color:#fff;box-shadow:0 6px 16px color-mix(in srgb,var(--pink) 38%,transparent)}
 .side-h{margin:14px 2px 6px;padding:14px 12px 0;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
 .side-cats{display:grid;gap:2px;margin-bottom:14px}
@@ -554,6 +561,19 @@ img.ico{display:inline-block;object-fit:contain}
     <a href="#how"><i>📖</i><span data-nav="how">วิธีสั่งซื้อ</span></a>
     <a href="#contact"><i>💬</i><span data-nav="contact">ติดต่อเรา</span></a>
   </nav>
+  <nav id="backNav" aria-label="เมนูหลังร้าน">
+    <a href="#admin" data-atab="stats"><i>📊</i><span>ภาพรวม</span></a>
+    <a href="#chat"><i>💬</i><span>แชทลูกค้า</span><b class="cbadge" id="bkChat" hidden></b></a>
+    <a href="#admin" data-atab="orders"><i>🧾</i><span>ออเดอร์</span><b class="cbadge" id="bkOrders" hidden></b></a>
+    <a href="#admin" data-atab="topups"><i>💰</i><span>คำขอเติมเงิน</span><b class="cbadge" id="bkTopups" hidden></b></a>
+    <a href="#admin" data-atab="members"><i>👥</i><span>สมาชิก</span></a>
+    <a href="#admin" data-atab="subs"><i>🔑</i><span>ลูกค้าแอป</span></a>
+    <a href="#admin" data-atab="products"><i>📦</i><span>สินค้า / แพ็กเกจ</span></a>
+    <a href="#admin" data-atab="codes"><i>🏷️</i><span>โค้ดส่วนลด</span></a>
+    <a href="#admin" data-atab="pay"><i>⚙️</i><span>ตั้งค่าร้าน</span></a>
+    <a href="./" class="sep"><i>🏪</i><span>ดูหน้าร้าน</span></a>
+    <a href="./?edit"><i>✏️</i><span>แก้ไขหน้าเว็บ</span></a>
+  </nav>
   <div class="side-h js-hside" data-edit="settings">หมวดหมู่</div>
   <div class="side-cats" id="sideCats"></div>
   <div class="promo" id="sidePromo" data-edit="promo"></div>
@@ -665,6 +685,14 @@ img.ico{display:inline-block;object-fit:contain}
         <button class="btn btn-main" type="submit">ตรวจสอบ</button>
       </form>
       <div class="panel" id="checkOut"><p class="muted">ผลการตรวจสอบจะแสดงที่นี่</p></div>
+    </div>
+  </section>
+
+  <section class="view" id="view-gate" hidden>
+    <div class="panel" style="max-width:460px;margin:60px auto;text-align:center;justify-items:center">
+      <b style="font-size:20px">🔒 Cat4K หลังร้าน</b>
+      <p class="muted" id="gateMsg"></p>
+      <div class="rowb" style="justify-content:center;flex-wrap:wrap"><button class="btn btn-main" type="button" data-auth="login" id="gateLogin">เข้าสู่ระบบ</button><a class="btn btn-ghost" href="./">ไปหน้าร้าน</a></div>
     </div>
   </section>
 
@@ -988,6 +1016,10 @@ img.ico{display:inline-block;object-fit:contain}
 const SUPABASE_URL = 'https://gbkjzwdrauyuhtsbczug.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_ytySGP-EX1EVtVXZBQRofg_Z2yKfccx';
 const sb = window.supabase?.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// โหมดหลังร้าน: เปิดด้วย ?admin (ลิงก์ admin.html พามา) เห็นเฉพาะงานแอดมิน; ?edit = เปิดหน้าร้านแล้วเข้าโหมดแก้ไขหน้าเว็บทันที (ปุ่มในหลังร้านส่งมา)
+const QS = new URLSearchParams(location.search), BACK = QS.has('admin'); let wantEdit = QS.has('edit');
+document.documentElement.classList.toggle('back', BACK);
+if (BACK) document.title = 'Cat4K หลังร้าน';
 
 // เนื้อหาเริ่มต้น ใช้จนกว่าแอดมินจะกดบันทึกครั้งแรกในเมนู แอดมิน > แก้ไขหน้าเว็บ (หลังจากนั้นอ่านจากฐานข้อมูล)
 const DEFAULT = {
@@ -1070,7 +1102,7 @@ const need = (r, msg) => { if (['PGRST202', 'PGRST205', '42883', '42P01'].includ
 const SETUP = file => `ยังไม่ได้ติดตั้งส่วนนี้ ให้รันไฟล์ ${file} ใน Supabase ก่อน`;
 document.addEventListener('click', e => { const b = e.target.closest('[data-copy]'); if (b) navigator.clipboard.writeText(b.dataset.copy).then(() => toast('คัดลอกแล้ว'), fail); });
 const h = (tag, props = {}, ...kids) => { const e = Object.assign(document.createElement(tag), props); e.append(...kids); return e; };
-const here = location.origin + location.pathname;
+const here = location.origin + location.pathname + (BACK ? '?admin' : '');  // ล้าง hash แล้วยังอยู่ในโหมดเดิม
 const EMPTY = '<p class="muted" style="padding:16px 0">ยังไม่มีรายการ</p>';
 const ST = {pending: ['รอดำเนินการ', 'y'], approved: ['อนุมัติแล้ว', 'g'], done: ['สำเร็จ', 'g'], rejected: ['ปฏิเสธ', 'r'], refunded: ['คืนเงินแล้ว', 'r'], cancelled: ['ยกเลิก ไม่คืนเงิน', 'r']};
 const badge = s => `<span class="badge ${ST[s]?.[1] || ''}">${ST[s]?.[0] || esc(s)}</span>`;
@@ -1314,7 +1346,7 @@ function paintAuth() {
          <div class="umenu-list">
            <a class="bal" href="#wallet">💰 ${baht(me?.balance)}</a>
            <a href="#account">👤 <span data-nav="account">${esc(view().nav.account)}</span></a>
-           ${me?.is_admin ? '<a href="#admin">⚙️ แอดมิน</a>' : ''}
+           ${me?.is_admin ? (BACK ? '<a href="./">🏪 ดูหน้าร้าน</a>' : '<a href="admin.html">⚙️ หลังร้าน</a>') : ''}
            <button type="button" data-logout>🚪 ออกจากระบบ</button>
          </div>
        </details>`
@@ -1344,7 +1376,8 @@ function adminFab() { $('#fabEdit').hidden = !me?.is_admin || editing || $('#hom
 document.addEventListener('click', e => {
   const a = e.target.closest('[data-atab]'); if (!a) return;
   e.preventDefault();
-  $('#view-admin').dataset.tab = a.dataset.atab;
+  if (!BACK) { try { sessionStorage.setItem('cat4k_tab', a.dataset.atab); } catch {} return void (location.href = 'admin.html#admin'); }  // หน้าร้าน: งานแอดมินอยู่ที่หลังร้าน
+  $('#view-admin').dataset.tab = a.dataset.atab; sideOpen(false);
   if (location.hash === '#admin') showTab(a.dataset.atab).catch(fail); else location.hash = '#admin';
 });
 $('#authBox').onclick = e => {
@@ -1416,8 +1449,15 @@ async function loadMe() {
 let pending = null;
 function route() {
   let v = location.hash.slice(1);
+  if (!BACK && (v === 'admin' || v === 'chat') && me?.is_admin) return void (location.href = 'admin.html#' + v);  // หน้าร้านไม่มีหน้าแอดมินแล้ว
+  if (BACK && !['admin', 'chat', 'account'].includes(v)) v = 'admin';  // หลังร้าน: หน้าแรก = ภาพรวม
   if (VIEWS[v] && v !== 'check' && !user) { pending = v; history.replaceState(null, '', here); openAuth('login'); v = ''; }
   if ((v === 'admin' || v === 'chat') && !me?.is_admin) v = '';
+  if (BACK && !me?.is_admin) {  // หลังร้าน: ยังไม่เข้าสู่ระบบ หรือไม่ใช่แอดมิน = เห็นแค่หน้าล็อก
+    v = 'gate'; if (user) pending = null;  // ยังไม่เข้าสู่ระบบ: จำหน้าที่จะไปไว้ให้หลังเข้าสู่ระบบ
+    $('#gateMsg').textContent = user ? 'บัญชีนี้ไม่มีสิทธิ์เข้าหลังร้าน ออกจากระบบแล้วเข้าด้วยบัญชีแอดมิน' : 'เข้าสู่ระบบด้วยบัญชีแอดมินเพื่อใช้งานหลังร้าน';
+    $('#gateLogin').hidden = !!user;
+  }
   if (editing && VIEWS[v]) { history.replaceState(null, '', here); v = ''; }  // กด back ระหว่างแก้ไข: อยู่หน้าเดิม งานที่แก้ไม่หาย
   const wasHome = !$('#home').hidden;
   $('#home').hidden = !!VIEWS[v];
@@ -1428,7 +1468,9 @@ function route() {
   chatWatch(chat.adm, v === 'chat' && !!chat.adm.mid); clearInterval(chatListT);  // ออกจากหน้าแชท = หยุดถามข้อความใหม่
   if (v === 'chat') chatListT = setInterval(() => adminChat().catch(() => {}), 15000);
   adminFab();
-  $$('.side nav a').forEach(a => a.classList.toggle('on', a.getAttribute('href') === (VIEWS[v] ? '#' + v : '#top')));  // ไฮไลต์เมนูของหน้าที่เปิดอยู่
+  $$('.side nav[data-edit] a').forEach(a => a.classList.toggle('on', a.getAttribute('href') === (VIEWS[v] ? '#' + v : '#top')));
+  $('#backNav').hidden = v === 'gate';
+  if (BACK) $$('#backNav a').forEach(a => a.classList.toggle('on', v === 'chat' ? a.hash === '#chat' : v === 'admin' && a.dataset.atab === ($('#view-admin').dataset.tab || 'stats')));  // ไฮไลต์เมนูของหน้าที่เปิดอยู่
   sideOpen(false);
   markCats();
   if (VIEWS[v]) { scrollTo(0, 0); VIEWS[v]().catch(fail); }
@@ -1444,6 +1486,8 @@ sb?.auth.onAuthStateChange((ev, session) => {
   uid = user?.id;
   setTimeout(async () => {  // ห้ามเรียก supabase ใน callback นี้ตรงๆ (deadlock)
     await loadMe(); paintAuth();
+    if (BACK) { try { const t = sessionStorage.getItem('cat4k_tab'); if (t) { $('#view-admin').dataset.tab = t; sessionStorage.removeItem('cat4k_tab'); } } catch {} }
+    if (wantEdit && me?.is_admin) { wantEdit = false; startEdit().catch(fail); }
     if (ev === 'PASSWORD_RECOVERY') { location.hash = '#account'; toast('ตั้งรหัสผ่านใหม่ได้ที่ช่อง "เปลี่ยนรหัสผ่าน"'); }
     else if (user && pending) { location.hash = '#' + pending; pending = null; }
     else route();
@@ -2251,7 +2295,7 @@ async function chatSend(t, form) {
 // --- ฝั่งลูกค้า: ปุ่มแชทลอย + กล่องแชทมุมขวาล่าง ---
 async function chatOpen(on) {
   if (on && !user) return openAuth('login');
-  if (on && me?.is_admin) return void (location.hash = '#chat');  // แอดมิน: ไปหน้าแชทหลังร้าน
+  if (on && me?.is_admin) return void (location.href = 'admin.html#chat');  // แอดมิน: ไปหน้าแชทหลังร้าน
   $('#chatBox').hidden = !on; $('#fabChat').hidden = on;
   chat.me.mid = on ? user.id : null; chatWatch(chat.me, on);
   chat.me.who = {member: {name: me?.display_name || 'คุณ', img: me?.avatar}, admin: shopWho()};
@@ -2268,6 +2312,11 @@ async function chatBadges() {
   // ลูกค้า = ข้อความในห้องตัวเองที่ยังไม่อ่าน; แอดมิน = ข้อความของลูกค้าทุกห้องที่แอดมินยังไม่อ่าน
   const n = me?.is_admin ? (await unseen('seen_by_admin')).count || 0 : $('#chatBox').hidden ? (await unseen('seen_by_member').eq('member_id', user.id)).count || 0 : 0;
   $('#chatBadge').textContent = n; $('#chatBadge').hidden = !n;
+  if (!BACK || !me?.is_admin) return;
+  // หลังร้าน: ตัวเลขงานค้างข้างเมนูซ้าย (แชทยังไม่อ่าน / ออเดอร์รอดำเนินการ / คำขอเติมเงินรอตรวจ)
+  const pend = t => sb.from(t).select('id', {count: 'exact', head: true}).eq('status', 'pending');
+  const [o, t] = await Promise.all([pend('shop_orders'), pend('shop_topups')]);
+  [['#bkChat', n], ['#bkOrders', o.count || 0], ['#bkTopups', t.count || 0]].forEach(([s, c]) => { $(s).textContent = c; $(s).hidden = !c; });
 }
 setInterval(() => chatBadges().catch(() => {}), 30000);
 // --- ฝั่งแอดมิน: รายชื่อห้อง (ลูกค้าที่มีข้อความ ล่าสุดอยู่บน) + ห้องที่เปิดอยู่ ---
@@ -2303,13 +2352,15 @@ $('#cAdmForm').onsubmit = act(async e => { await chatSend(chat.adm, e.target); a
 async function showTab(t) {
   $('#view-admin').dataset.tab = t;
   $$('#aTabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === t));
+  $$('#backNav a').forEach(a => a.classList.toggle('on', a.dataset.atab === t));
+  if (BACK) $('#view-admin h2').textContent = $('#backNav a.on span')?.textContent || 'หลังร้าน';
   $$('.apane').forEach(p => p.hidden = p.id !== 'a-' + t);
   await ({stats: adminStats, topups: adminTopups, orders: adminOrders, members: adminMembers, subs: adminSubs, products: adminProducts, codes: adminCodes, pay: adminPay})[t]();
 }
 $('#aTabs').onclick = act(async e => { const t = e.target.closest('button')?.dataset.tab; if (t) await showTab(t); });
 const loadAdmin = () => showTab($('#view-admin').dataset.tab || 'stats');
 
-const VIEWS = {wallet: loadWallet, orders: loadOrders, account: loadAccount, admin: loadAdmin, chat: adminChat, check: async () => {}};
+const VIEWS = {gate: async () => {}, wallet: loadWallet, orders: loadOrders, account: loadAccount, admin: loadAdmin, chat: adminChat, check: async () => {}};
 
 // ===== โหมดแก้ไขบนหน้าเว็บ (แอดมิน): กดส่วนที่อยากแก้ -> แผงแก้ไขเปิดข้างๆ -> หน้าเว็บเปลี่ยนตามทันที =====
 const openSet = new WeakSet();
@@ -2404,6 +2455,7 @@ function closeDrawer() {
 }
 
 async function startEdit() {
+  if (BACK) return void (location.href = './?edit');  // แก้แบบกดบนหน้าจริง ต้องทำที่หน้าร้าน
   await ready;
   if (!me?.is_admin) return;
   // กันเซฟทับของจริงด้วยข้อมูลเก่า/ค่าเริ่มต้น ถ้าโหลดจากฐานข้อมูลไม่สำเร็จ
