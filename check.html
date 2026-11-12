@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>เช็ควันหมดอายุ | Cat4K</title>
+<meta name="description" content="เช็ควันหมดอายุแอปพรีเมียมที่ซื้อจากร้าน ด้วยชื่อผู้ใช้และรหัสผ่านที่ได้รับ">
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- โหมดมืด/สว่าง: ใช้ค่าเดียวกับหน้าร้าน (เว็บเดียวกัน เก็บในเครื่องลูกค้า) -->
+<script>try{var t=localStorage.getItem('cat4k_theme')||(JSON.parse(localStorage.getItem('cat4k_content')||'{}').settings||{}).defaultMode||'dark';if(t==='dark')document.documentElement.dataset.theme='dark'}catch(e){document.documentElement.dataset.theme='dark'}</script>
+<style>
+/* เว็บเช็ควันหมดอายุ (แยกจากหน้าร้าน): ใช้บัญชีที่ร้านสร้างให้ (หลังร้าน > สร้างรหัส) ผ่านฟังก์ชัน shop_check_subs ใน supabase-subs.sql */
+:root{
+  color-scheme:light;
+  --sky:#1a82e8; --pink:#ff2d7a; --star:#ffd23f;
+  --bg:#dcefff; --bg2:#86caff; --panel:#fff; --panel2:#edf6ff; --line:#cfe4f8;
+  --text:#17305c; --muted:#506a8f; --ok:#16a34a; --warn:#d97706; --bad:#e11d48;
+  --pinkgrad:linear-gradient(180deg,color-mix(in srgb,var(--pink) 78%,#fff),var(--pink));
+}
+:root[data-theme=dark]{
+  color-scheme:dark;
+  --bg:#000; --bg2:#000; --panel:#0e0e0e; --panel2:#1a1a1a; --line:#2b2b2b;
+  --text:#f4f4f4; --muted:#a3a3a3; --ok:#4ade80; --warn:#fbbf24; --bad:#fb7185;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+body{font-family:Prompt,system-ui,sans-serif;color:var(--text);line-height:1.5;min-height:100vh;background:
+  radial-gradient(900px 520px at 100% 0,color-mix(in srgb,var(--pink) 16%,transparent),transparent 70%),
+  linear-gradient(180deg,var(--bg2),var(--bg) 620px);background-color:var(--bg);background-attachment:fixed}
+:root[data-theme=dark] body{background:#000}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;border:0;color:inherit;background:none}
+button:disabled{opacity:.5;cursor:wait}
+.wrap{max-width:560px;margin:auto;padding:0 16px 40px}
+header{display:flex;align-items:center;justify-content:space-between;padding:18px 0}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;font-style:italic}
+.brand img{width:44px;height:44px;border-radius:50%;object-fit:cover}
+.round{width:40px;height:40px;border-radius:50%;background:var(--panel);border:1px solid var(--line);display:grid;place-items:center;font-size:18px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:0 10px 40px rgba(30,110,210,.12);display:grid;gap:14px}
+:root[data-theme=dark] .card{box-shadow:none}
+h1{font-size:24px;line-height:1.3}
+.muted{color:var(--muted);font-size:14px}
+label{display:grid;gap:6px;font-size:14px;font-weight:500}
+.inp{position:relative}
+input{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:12px 14px;color:var(--text);font:inherit;font-size:16px}
+input:focus{outline:none;border-color:var(--sky);box-shadow:0 0 0 3px color-mix(in srgb,var(--sky) 25%,transparent)}
+.inp input{padding-right:52px}
+.eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:10px;font-size:18px}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;border-radius:14px;font-weight:700;font-size:16px}
+.btn-main{background:var(--pinkgrad);color:#fff;box-shadow:0 6px 18px color-mix(in srgb,var(--pink) 35%,transparent)}
+.btn-line{background:#06c755;color:#fff}
+.btn-ghost{border:1px solid var(--line);background:var(--panel)}
+.who{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.chip{font-size:13px;font-weight:600;padding:3px 12px;border-radius:99px;background:var(--panel2);border:1px solid var(--line)}
+.sub{border:1px solid var(--line);border-radius:18px;padding:16px;display:grid;gap:10px;background:var(--panel2)}
+.sub .top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.sub b{font-size:17px}
+.left{text-align:right;line-height:1.1}
+.left strong{display:block;font-size:30px;font-weight:800}
+.left small{font-size:12px;color:var(--muted)}
+.ok strong{color:var(--ok)}.warn strong{color:var(--warn)}.bad strong{color:var(--bad)}
+.bar{height:8px;border-radius:99px;background:color-mix(in srgb,var(--muted) 20%,transparent);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:99px;background:var(--ok)}
+.warn .bar i{background:var(--warn)}.bad .bar i{background:var(--bad)}
+.dates{display:flex;justify-content:space-between;gap:8px;font-size:13px;color:var(--muted);flex-wrap:wrap}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--bad);color:#fff;padding:10px 18px;border-radius:12px;font-size:14px;max-width:calc(100% - 32px);text-align:center;z-index:9}
+footer{text-align:center;margin-top:18px;font-size:14px;color:var(--muted)}
+footer a{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="brand" href="./"><img id="logo" src="logo.png" alt=""><span id="shop">Cat4K</span></a>
+    <button class="round" type="button" id="theme" aria-label="สลับโหมดมืด/สว่าง">🌙</button>
+  </header>
+
+  <form class="card" id="fCheck">
+    <h1>📅 เช็ควันหมดอายุ</h1>
+    <p class="muted">กรอกชื่อผู้ใช้และรหัสผ่านที่ได้รับจากร้านตอนซื้อแอป</p>
+    <label>ชื่อผู้ใช้ หรืออีเมลที่ใช้ซื้อ<input name="username" required maxlength="200" autocomplete="username" autocapitalize="none" spellcheck="false"></label>
+    <label>รหัสผ่าน<span class="inp"><input name="password" type="password" required maxlength="40" autocomplete="current-password" autocapitalize="characters" spellcheck="false"><button class="eye" type="button" id="eye" aria-label="แสดงรหัสผ่าน">👁</button></span></label>
+    <button class="btn btn-main" type="submit">ตรวจสอบ</button>
+  </form>
+
+  <section class="card" id="out" hidden aria-live="polite"></section>
+
+  <footer>ไม่มีรหัส หรือทำรหัสหาย? <a id="lineHelp" href="#" target="_blank" rel="noopener">ติดต่อร้านทาง LINE</a> · <a href="./">ไปหน้าร้าน</a></footer>
+</div>
+<div class="toast" id="toast" hidden role="alert"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const sb = window.supabase?.createClient('https://gbkjzwdrauyuhtsbczug.supabase.co', 'sb_publishable_ytySGP-EX1EVtVXZBQRofg_Z2yKfccx');
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'})[c]);
+const thDate = d => new Date(d + 'T00:00:00').toLocaleDateString('th-TH', {dateStyle: 'long'});
+let S = {shop: 'Cat4K', logo: 'logo.png', lineId: '@cat4k'};
+const lineUrl = msg => { const id = encodeURIComponent(S.lineId); return `https://line.me/R/${msg ? `oaMessage/${id}/?${encodeURIComponent(msg)}` : `ti/p/${id}`}`; };
+const toast = m => { const t = $('#toast'); t.textContent = m; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => t.hidden = true, 4000); };
+
+// ชื่อร้าน โลโก้ สี LINE: ใช้ค่าที่หน้าร้านเก็บไว้ในเครื่องก่อน (ขึ้นทันที) แล้วอัปเดตจากฐานข้อมูล
+function paintShop(s) {
+  if (!s) return;
+  S = {...S, ...s};
+  $('#shop').textContent = S.shop; $('#logo').src = S.logo; document.title = `เช็ควันหมดอายุ | ${S.shop}`;
+  if (S.accent) document.documentElement.style.setProperty('--sky', S.accent);
+  if (S.accent2) document.documentElement.style.setProperty('--pink', S.accent2);
+  $('#lineHelp').href = lineUrl();
+}
+try { paintShop(JSON.parse(localStorage.getItem('cat4k_content') || '{}').settings); } catch {}
+paintShop(S);
+sb?.from('shop_content').select('content').eq('id', 1).maybeSingle().then(r => paintShop(r.data?.content?.settings));
+
+const paintTheme = () => { $('#theme').textContent = document.documentElement.dataset.theme === 'dark' ? '☀️' : '🌙'; };
+paintTheme();
+$('#theme').onclick = () => {
+  const dark = document.documentElement.dataset.theme !== 'dark';
+  if (dark) document.documentElement.dataset.theme = 'dark'; else delete document.documentElement.dataset.theme;
+  try { localStorage.setItem('cat4k_theme', dark ? 'dark' : 'light'); } catch {}
+  paintTheme();
+};
+$('#eye').onclick = () => { const p = $('#fCheck').elements.password; p.type = p.type === 'password' ? 'text' : 'password'; $('#eye').textContent = p.type === 'password' ? '👁' : '🙈'; };
+
+// ลิงก์จากร้าน check.html?u=ชื่อผู้ใช้ = กรอกชื่อผู้ใช้ไว้ให้ ลูกค้าใส่แค่รหัสผ่าน
+const u = new URLSearchParams(location.search).get('u');
+if (u) { $('#fCheck').elements.username.value = u.slice(0, 200); $('#fCheck').elements.password.focus(); }
+
+function paintResult(r) {
+  const subs = r.subs || [];
+  $('#out').innerHTML = `
+    <div class="who"><b>👤 ${esc(r.name)}</b><span class="chip">${esc(r.username)}</span></div>
+    ${subs.map(x => {
+      const n = x.days_left, cls = n < 0 ? 'bad' : n <= 7 ? 'warn' : 'ok';
+      const total = x.starts_on ? Math.max(1, (new Date(x.expires_on) - new Date(x.starts_on)) / 864e5) : 0;
+      const pct = total ? Math.min(100, Math.max(0, n / total * 100)) : n < 0 ? 0 : 100;
+      return `<div class="sub ${cls}">
+        <div class="top"><div><b>${esc(x.app)}</b>${x.account ? `<div class="muted">${esc(x.account)}</div>` : ''}${x.note ? `<div class="muted">${esc(x.note)}</div>` : ''}</div>
+          <div class="left"><strong>${n < 0 ? 'หมด' : n}</strong><small>${n < 0 ? `หมดอายุแล้ว ${-n} วัน` : n === 0 ? 'หมดอายุวันนี้' : 'วันที่เหลือ'}</small></div></div>
+        <div class="bar"><i style="width:${pct}%"></i></div>
+        <div class="dates"><span>${x.starts_on ? `เริ่ม ${thDate(x.starts_on)}` : ''}</span><span>หมดอายุ ${thDate(x.expires_on)}</span></div>
+      </div>`;
+    }).join('') || '<p class="muted">ยังไม่มีแอปในบัญชีนี้</p>'}
+    <a class="btn btn-line" href="${esc(lineUrl(`สนใจต่ออายุแอป (ชื่อผู้ใช้ ${r.username})`))}" target="_blank" rel="noopener">💬 ต่ออายุทาง LINE</a>
+    <button class="btn btn-ghost" type="button" id="again">🔄 เช็คบัญชีอื่น</button>`;
+  $('#out').hidden = false; $('#fCheck').hidden = true; $('#toast').hidden = true;  // ปิดข้อความผิดพลาดของรอบก่อน
+  $('#again').onclick = () => { $('#out').hidden = true; $('#fCheck').hidden = false; $('#fCheck').reset(); $('#fCheck').elements.username.focus(); };
+}
+
+$('#fCheck').onsubmit = async e => {
+  e.preventDefault();
+  const f = e.target.elements, b = e.submitter || e.target.querySelector('[type=submit]');
+  b.disabled = true;
+  try {
+    if (!sb) throw new Error('โหลดระบบไม่สำเร็จ ลองรีเฟรชหน้าเว็บ');
+    const {data: r, error} = await sb.rpc('shop_check_subs', {p_username: f.username.value.trim(), p_password: f.password.value});
+    if (error) throw new Error('ตรวจสอบไม่สำเร็จ ลองใหม่อีกครั้ง');
+    f.password.value = '';
+    if (!r.ok) throw new Error(r.error);
+    paintResult(r);
+  } catch (err) { toast(err.message); } finally { b.disabled = false; }
+};
+</script>
+</body>
+</html>

@@ -1889,7 +1889,7 @@ function paintCust() {
       </details>
     </div>`).join('') || EMPTY;
 }
-const credMsg = (r, sub) => `${sub ? `${sub.app} ใช้ได้ถึง ${thDate(sub.expires_on)}\n` : ''}ชื่อผู้ใช้: ${r.username}${r.email ? ` (หรือใช้อีเมล ${r.email})` : ''}\nรหัสผ่าน: ${r.password}\nเช็ควันหมดอายุได้ที่ ${location.origin + location.pathname}#check`;
+const credMsg = (r, sub) => `${sub ? `${sub.app} ใช้ได้ถึง ${thDate(sub.expires_on)}\n` : ''}ชื่อผู้ใช้: ${r.username}${r.email ? ` (หรือใช้อีเมล ${r.email})` : ''}\nรหัสผ่าน: ${r.password}\nเช็ควันหมดอายุได้ที่ ${new URL('check.html?u=' + encodeURIComponent(r.username), location.href).href}`;  // เว็บเช็ควันหมดอายุแยก กรอกชื่อผู้ใช้ไว้ให้แล้ว
 // กล่องดูข้อมูลบัญชี: ชื่อผู้ใช้ + รหัสผ่าน (ดูซ้ำได้ถ้ารัน supabase-subs.sql รุ่นใหม่แล้ว) + ออเดอร์ที่ซื้อ + แอปทั้งหมด
 let custPassOk = false, cuCur = null;
 async function custInfo(c) {
