@@ -530,6 +530,15 @@ footer a:hover{color:var(--sky-t)}
 .csearch:focus{outline:none;border-color:var(--sky)}
 .cres-h{font-size:13px;color:var(--muted);padding:8px 2px 0;border-top:1px solid var(--line)}
 .crow mark,.cmr.hit .cm{background:var(--star);color:#4a3200;border-radius:4px}
+/* ค้นหาในห้องแชทที่เปิดอยู่ */
+.chtools{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.cfind{align-items:center;gap:4px}
+.cfind:not([hidden]){display:flex}
+.cfind input{width:170px;background:var(--panel);border:1px solid var(--line);border-radius:99px;padding:5px 12px;color:var(--text);font:inherit;font-size:13px}
+.cfind input:focus{outline:none;border-color:var(--sky)}
+.cfind small{color:var(--muted);min-width:38px;text-align:center;font-size:12px}
+.cmsgs .found .cm,.cmsgs .cm.found{box-shadow:0 0 0 2px color-mix(in srgb,var(--star) 55%,transparent)}
+.cmsgs .cm.hit{box-shadow:0 0 0 3px var(--star)}
 .ctags{display:flex;flex-wrap:wrap;gap:6px}
 .crow .ctags{justify-content:flex-start;gap:4px}
 .ctag{display:inline-flex;align-items:center;gap:4px;padding:2px 10px;border-radius:99px;background:color-mix(in srgb,var(--sky) 25%,transparent);color:var(--text);font-size:12px;font-style:normal;border:0}
@@ -735,7 +744,9 @@ img.ico{display:inline-block;object-fit:contain}
           <div class="clist" id="cList"></div>
         </div>
         <div class="cbox">
-          <div class="chead"><span id="cAdmHead">เลือกลูกค้าทางซ้ายเพื่อเปิดแชท</span><button class="mini" type="button" id="cInfoBtn" hidden>ℹ️ ข้อมูลลูกค้า</button></div>
+          <div class="chead"><span id="cAdmHead">เลือกลูกค้าทางซ้ายเพื่อเปิดแชท</span><span class="chtools">
+            <span class="cfind" id="cFind" hidden><input id="cFindQ" type="search" placeholder="ค้นในแชทนี้" aria-label="ค้นหาข้อความในแชทนี้" autocomplete="off"><small id="cFindN"></small><button class="mini" type="button" data-step="-1" aria-label="ผลก่อนหน้า (เก่ากว่า)">▲</button><button class="mini" type="button" data-step="1" aria-label="ผลถัดไป (ใหม่กว่า)">▼</button></span>
+            <button class="mini" type="button" id="cFindBtn" hidden>🔍 ค้นหา</button><button class="mini" type="button" id="cInfoBtn" hidden>ℹ️ ข้อมูลลูกค้า</button></span></div>
           <div class="cmsgs" id="cAdmMsgs"></div>
           <form class="cform" id="cAdmForm" hidden><input name="body" maxlength="2000" placeholder="พิมพ์ข้อความ..." autocomplete="off" required aria-label="ข้อความ"><button class="btn btn-main" type="submit" aria-label="ส่งข้อความ">➤</button></form>
         </div>
@@ -2502,11 +2513,30 @@ $('#cInfo').onsubmit = act(async e => {
   if (t && !tags.includes(t)) await saveMeta({tags: [...tags, t]}); else e.target.reset();
 });
 $('#cInfoBtn').onclick = () => $('#chatAdm').classList.toggle('noinfo');
+// ค้นหาในแชทที่เปิดอยู่: ไฮไลต์ทุกข้อความที่มีคำนี้ (รวมการ์ดออเดอร์) ▲ = เก่ากว่า ▼ = ใหม่กว่า, Enter = เก่ากว่า, Shift+Enter = ใหม่กว่า
+// ponytail: ค้นเฉพาะ 200 ข้อความล่าสุดที่โหลดในห้อง ข้อความเก่ากว่านั้นใช้ช่องค้นหาด้านซ้าย (ค้นทั้งฐานข้อมูล)
+let findHits = [], findI = 0;
+function chatFind(step = 0) {
+  const q = $('#cFindQ').value.trim().toLowerCase();
+  if (!step) {
+    $$('#cAdmMsgs .found').forEach(x => x.classList.remove('found', 'hit'));
+    findHits = q ? $$('#cAdmMsgs > *').filter(x => x.textContent.toLowerCase().includes(q)) : [];
+    findHits.forEach(x => x.classList.add('found')); findI = findHits.length - 1;  // เริ่มจากข้อความล่าสุด
+  } else if (findHits.length) findI = (findI + step + findHits.length) % findHits.length;
+  findHits.forEach((x, i) => x.classList.toggle('hit', i === findI));
+  $('#cFindN').textContent = !q ? '' : findHits.length ? `${findI + 1}/${findHits.length}` : 'ไม่พบ';
+  findHits[findI]?.scrollIntoView({block: 'center'});
+}
+const findReset = () => { $('#cFindQ').value = ''; $('#cFind').hidden = true; chatFind(); };
+$('#cFindBtn').onclick = () => { $('#cFind').hidden = !$('#cFind').hidden; if ($('#cFind').hidden) findReset(); else $('#cFindQ').focus(); };
+$('#cFindQ').oninput = () => chatFind();
+$('#cFindQ').onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); chatFind(e.shiftKey ? 1 : -1); } else if (e.key === 'Escape') { e.preventDefault(); findReset(); } };
+$('#cFind').onclick = e => { const s = +e.target.closest('[data-step]')?.dataset.step; if (s) chatFind(s); };
 if (innerWidth < 1100) $('#chatAdm').classList.add('noinfo');  // จอแคบ: ช่องข้อมูลลูกค้าเปิดเมื่อกดปุ่ม
 $('#cList').onclick = act(async e => {
   const b = e.target.closest('[data-mid]'); if (!b) return;
   const x = chatRooms.find(r => r.id === b.dataset.mid) || {id: b.dataset.mid, name: 'สมาชิก'};
-  chat.adm.mid = x.id; chatCur = null; $('#cInfoBtn').hidden = false; roomInfo(x).catch(fail); $('#cAdmHead').innerHTML = `<span class="chd">${av(x)}<span>กำลังสนทนากับ <b>${esc(x.name)}</b></span></span>`;
+  chat.adm.mid = x.id; chatCur = null; $('#cInfoBtn').hidden = $('#cFindBtn').hidden = false; findReset(); roomInfo(x).catch(fail); $('#cAdmHead').innerHTML = `<span class="chd">${av(x)}<span>กำลังสนทนากับ <b>${esc(x.name)}</b></span></span>`;
   chat.adm.who = {member: x, admin: {name: me?.display_name || 'แอดมิน', img: me?.avatar || C.settings.logo}}; $('#cAdmForm').hidden = false;
   $$('#cList .crow').forEach(r => r.classList.toggle('on', r === b));
   await chatPull(chat.adm, true); chatWatch(chat.adm, true);
