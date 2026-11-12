@@ -994,6 +994,13 @@ img.ico{display:inline-block;object-fit:contain}
   </form>
 </dialog>
 
+<dialog id="dlgCust" aria-labelledby="cuTitle">
+  <form method="dialog">
+    <button class="x" type="button" aria-label="ปิด">✕</button>
+    <h3 id="cuTitle"></h3>
+    <div id="cuBody" style="display:grid;gap:12px"></div>
+  </form>
+</dialog>
 <dialog id="dlgLine" aria-labelledby="lTitle">
   <form method="dialog">
     <button class="x" type="button" aria-label="ปิด">✕</button>
@@ -1832,7 +1839,10 @@ async function afterRenew(cid, wasLapsed, newExp) {
 }
 async function adminSubs() {
   // ponytail: ดึงลูกค้ามาทั้งหมดแล้วค้นในเบราว์เซอร์ พอสำหรับลูกค้าหลักร้อย ถ้าเกิน 1,000 คนค่อยย้ายการค้นไปฝั่งฐานข้อมูล
-  custRows = ok(await sb.from('shop_customers').select('id, username, email, name, contact, note, created_at, subs:shop_subs(id, app, account, starts_on, expires_on, note)').order('created_at', {ascending: false}).limit(1000));
+  const custQ = cols => sb.from('shop_customers').select(`id, username, email, name, contact, note, created_at${cols}, subs:shop_subs(id, app, account, starts_on, expires_on, note)`).order('created_at', {ascending: false}).limit(1000);
+  let r = await custQ(', pass_plain'); custPassOk = !r.error;
+  if (r.error) r = await custQ('');  // ยังไม่ได้รัน supabase-subs.sql รุ่นที่เก็บรหัสให้ดูซ้ำ
+  custRows = ok(r);
   $('#appList').innerHTML = C.sections.flatMap(x => x.items).map(i => `<option value="${esc(i.n)}">`).join('');
   custApps(); paintCust();
 }
@@ -1842,7 +1852,7 @@ function paintCust() {
     <div class="panel" data-cid="${c.id}">
       <div class="rowb">
         <div><b>${esc(c.name)}</b> <span class="badge g sel">${esc(c.username)}</span>${isLapsed(c) ? ` <span class="badge r">ขาดต่ออายุเกิน ${lapseDays()} วัน</span>` : ''}<div class="muted">${[c.email, c.contact, c.note].filter(Boolean).map(esc).join(' · ')}</div></div>
-        <div class="r"><button class="mini" type="button" data-act="reset">รีเซ็ตรหัสผ่าน</button><button class="mini" type="button" data-act="delc">ลบลูกค้า</button></div>
+        <div class="r"><button class="mini" type="button" data-act="info">👁 ดูข้อมูล / รหัส</button><button class="mini" type="button" data-act="reset">รีเซ็ตรหัสผ่าน</button><button class="mini" type="button" data-act="delc">ลบลูกค้า</button></div>
       </div>
       ${[...c.subs].sort((a, b) => a.expires_on.localeCompare(b.expires_on)).map(x => `
       <div class="item" data-sid="${x.id}">
@@ -1868,11 +1878,47 @@ function paintCust() {
       </details>
     </div>`).join('') || EMPTY;
 }
+const credMsg = (r, sub) => `${sub ? `${sub.app} ใช้ได้ถึง ${thDate(sub.expires_on)}\n` : ''}ชื่อผู้ใช้: ${r.username}${r.email ? ` (หรือใช้อีเมล ${r.email})` : ''}\nรหัสผ่าน: ${r.password}\nเช็ควันหมดอายุได้ที่ ${location.origin + location.pathname}#check`;
+// กล่องดูข้อมูลบัญชี: ชื่อผู้ใช้ + รหัสผ่าน (ดูซ้ำได้ถ้ารัน supabase-subs.sql รุ่นใหม่แล้ว) + ออเดอร์ที่ซื้อ + แอปทั้งหมด
+let custPassOk = false, cuCur = null;
+async function custInfo(c) {
+  cuCur = c;
+  const no = c.name.match(/^ออเดอร์ #(\d+)$/)?.[1], pass = c.pass_plain;
+  const o = no ? (await sb.from('shop_orders').select('*, m:shop_members(display_name, email)').eq('id', +no).maybeSingle()).data : null;
+  if (cuCur !== c) return;
+  $('#cuTitle').textContent = `🔑 ${c.name}`;
+  $('#cuBody').innerHTML = `
+    <div class="credbox">ชื่อผู้ใช้: <b class="sel">${esc(c.username)}</b><br>รหัสผ่าน: ${pass
+      ? `<b class="sel" id="cuPass">••••••••</b> <button class="mini" type="button" data-cu="show">👁 แสดง</button>`
+      : `<span class="muted" style="font-size:14px">${custPassOk ? 'ไม่ได้เก็บไว้ (สร้างก่อนมีระบบดูรหัส)' : 'ยังดูไม่ได้ ให้รัน supabase-subs.sql ใน Supabase อีกครั้ง'} กด "รีเซ็ตรหัสผ่าน" เพื่อออกรหัสใหม่</span>`}</div>
+    <div class="rowb" style="flex-wrap:wrap;justify-content:flex-start;gap:8px">${pass ? '<button class="btn btn-main" type="button" data-cu="copy">📋 คัดลอกข้อความส่งให้ลูกค้า</button>' : ''}<button class="btn btn-ghost" type="button" data-cu="reset">🔄 รีเซ็ตรหัสผ่าน</button></div>
+    <div><b>📱 แอปในบัญชีนี้</b>${[...c.subs].sort((a, b) => a.expires_on.localeCompare(b.expires_on)).map(x => item(esc(x.app),
+      `${[x.note, x.account].filter(Boolean).map(esc).join(' · ')}${x.note || x.account ? '<br>' : ''}เริ่ม ${x.starts_on ? thDate(x.starts_on) : '-'} · หมดอายุ ${thDate(x.expires_on)}`, expBadge(daysLeft(x.expires_on)))).join('') || '<p class="muted">ยังไม่มีแอป</p>'}</div>
+    ${no ? `<div><b>🧾 ออเดอร์ที่ซื้อ</b>${o ? item(`${esc(o.product)} · ${esc(o.package_name)}`,
+      `${baht(o.price)} · สั่งเมื่อ ${when(o.created_at)}<br>ลูกค้า: ${esc(o.m?.display_name || o.m?.email || '-')}${o.m?.email ? ` (${esc(o.m.email)})` : ''}<br>ข้อมูลจากลูกค้า: <span class="sel">${esc(o.info)}</span>`, badge(o.status))
+      : `<p class="muted">ไม่พบออเดอร์ ${esc(no)} ในเว็บ (อาจเป็นออเดอร์ทาง LINE)</p>`}</div>` : ''}
+    <div class="muted" style="font-size:14px">สร้างบัญชีเมื่อ ${when(c.created_at)}${[c.email, c.contact, c.note].filter(Boolean).map(v => ' · ' + esc(v)).join('')}</div>`;
+  if (!$('#dlgCust').open) $('#dlgCust').showModal();
+}
+$('#cuBody').onclick = act(async e => {
+  const b = e.target.closest('[data-cu]'); if (!b) return;
+  const c = cuCur, a = b.dataset.cu, sub = [...c.subs].sort((x, y) => y.expires_on.localeCompare(x.expires_on))[0];
+  if (a === 'show') { const shown = b.textContent.includes('ซ่อน'); $('#cuPass').textContent = shown ? '••••••••' : c.pass_plain; b.textContent = shown ? '👁 แสดง' : '🙈 ซ่อน'; }
+  else if (a === 'copy') { await navigator.clipboard.writeText(credMsg({...c, password: c.pass_plain}, sub)); toast('คัดลอกแล้ว วางในแชต LINE ได้เลย'); }
+  else if (a === 'reset') {
+    if (!confirm(`ออกรหัสผ่านใหม่ให้ ${c.name}? รหัสเดิมจะใช้ไม่ได้ทันที`)) return;
+    const r = ok(await sb.rpc('shop_reset_customer_pass', {p_id: c.id}));
+    await adminSubs();
+    const n = custRows.find(x => x.id === c.id) || c; n.pass_plain = r.password;  // แสดงรหัสใหม่ทันที (ถึงยังไม่ได้รัน SQL รุ่นใหม่)
+    await custInfo(n); $('#cuPass').textContent = r.password; $('#cuBody [data-cu="show"]').textContent = '🙈 ซ่อน';
+    toast('ออกรหัสผ่านใหม่แล้ว');
+  }
+});
 function showCreds(r, title, sub) {
-  const msg = `${sub ? `${sub.app} ใช้ได้ถึง ${thDate(sub.expires_on)}\n` : ''}ชื่อผู้ใช้: ${r.username}${r.email ? ` (หรือใช้อีเมล ${r.email})` : ''}\nรหัสผ่าน: ${r.password}\nเช็ควันหมดอายุได้ที่ ${here}#check`;
+  const msg = credMsg(r, sub);
   $('#custNew').innerHTML = `<div class="panel" style="margin-top:14px;border-color:var(--pink)"><b>${title}: ${esc(r.name)}</b>
     <div class="credbox">ชื่อผู้ใช้: <b class="sel">${esc(r.username)}</b><br>รหัสผ่าน: <b class="sel">${esc(r.password)}</b></div>
-    <p class="muted">รหัสผ่านแสดงให้เห็นครั้งนี้ครั้งเดียว ระบบไม่ได้เก็บรหัสจริงไว้ ถ้าลูกค้าทำหายให้กด "รีเซ็ตรหัสผ่าน"</p>
+    <p class="muted">${custPassOk ? 'ดูรหัสนี้ซ้ำได้ทุกเมื่อที่ปุ่ม "👁 ดูข้อมูล / รหัส" ในรายการด้านล่าง' : 'รหัสผ่านแสดงให้เห็นครั้งนี้ครั้งเดียว (รัน supabase-subs.sql อีกครั้งเพื่อให้ดูซ้ำได้) ถ้าลูกค้าทำหายให้กด "รีเซ็ตรหัสผ่าน"'}</p>
     <button class="btn btn-ghost" type="button" id="credCopy">📋 คัดลอกข้อความส่งให้ลูกค้า</button></div>`;
   $('#credCopy').onclick = act(async () => { await navigator.clipboard.writeText(msg); toast('คัดลอกแล้ว วางในแชต LINE ได้เลย'); });
   $('#custNew').scrollIntoView({block: 'nearest', behavior: 'instant'});
@@ -1944,6 +1990,7 @@ $('#custList').addEventListener('click', e => {
   const b = e.target.closest('button[data-act]'); if (!b) return;
   act(async () => {
     const cid = +b.closest('[data-cid]').dataset.cid, c = custRows.find(x => x.id === cid), a = b.dataset.act;
+    if (a === 'info') return custInfo(c);
     if (a === 'reset') {
       if (!confirm(`ออกรหัสผ่านใหม่ให้ ${c.name}? รหัสเดิมจะใช้ไม่ได้ทันที`)) return;
       return showCreds(ok(await sb.rpc('shop_reset_customer_pass', {p_id: cid})), 'รหัสผ่านใหม่');
