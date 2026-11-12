@@ -1735,7 +1735,7 @@ async function adminMembers() {
   // ponytail: ดึงสมาชิกมาทั้งหมดแล้วค้น/แบ่งหน้าในเบราว์เซอร์ ถ้าเกิน 1,000 คนค่อยย้ายการค้นไปฝั่งฐานข้อมูล
   // ยอดเติมรวม = รวมรายการเติมเงินที่อนุมัติแล้วของแต่ละคน (ดึงทุกแถวมารวมในเบราว์เซอร์ เหมือนแท็บภาพรวม)
   const [rows, tops] = await Promise.all([
-    sb.from('shop_members').select('id, email, display_name, phone, line_id, balance, is_admin, created_at').order('created_at', {ascending: false}).limit(1000),
+    sb.from('shop_members').select('*').order('created_at', {ascending: false}).limit(1000),  // * = มีคอลัมน์รูปโปรไฟล์ (avatar) ก็ได้มาด้วย ยังไม่มีก็ไม่พัง
     stRows('shop_topups', 'member_id, amount', new Date(0), new Date(4e12), q => q.eq('status', 'approved'))]);
   memRows = ok(rows); memTop = {};
   for (const t of tops) memTop[t.member_id] = (memTop[t.member_id] || 0) + +t.amount;
@@ -1753,7 +1753,7 @@ function paintMembers() {
   const from = memPage * size, page = hit.slice(from, from + size);
   $('#memList').innerHTML = '<tr><th>#</th><th class="l">สมาชิก</th><th class="l">ติดต่อ</th><th>เงินคงเหลือ</th><th>ยอดเติมรวม</th><th>จัดการ</th></tr>' + (page.map((m, i) => `
     <tr data-mid="${esc(m.id)}"><td>${from + i + 1}</td>
-      <td class="l"><b>${esc(m.display_name || m.email)}</b>${m.is_admin ? ' <b class="adm">ADMIN</b>' : ''}<small>สมัครเมื่อ ${when(m.created_at)}</small></td>
+      <td class="l"><span class="chd">${av({name: m.display_name || m.email, img: m.avatar})}<span><b>${esc(m.display_name || m.email)}</b>${m.is_admin ? ' <b class="adm">ADMIN</b>' : ''}<small>สมัครเมื่อ ${when(m.created_at)}</small></span></span></td>
       <td class="l">${esc(m.email)}<small>${[m.phone, m.line_id].filter(Boolean).map(esc).join(' · ')}</small></td>
       <td><b>${baht(m.balance)}</b></td><td>${baht(memTop[m.id])}</td>
       <td><div class="r"><button class="mini" type="button" data-act="edit">แก้ไข / ปรับยอด</button><button class="mini" type="button" data-act="del">ลบ</button></div></td></tr>`).join('') || `<tr><td colspan="6">${EMPTY}</td></tr>`);
@@ -1894,16 +1894,24 @@ function custApps() {
 }
 function custPromos() {
   const el = $('#fCust').elements, cur = el.promo.value, it = appItems().find(i => i.n === el.app.value);
-  const pks = (it?.packages || []).filter(k => k.months > 0 || k.bonus > 0);
-  el.promo.innerHTML = '<option value="">เลือกโปรโมชั่น</option>'
-    + (pks.length ? `<optgroup label="แพ็กเกจของแอปนี้">${pks.map(k => `<option value="${k.months || 0}|${k.bonus || 0}|${esc(k.app || '')}">${esc(k.name || pkFull(k))}</option>`).join('')}</optgroup>` : '')
-    + `<optgroup label="ระยะเวลา">${[1, 2, 3, 6, 12].map(n => `<option value="${n}|0|">${n === 12 ? '1 ปี' : n + ' เดือน'}</option>`).join('')}</optgroup>`;
+  // ดึงทุกแพ็กเกจของแอปนี้จากหน้า สินค้า / แพ็กเกจ แยกกลุ่มตามประเภท (มือถือ, TV, ...); แอปที่ยังไม่มีแพ็กเกจ = ระยะเวลามาตรฐาน
+  const pks = it?.packages || [], kinds = [...new Set(pks.map(k => String(k.kind || '').trim()))];
+  el.promo.innerHTML = '<option value="">เลือกโปรโมชั่น</option>' + (pks.length
+    ? kinds.map(kd => `<optgroup label="${esc(kd || 'แพ็กเกจ')}">${pks.filter(k => String(k.kind || '').trim() === kd).map(k => { const d = pkSpan(k);
+        return `<option value="${d ? `${d.m}|${d.d}` : 'x|x'}|${esc(k.app || '')}">${esc(pkFull(k))}</option>`; }).join('')}</optgroup>`).join('')
+    : `<optgroup label="ระยะเวลา">${[1, 2, 3, 6, 12].map(n => `<option value="${n}|0|">${n === 12 ? '1 ปี' : n + ' เดือน'}</option>`).join('')}</optgroup>`);
   if ([...el.promo.options].some(o => o.value === cur)) el.promo.value = cur;
   custExp();
 }
-const promoOf = () => { const [m, b, app] = $('#fCust').elements.promo.value.split('|'); return {m: +m || 0, b: +b || 0, app: app || ''}; };
+// ระยะเวลาของแพ็กเกจ: ช่อง "ระยะเวลา" ที่ตั้งไว้ หรืออ่านจากชื่อที่กรอกเอง เช่น "7 วัน" "2 สัปดาห์" "3 เดือน" "1 ปี" (+ วันแถม); อ่านไม่ออก = null
+const pkSpan = k => {
+  const b = +k.bonus || 0; if (k.months > 0) return {m: +k.months, d: b};
+  const x = String(k.label || '').match(/(\d+)\s*(วัน|สัปดาห์|อาทิตย์|เดือน|ปี)/); if (!x) return b ? {m: 0, d: b} : null;
+  const n = +x[1]; return {วัน: {m: 0, d: n + b}, สัปดาห์: {m: 0, d: 7 * n + b}, อาทิตย์: {m: 0, d: 7 * n + b}, เดือน: {m: n, d: b}, ปี: {m: 12 * n, d: b}}[x[2]];
+};
+const promoOf = () => { const [m, b, app] = $('#fCust').elements.promo.value.split('|'); return {ok: m !== 'x', m: +m || 0, b: +b || 0, app: app || ''}; };
 const promoExp = () => addDays(addMonths(today(), promoOf().m), promoOf().b);  // เริ่มนับวันนี้
-const custExp = () => { $('#custExp').textContent = $('#fCust').elements.promo.value ? `ใช้ได้ตั้งแต่วันนี้ถึง ${thDate(promoExp())}` : ''; };
+const custExp = () => { $('#custExp').textContent = !$('#fCust').elements.promo.value ? '' : promoOf().ok ? `ใช้ได้ตั้งแต่วันนี้ถึง ${thDate(promoExp())}` : '⚠️ แพ็กเกจนี้ไม่รู้ระยะเวลา ให้ตั้ง "ระยะเวลา" หรือใส่ชื่อแบบ "7 วัน" / "1 เดือน" ที่หน้า สินค้า / แพ็กเกจ'; };
 $('#fCust').addEventListener('change', e => e.target.name === 'app' ? custPromos() : custExp());
 // ฟอร์ม "เพิ่มแอปให้ลูกค้านี้" ในรายการ: พิมพ์วันแถมแล้ววันหมดอายุขยับทันที
 $('#custList').addEventListener('input', e => { if (e.target.name === 'bonus') dateSync(e.target); });
@@ -1914,6 +1922,7 @@ $('#fCust').onsubmit = act(async e => {
   if (!no) throw new Error('กรอกเลขออเดอร์');
   const old = custRows.find(c => c.name === name);
   if (old) throw new Error(`เลขออเดอร์ #${no} สร้างรหัสไปแล้ว (ชื่อผู้ใช้ ${old.username}) ดูได้ในรายการด้านล่าง`);
+  if (!promoOf().ok) throw new Error('แพ็กเกจนี้ไม่รู้ระยะเวลา ให้แก้ที่หน้า สินค้า / แพ็กเกจ ก่อน');
   const promo = el.promo.selectedOptions[0].textContent;
   const sub = {app: (promoOf().app || el.app.value).slice(0, 100), account: null, note: `โปรโมชั่น ${promo}`.slice(0, 300), starts_on: today(), expires_on: promoExp()};
   const r = ok(await sb.rpc('shop_create_customer', {p_name: name, p_contact: null, p_note: null, p_email: null}));
