@@ -514,7 +514,10 @@ footer a:hover{color:var(--sky-t)}
 .cform .btn{padding:9px 16px}
 .chatadm{display:grid;grid-template-columns:300px 1fr;gap:12px;height:min(640px,calc(100vh - 220px))}
 .chatadm>*{min-height:0}
-.clist{overflow-y:auto;display:grid;gap:6px;align-content:start}
+.cleft{display:flex;flex-direction:column;gap:8px;min-height:0}
+.cleft .tabs{margin:0;flex-shrink:0}
+.cleft .tabs button{padding:6px 12px;font-size:14px}
+.clist{flex:1;overflow-y:auto;display:grid;gap:6px;align-content:start}
 .crow{display:grid;gap:2px;text-align:left;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--panel);width:100%}
 .crow.on{border-color:var(--pink);background:var(--panel2)}
 .crow span{display:flex;justify-content:space-between;gap:8px;align-items:center}
@@ -750,7 +753,14 @@ img.ico{display:inline-block;object-fit:contain}
     </div>
     <div class="apane" id="a-chat">
       <div class="chatadm">
-        <div class="clist" id="cList"></div>
+        <div class="cleft">
+          <div class="tabs" id="cTabs">
+            <button type="button" data-f="all">ทั้งหมด</button>
+            <button type="button" data-f="unread">ยังไม่อ่าน</button>
+            <button type="button" data-f="pending">รอดำเนินการ</button>
+          </div>
+          <div class="clist" id="cList"></div>
+        </div>
         <div class="cbox">
           <div class="chead" id="cAdmHead">เลือกลูกค้าทางซ้ายเพื่อเปิดแชท</div>
           <div class="cmsgs" id="cAdmMsgs"></div>
@@ -2157,7 +2167,7 @@ async function orderCards(t = chat.adm) {  // ฝั่งลูกค้าเ�
   const orders = ok(await sb.from('shop_orders').select('*').eq('member_id', mid).order('id', {ascending: false}).limit(200));
   if (mid !== t.mid) return;
   const lastOf = new Map(els.map(e => [e.dataset.oid, e]));  // ตัวท้ายสุดของแต่ละออเดอร์ชนะ
-  els.forEach(e => { if (lastOf.get(e.dataset.oid) !== e && e.classList.contains('ocard')) e.remove(); });  // การ์ดเก่าของออเดอร์เดียวกัน: เหลือใบล่าสุดใบเดียว
+  els.forEach(e => { if (lastOf.get(e.dataset.oid) !== e) e.remove(); });  // ออเดอร์ละหนึ่งการ์ด: ข้อความแจ้งสถานะก่อนหน้าและการ์ดเก่าไม่ต้องแสดง
   for (const [oid, el] of lastOf) {
     const o = orders.find(x => x.id === +oid); if (!o) continue;
     const img = C.sections.flatMap(s => s.items).find(p => p.n === o.product)?.img, open = adm && o.status === 'pending';
@@ -2179,7 +2189,8 @@ $('#cAdmMsgs').onclick = act(async e => {
   const card = b.closest('.ocard'), id = +card.dataset.oid, st = b.dataset.st, note = card.querySelector('.onote')?.value.trim() || '';
   const ask = {refunded: `ยกเลิกออเดอร์ #${id} และคืนเงินเข้ากระเป๋าตังลูกค้า? (ย้อนกลับไม่ได้)`, cancelled: `ยกเลิกออเดอร์ #${id} โดยไม่คืนเงิน? (ย้อนกลับไม่ได้)`,
     done: note ? '' : `ยืนยันส่งมอบออเดอร์ #${id} โดยไม่ได้พิมพ์ข้อมูลส่งมอบ?`}[st];
-  if (st === 'pending' && !note) throw new Error('พิมพ์ข้อความถึงลูกค้าในช่องด้านบนก่อน');
+  // "รอส่งลูกค้า": ออเดอร์ยังรอดำเนินการ ไม่แจ้งอะไรในแชทของลูกค้า แค่พาไปแท็บ "รอดำเนินการ" ที่รวมห้องที่มีออเดอร์ค้างอยู่
+  if (st === 'pending') { chatFilter = 'pending'; await adminChat(); return toast('อยู่ในแท็บ "รอดำเนินการ" แล้ว ลูกค้าไม่ได้รับแจ้ง'); }
   if (ask && !confirm(ask)) return;
   const r = await sb.rpc('shop_update_order', {p_id: id, p_status: st, p_note: note});
   if (r.error?.message === 'สถานะไม่ถูกต้อง') throw new Error(SETUP('supabase-order-actions.sql'));  // ฟังก์ชันรุ่นเดิมยังไม่รู้จักสถานะนี้
@@ -2215,7 +2226,7 @@ async function chatBadges() {
 }
 setInterval(() => chatBadges().catch(() => {}), 30000);
 // --- ฝั่งแอดมิน: รายชื่อห้อง (ลูกค้าที่มีข้อความ ล่าสุดอยู่บน) + ห้องที่เปิดอยู่ ---
-let chatRooms = [], chatListT = 0;
+let chatRooms = [], chatListT = 0, chatFilter = 'all';  // chatFilter: all = ทุกห้อง, unread = มีข้อความที่แอดมินยังไม่อ่าน, pending = มีออเดอร์รอดำเนินการ
 async function adminChat() {
   // ponytail: สร้างรายชื่อห้องจาก 1,000 ข้อความล่าสุด ลูกค้าที่เงียบไปนานจะหลุดจากรายชื่อ ถ้าต้องการครบค่อยทำ view สรุปต่อห้องใน SQL
   const rooms_q = cols => sb.from('shop_messages').select(`*, m:shop_members(${cols})`).order('id', {ascending: false}).limit(1000);
@@ -2225,7 +2236,10 @@ async function adminChat() {
   const rooms = new Map();
   for (const m of r.data) { const x = rooms.get(m.member_id) || rooms.set(m.member_id, {id: m.member_id, name: m.m?.display_name || m.m?.email || 'สมาชิก', img: m.m?.avatar, last: m, unread: 0}).get(m.member_id); if (!m.seen_by_admin) x.unread++; }
   chatRooms = [...rooms.values()];
-  $('#cList').innerHTML = chatRooms.map(x => `<button class="crow${x.id === chat.adm.mid ? ' on' : ''}" type="button" data-mid="${esc(x.id)}">
+  const pend = new Set(((await sb.from('shop_orders').select('member_id').eq('status', 'pending').limit(1000)).data || []).map(o => o.member_id));
+  const show = {all: () => true, unread: x => x.unread > 0, pending: x => pend.has(x.id)};
+  $$('#cTabs button').forEach(b => { const n = chatRooms.filter(show[b.dataset.f]).length; b.classList.toggle('on', b.dataset.f === chatFilter); b.textContent = `${{all: 'ทั้งหมด', unread: 'ยังไม่อ่าน', pending: 'รอดำเนินการ'}[b.dataset.f]}${b.dataset.f !== 'all' && n ? ` (${n})` : ''}`; });
+  $('#cList').innerHTML = chatRooms.filter(show[chatFilter]).map(x => `<button class="crow${x.id === chat.adm.mid ? ' on' : ''}" type="button" data-mid="${esc(x.id)}">
     <span><span class="chd">${av(x)}<b>${esc(x.name)}</b></span>${x.unread && x.id !== chat.adm.mid ? `<b class="cbadge" style="background:var(--pink);color:#fff">${x.unread}</b>` : `<small>${when(x.last.created_at)}</small>`}</span>
     <small>${x.last.sender === 'admin' ? 'คุณ: ' : ''}${esc(x.last.body.split('\n')[0])}</small></button>`).join('') || EMPTY;
   chatBadges().catch(() => {});
@@ -2238,6 +2252,7 @@ $('#cList').onclick = act(async e => {
   $$('#cList .crow').forEach(r => r.classList.toggle('on', r === b));
   await chatPull(chat.adm, true); chatWatch(chat.adm, true); await adminChat();
 });
+$('#cTabs').onclick = act(async e => { const f = e.target.closest('button')?.dataset.f; if (f) { chatFilter = f; await adminChat(); } });
 $('#cAdmForm').onsubmit = act(async e => { await chatSend(chat.adm, e.target); await adminChat(); });
 
 async function showTab(t) {
@@ -2401,6 +2416,39 @@ const ready = (async () => {
   if (c && JSON.stringify(c) !== JSON.stringify(raw)) setContent(c);
   if (c) cacheContent(c);
 })();
+
+// ===== อัปเดตทันที (realtime): ฐานข้อมูลแจ้งเมื่อแถวในตารางเหล่านี้เปลี่ยน แล้วหน้าเว็บโหลดส่วนที่เปิดอยู่ใหม่ (ต้องรัน supabase-realtime.sql) =====
+// ได้รับเฉพาะแถวที่ตัวเองมีสิทธิ์อ่าน (RLS): ลูกค้า = ของตัวเอง, แอดมิน = ทั้งหมด; ถ้ายังไม่ได้รัน SQL หน้าเว็บยังทำงานแบบเดิม (แชทถามซ้ำทุก 5 วินาที)
+const liveT = {};
+const live = table => { clearTimeout(liveT[table]); liveT[table] = setTimeout(() => liveRun(table).catch(() => {}), 250); };  // หลายแถวเปลี่ยนติดกัน = โหลดใหม่ครั้งเดียว
+async function liveRun(table) {
+  const v = location.hash.slice(1), tab = $('#view-admin').dataset.tab, adm = v === 'admin' && me?.is_admin, chatMine = !$('#chatBox').hidden;
+  if (table === 'shop_messages') {
+    if (chatMine) await chatPull(chat.me);
+    if (adm && tab === 'chat') { await chatPull(chat.adm); await adminChat(); }
+    await chatBadges();
+  } else if (table === 'shop_orders') {
+    if (v === 'orders') await loadOrders();
+    if (chatMine) await orderCards(chat.me);
+    if (adm && tab === 'chat') await orderCards(chat.adm);
+    if (adm && tab === 'orders') await adminOrders();
+    if (adm && tab === 'stats') await adminStats();
+  } else if (table === 'shop_topups') {
+    if (v === 'wallet') await loadWallet();
+    if (adm && tab === 'topups') await adminTopups();
+    if (adm && tab === 'stats') await adminStats();
+  } else if (table === 'shop_members') {  // ยอดเงิน / ชื่อ / รูป ของตัวเองเปลี่ยน (แอดมิน: ของสมาชิกคนไหนก็ได้)
+    if (!user) return;
+    if (v === 'wallet') await loadWallet(); else { await loadMe(); paintAuth(); }
+    if ($('#dlgOrder').open) $('#oBal').textContent = baht(me?.balance);
+    if (adm && tab === 'members' && !$('#dlgMember').open) await adminMembers();
+  } else if (table === 'shop_content' && !editing && !$('dialog[open]')) {  // แอดมินแก้หน้าเว็บ/สินค้า: ทุกคนเห็นทันที (ไม่แทรกตอนกำลังแก้ไขหรือเปิดกล่องอยู่)
+    const c = ok(await sb.from('shop_content').select('content').eq('id', 1).maybeSingle())?.content;
+    if (c) { setContent(c); cacheContent(C); if (adm && tab === 'products') adminProducts(); }
+  }
+}
+if (sb) ['shop_messages', 'shop_orders', 'shop_topups', 'shop_members', 'shop_content']
+  .reduce((ch, t) => ch.on('postgres_changes', {event: '*', schema: 'public', table: t}, () => live(t)), sb.channel('shop-live')).subscribe();
 </script>
 </body>
 </html>
