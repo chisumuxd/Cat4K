@@ -594,7 +594,7 @@ img.ico{display:inline-block;object-fit:contain}
     <a href="#admin" data-atab="orders"><i>🧾</i><span>ออเดอร์</span><b class="cbadge" id="bkOrders" hidden></b></a>
     <a href="#admin" data-atab="topups"><i>💰</i><span>คำขอเติมเงิน</span><b class="cbadge" id="bkTopups" hidden></b></a>
     <a href="#admin" data-atab="members"><i>👥</i><span>สมาชิก</span></a>
-    <a href="#admin" data-atab="subs"><i>🔑</i><span>ลูกค้าแอป</span></a>
+    <a href="#admin" data-atab="subs"><i>🔑</i><span>สร้างรหัส</span></a>
     <a href="#admin" data-atab="products"><i>📦</i><span>สินค้า / แพ็กเกจ</span></a>
     <a href="#admin" data-atab="codes"><i>🏷️</i><span>โค้ดส่วนลด</span></a>
     <a href="#admin" data-atab="pay"><i>⚙️</i><span>ตั้งค่าร้าน</span></a>
@@ -750,7 +750,7 @@ img.ico{display:inline-block;object-fit:contain}
       <button type="button" data-tab="topups">คำขอเติมเงิน</button>
       <button type="button" data-tab="orders">ออเดอร์</button>
       <button type="button" data-tab="members">จัดการสมาชิก</button>
-      <button type="button" data-tab="subs">ลูกค้าแอป</button>
+      <button type="button" data-tab="subs">สร้างรหัส</button>
       <button type="button" data-tab="products">สินค้า / แพ็กเกจ</button>
       <button type="button" data-tab="codes">โค้ดส่วนลด</button>
       <button type="button" data-tab="pay">ช่องทางชำระเงิน</button>
@@ -843,21 +843,15 @@ img.ico{display:inline-block;object-fit:contain}
     </div>
     <div class="apane" id="a-subs">
       <form class="panel" id="fCust">
-        <b>🔑 สร้างบัญชีและเพิ่มแอปให้ลูกค้า</b>
-        <p class="muted">ใช้กับลูกค้าที่ซื้อทาง LINE (ลูกค้าที่ซื้อผ่านเว็บได้บัญชีอัตโนมัติ) ถ้าอีเมลนี้มีบัญชีอยู่แล้ว ระบบจะเพิ่มหรือต่ออายุแอปในบัญชีเดิม ไม่สร้างบัญชีซ้ำ</p>
+        <b>🔑 สร้างรหัส</b>
+        <p class="muted">กรอกเลขออเดอร์ เลือกแอปและโปรโมชั่นที่ลูกค้าซื้อ แล้วกด "สร้างรหัส" ระบบจะสร้าง Username และ Password ให้ลูกค้าไว้เช็ควันหมดอายุ</p>
         <div class="grid3">
-          <label class="f">ชื่อลูกค้า<input name="name" required maxlength="80"></label>
-          <label class="f">อีเมลที่ลูกค้าใช้กับแอป (ถ้ามี)<input name="email" type="email" maxlength="200"></label>
-          <label class="f">ช่องทางติดต่อ (LINE / เบอร์)<input name="contact" maxlength="120"></label>
-          <label class="f">แอป / แพ็กเกจ<input name="app" required maxlength="100" list="appList"></label>
-          <label class="f">วันเริ่ม<input name="starts_on" type="date" required></label>
-          <label class="f">ระยะเวลา<select name="months"><option value="1">1 เดือน</option><option value="2">2 เดือน</option><option value="3">3 เดือน</option><option value="6">6 เดือน</option><option value="12">1 ปี</option><option value="">กำหนดวันเอง</option></select></label>
-          <label class="f">แถมเพิ่ม (วัน)<input name="bonus" type="number" min="0" max="365" step="1" value="0" inputmode="numeric"></label>
-          <label class="f">วันหมดอายุ<input name="expires_on" type="date" required></label>
-          <label class="f">ข้อความถึงลูกค้า (ไม่บังคับ)<input name="subnote" maxlength="300"></label>
-          <label class="f">โน้ตภายใน (ลูกค้าไม่เห็น)<input name="note" maxlength="300"></label>
+          <label class="f">เลขออเดอร์<input name="order" required maxlength="40" placeholder="เช่น 1024" autocomplete="off"></label>
+          <label class="f">ชื่อแอป<select name="app" required></select></label>
+          <label class="f">โปรโมชั่นที่ซื้อ<select name="promo" required></select></label>
         </div>
-        <button class="btn btn-main" type="submit">สร้างบัญชีและเพิ่มแอป</button>
+        <p class="muted" id="custExp"></p>
+        <button class="btn btn-main" type="submit">สร้างรหัส</button>
       </form>
       <div id="custNew"></div>
       <label class="search"><span aria-hidden="true">🔍</span><input id="custQ" type="search" placeholder="ค้นหาชื่อลูกค้า ชื่อผู้ใช้ อีเมล หรือช่องทางติดต่อ" aria-label="ค้นหาลูกค้า"></label>
@@ -1727,7 +1721,7 @@ async function adminOrders() {
 $('#aStatus').onchange = act(adminOrders);
 $('#aOrders').onclick = act(async e => {
   const b = e.target.closest('button[data-id]'); if (!b) return;
-  if (b.dataset.st === 'refunded' && !confirm('คืนเงินเข้ากระเป๋าลูกค้า? (ย้อนกลับไม่ได้)\nถ้าออเดอร์นี้เป็นแพ็กเกจที่มีวันหมดอายุ ให้แก้วันหมดอายุที่แท็บ "ลูกค้าแอป" เองด้วย')) return;
+  if (b.dataset.st === 'refunded' && !confirm('คืนเงินเข้ากระเป๋าลูกค้า? (ย้อนกลับไม่ได้)\nถ้าออเดอร์นี้เป็นแพ็กเกจที่มีวันหมดอายุ ให้แก้วันหมดอายุที่แท็บ "สร้างรหัส" เองด้วย')) return;
   ok(await sb.rpc('shop_update_order', {p_id: +b.dataset.id, p_status: b.dataset.st, p_note: b.closest('.item').querySelector('.note').value}));
   toast('บันทึกแล้ว'); await adminOrders();
 });
@@ -1840,7 +1834,7 @@ async function adminSubs() {
   // ponytail: ดึงลูกค้ามาทั้งหมดแล้วค้นในเบราว์เซอร์ พอสำหรับลูกค้าหลักร้อย ถ้าเกิน 1,000 คนค่อยย้ายการค้นไปฝั่งฐานข้อมูล
   custRows = ok(await sb.from('shop_customers').select('id, username, email, name, contact, note, created_at, subs:shop_subs(id, app, account, starts_on, expires_on, note)').order('created_at', {ascending: false}).limit(1000));
   $('#appList').innerHTML = C.sections.flatMap(x => x.items).map(i => `<option value="${esc(i.n)}">`).join('');
-  paintCust();
+  custApps(); paintCust();
 }
 function paintCust() {
   const q = $('#custQ').value.trim().toLowerCase();
@@ -1890,35 +1884,44 @@ function dateSync(t) {
   if (t.name === 'expires_on') el.months.value = '';
   else if (['months', 'starts_on', 'bonus'].includes(t.name) && el.months.value && el.starts_on.value) el.expires_on.value = addDays(addMonths(el.starts_on.value, +el.months.value), bonusOf(el.bonus));
 }
-function initCustForm() {
-  const el = $('#fCust').elements;
-  el.starts_on.value = today(); el.months.value = '1'; el.expires_on.value = addMonths(today(), 1);
+// ฟอร์มสร้างรหัส: ชื่อแอป = สินค้าในร้าน; โปรโมชั่น = แพ็กเกจของแอปนั้นที่ตั้งอายุไว้ + ระยะเวลามาตรฐาน (ค่า = "เดือน|วันแถม|ชื่อแอปในบัญชี")
+const appItems = () => C.sections.flatMap(s => s.items);
+function custApps() {
+  const el = $('#fCust').elements, cur = el.app.value;
+  el.app.innerHTML = '<option value="">เลือกแอป</option>' + appItems().map(i => `<option>${esc(i.n)}</option>`).join('');
+  el.app.value = appItems().some(i => i.n === cur) ? cur : '';
+  custPromos();
 }
-initCustForm();
-$('#fCust').addEventListener('change', e => dateSync(e.target));
-// พิมพ์วันแถมแล้ววันหมดอายุขยับทันที ไม่ต้องรอออกจากช่อง
-$('#fCust').addEventListener('input', e => { if (e.target.name === 'bonus') dateSync(e.target); });
+function custPromos() {
+  const el = $('#fCust').elements, cur = el.promo.value, it = appItems().find(i => i.n === el.app.value);
+  const pks = (it?.packages || []).filter(k => k.months > 0 || k.bonus > 0);
+  el.promo.innerHTML = '<option value="">เลือกโปรโมชั่น</option>'
+    + (pks.length ? `<optgroup label="แพ็กเกจของแอปนี้">${pks.map(k => `<option value="${k.months || 0}|${k.bonus || 0}|${esc(k.app || '')}">${esc(k.name || pkFull(k))}</option>`).join('')}</optgroup>` : '')
+    + `<optgroup label="ระยะเวลา">${[1, 2, 3, 6, 12].map(n => `<option value="${n}|0|">${n === 12 ? '1 ปี' : n + ' เดือน'}</option>`).join('')}</optgroup>`;
+  if ([...el.promo.options].some(o => o.value === cur)) el.promo.value = cur;
+  custExp();
+}
+const promoOf = () => { const [m, b, app] = $('#fCust').elements.promo.value.split('|'); return {m: +m || 0, b: +b || 0, app: app || ''}; };
+const promoExp = () => addDays(addMonths(today(), promoOf().m), promoOf().b);  // เริ่มนับวันนี้
+const custExp = () => { $('#custExp').textContent = $('#fCust').elements.promo.value ? `ใช้ได้ตั้งแต่วันนี้ถึง ${thDate(promoExp())}` : ''; };
+$('#fCust').addEventListener('change', e => e.target.name === 'app' ? custPromos() : custExp());
+// ฟอร์ม "เพิ่มแอปให้ลูกค้านี้" ในรายการ: พิมพ์วันแถมแล้ววันหมดอายุขยับทันที
 $('#custList').addEventListener('input', e => { if (e.target.name === 'bonus') dateSync(e.target); });
-// กรอกครั้งเดียว: ลูกค้าใหม่ = สร้างบัญชี (user / password) + แอปแรก; อีเมลที่มีบัญชีแล้ว = เพิ่มหรือต่ออายุแอปในบัญชีเดิม
+// เลขออเดอร์หนึ่งเลข = หนึ่งบัญชี (เก็บเป็นชื่อลูกค้า "ออเดอร์ #เลข" ลูกค้าเห็นตอนเช็ควันหมดอายุ, ค้นในรายการด้านล่างได้)
+// ponytail: ไม่ได้เช็คว่าเลขนี้มีในออเดอร์ของเว็บจริงไหม (ออเดอร์ทาง LINE ไม่มีในระบบ) แค่กันสร้างซ้ำเลขเดิม
 $('#fCust').onsubmit = act(async e => {
-  const f = e.target, d = Object.fromEntries(new FormData(f)), email = d.email.trim().toLowerCase();
-  const sub = {app: d.app.trim(), account: email || null, note: d.subnote.trim() || null, starts_on: d.starts_on, expires_on: d.expires_on};
-  const old = email && custRows.find(c => c.email === email);
-  if (old) {
-    const was = isLapsed(old), same = old.subs.find(x => x.app.toLowerCase() === sub.app.toLowerCase());
-    const {app, ...dates} = sub;  // ต่ออายุแอปเดิม: คงชื่อแอปที่บันทึกไว้
-    ok(same ? await sb.from('shop_subs').update(dates).eq('id', same.id) : await sb.from('shop_subs').insert({customer_id: old.id, ...sub}));
-    $('#custNew').innerHTML = '';
-    toast(`อีเมลนี้มีบัญชีอยู่แล้ว (${old.username}) ${same ? 'ต่ออายุ' : 'เพิ่ม'}แอปในบัญชีเดิมให้แล้ว`);
-    f.reset(); initCustForm();
-    return afterRenew(old.id, was, sub.expires_on);
-  }
-  const r = ok(await sb.rpc('shop_create_customer', {p_name: d.name, p_contact: d.contact, p_note: d.note, p_email: d.email}));
-  showCreds(r, 'สร้างบัญชีแล้ว', sub);  // โชว์รหัสก่อน: ถึงขั้นถัดไปพลาด รหัสผ่าน (เห็นได้ครั้งเดียว) ก็ไม่หาย
+  const f = e.target, el = f.elements, no = el.order.value.trim().replace(/^#\s*/, ''), name = `ออเดอร์ #${no}`.slice(0, 80);
+  if (!no) throw new Error('กรอกเลขออเดอร์');
+  const old = custRows.find(c => c.name === name);
+  if (old) throw new Error(`เลขออเดอร์ #${no} สร้างรหัสไปแล้ว (ชื่อผู้ใช้ ${old.username}) ดูได้ในรายการด้านล่าง`);
+  const promo = el.promo.selectedOptions[0].textContent;
+  const sub = {app: (promoOf().app || el.app.value).slice(0, 100), account: null, note: `โปรโมชั่น ${promo}`.slice(0, 300), starts_on: today(), expires_on: promoExp()};
+  const r = ok(await sb.rpc('shop_create_customer', {p_name: name, p_contact: null, p_note: null, p_email: null}));
+  showCreds(r, 'สร้างรหัสแล้ว', sub);  // โชว์รหัสก่อน: ถึงขั้นถัดไปพลาด รหัสผ่าน (เห็นได้ครั้งเดียว) ก็ไม่หาย
   try {
     const x = await sb.from('shop_subs').insert({customer_id: r.id, ...sub});
-    if (x.error) throw new Error(`สร้างบัญชีแล้ว แต่เพิ่มแอปไม่สำเร็จ (${x.error.message}) ให้เพิ่มแอปที่รายการลูกค้าด้านล่างแทน`);
-    f.reset(); initCustForm();
+    if (x.error) throw new Error(`สร้างรหัสแล้ว แต่เพิ่มแอปไม่สำเร็จ (${x.error.message}) ให้เพิ่มแอปที่รายการด้านล่างแทน`);
+    el.order.value = '';
   } finally { await adminSubs(); }
 });
 // ปุ่มในรายการลูกค้า (ไม่ครอบ act ทั้งกล่อง: act ปิดปุ่มชั่วคราว ซึ่งจะทำให้ปุ่ม submit ของฟอร์มเพิ่มแอปไม่ทำงาน)
