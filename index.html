@@ -475,6 +475,30 @@ footer a:hover{color:var(--sky-t)}
 .fab{position:fixed;right:18px;bottom:18px;z-index:40;padding:12px 18px;box-shadow:0 8px 22px rgba(0,20,60,.35)}
 .cat,.panel,.item,.step,.post,.search{box-shadow:0 6px 18px var(--glow)}
 .fab-edit{right:auto;left:calc(var(--side) + 18px)}
+/* ===== แชท: กล่องแชท (หัว / ข้อความ / ช่องพิมพ์) ใช้ทั้งหน้าร้านและแท็บแชทของแอดมิน ===== */
+.fab-chat{bottom:72px}
+.cbadge{background:#fff;color:var(--pink);border-radius:99px;font-size:12px;min-width:20px;padding:0 6px;line-height:20px;text-align:center;text-shadow:none}
+.cbox{display:flex;flex-direction:column;min-height:0;background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.chatbox{position:fixed;right:18px;bottom:18px;z-index:70;width:min(380px,calc(100vw - 24px));height:min(540px,calc(100vh - 90px));box-shadow:0 14px 40px rgba(0,0,0,.45)}
+.chead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line);background:var(--panel2);font-size:14px}
+.cmsgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px}
+.cmsgs:empty::before{content:'ยังไม่มีข้อความ';color:var(--muted);text-align:center;margin-top:30px}
+.cm{max-width:82%;align-self:flex-start;background:var(--panel2);border-radius:14px 14px 14px 4px;padding:8px 12px;white-space:pre-line;overflow-wrap:anywhere;font-size:15px}
+.cm.me{align-self:flex-end;background:var(--pinkgrad);color:#fff;border-radius:14px 14px 4px 14px}
+.cm.sys{align-self:center;max-width:94%;text-align:center;background:none;border:1px dashed var(--line);border-radius:12px;font-size:13px;color:var(--muted)}
+.cm small{display:block;font-size:11px;opacity:.7;margin-top:2px}
+.cform{display:flex;gap:8px;padding:10px;border-top:1px solid var(--line)}
+.cform input{flex:1;min-width:0;background:var(--panel2);border:1px solid var(--line);border-radius:99px;padding:10px 14px;color:var(--text);font:inherit}
+.cform input:focus{outline:none;border-color:var(--sky)}
+.cform .btn{padding:9px 16px}
+.chatadm{display:grid;grid-template-columns:300px 1fr;gap:12px;height:min(640px,calc(100vh - 220px))}
+.chatadm>*{min-height:0}
+.clist{overflow-y:auto;display:grid;gap:6px;align-content:start}
+.crow{display:grid;gap:2px;text-align:left;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--panel);width:100%}
+.crow.on{border-color:var(--pink);background:var(--panel2)}
+.crow span{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.crow small{color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media (max-width:760px){.chatadm{grid-template-columns:1fr;height:auto}.clist{max-height:220px}.chatadm .cbox{height:60vh}}
 @media (max-width:980px){.fab-edit{left:18px}}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 @media (max-width:760px){.grid3{grid-template-columns:1fr}}
@@ -627,6 +651,7 @@ img.ico{display:inline-block;object-fit:contain}
       <button type="button" data-tab="subs">ลูกค้าแอป</button>
       <button type="button" data-tab="products">สินค้า / แพ็กเกจ</button>
       <button type="button" data-tab="codes">โค้ดส่วนลด</button>
+      <button type="button" data-tab="chat">แชท <b class="cbadge" id="admChatBadge" hidden></b></button>
       <button type="button" data-tab="pay">ช่องทางชำระเงิน</button>
       <button type="button" data-start-edit>✏️ แก้ไขหน้าเว็บ</button>
     </div>
@@ -701,6 +726,16 @@ img.ico{display:inline-block;object-fit:contain}
       </form>
       <div class="tblwrap" style="margin-top:14px"><table class="tbl" id="codeList"></table></div>
     </div>
+    <div class="apane" id="a-chat">
+      <div class="chatadm">
+        <div class="clist" id="cList"></div>
+        <div class="cbox">
+          <div class="chead" id="cAdmHead">เลือกลูกค้าทางซ้ายเพื่อเปิดแชท</div>
+          <div class="cmsgs" id="cAdmMsgs"></div>
+          <form class="cform" id="cAdmForm" hidden><input name="body" maxlength="2000" placeholder="พิมพ์ข้อความ..." autocomplete="off" required aria-label="ข้อความ"><button class="btn btn-main" type="submit" aria-label="ส่งข้อความ">➤</button></form>
+        </div>
+      </div>
+    </div>
     <div class="apane" id="a-pay">
       <form class="panel" id="fPay">
         <b>🏦 ช่องทางชำระเงิน</b>
@@ -757,6 +792,12 @@ img.ico{display:inline-block;object-fit:contain}
 </footer>
 </div><!-- /.app -->
 
+<button class="btn btn-main fab fab-chat" id="fabChat" type="button">💬 แชทกับแอดมิน <b class="cbadge" id="chatBadge" hidden></b></button>
+<section class="cbox chatbox" id="chatBox" aria-label="แชทกับแอดมิน" hidden>
+  <div class="chead"><b>💬 แชทกับแอดมิน</b><button class="mini" type="button" id="chatClose" aria-label="ปิดแชท">✕</button></div>
+  <div class="cmsgs" id="chatMsgs"></div>
+  <form class="cform" id="chatForm"><input name="body" maxlength="2000" placeholder="พิมพ์ข้อความ..." autocomplete="off" required aria-label="ข้อความ"><button class="btn btn-main" type="submit" aria-label="ส่งข้อความ">➤</button></form>
+</section>
 <a class="btn btn-line fab" id="fabContact" data-edit="fab" href="#" target="_blank" rel="noopener">💬 ติดต่อเรา</a>
 <button class="btn btn-main fab fab-edit" id="fabEdit" type="button" data-start-edit hidden>✏️ แก้ไขหน้าเว็บ</button>
 
@@ -1228,6 +1269,7 @@ function paintAuth() {
        </details>`
     : `<button class="btn btn-ghost" type="button" data-auth="login">เข้าสู่ระบบ</button><button class="btn btn-main" type="button" data-auth="register">สมัครสมาชิก</button>`;
   adminFab(); paintPromo();
+  if (!user) chatOpen(false); chatBadges().catch(() => {});  // ออกจากระบบ = ปิดแชท
 }
 // กล่องล่างสุดของแถบซ้าย: คำชวนสมัครสมาชิก (แอดมินแก้ข้อความได้) — เห็นเฉพาะคนที่ยังไม่เข้าสู่ระบบ และตอนแอดมินกำลังแก้ไขหน้าเว็บ
 function paintPromo() {
@@ -1328,7 +1370,8 @@ function route() {
   const wasHome = !$('#home').hidden;
   $('#home').hidden = !!VIEWS[v];
   $$('.view').forEach(x => x.hidden = x.id !== 'view-' + v);
-  $('.fab').hidden = v === 'admin';  // ไม่ให้บังปุ่มบันทึก
+  $('#fabContact').hidden = v === 'admin';  // ไม่ให้บังปุ่มบันทึก
+  $('#fabChat').hidden = v === 'admin' || !$('#chatBox').hidden;  // หน้าแอดมินมีแท็บแชทของตัวเองแล้ว
   adminFab();
   $$('.side nav a').forEach(a => a.classList.toggle('on', a.getAttribute('href') === (VIEWS[v] ? '#' + v : '#top')));  // ไฮไลต์เมนูของหน้าที่เปิดอยู่
   sideOpen(false);
@@ -2046,11 +2089,82 @@ $('#fProduct').onsubmit = act(async e => {
   $('#dlgProduct').close();
 });
 
+// ===== แชท ลูกค้า <-> แอดมิน (ตาราง shop_messages ดู supabase-chat.sql) =====
+// สมาชิกหนึ่งคน = หนึ่งห้องแชท; ออเดอร์ใหม่และการเปลี่ยนสถานะออเดอร์ ฐานข้อมูลใส่เป็นข้อความของระบบในห้องนั้นให้เอง
+// ponytail: ดึงข้อความใหม่ด้วยการถามซ้ำทุก 5 วินาทีตอนเปิดแชทอยู่ ถ้าคนใช้เยอะจนเปลือง ค่อยเปลี่ยนเป็น Supabase Realtime
+const CHAT_SQL = SETUP('supabase-chat.sql');
+const chat = {me: {el: '#chatMsgs', mid: null, mine: 'member', last: 0, timer: 0}, adm: {el: '#cAdmMsgs', mid: null, mine: 'admin', last: 0, timer: 0}};
+const msgHtml = (m, mine) => `<div class="cm ${m.sender === 'system' ? 'sys' : m.sender === mine ? 'me' : ''}">${esc(m.body)}<small>${when(m.created_at)}</small></div>`;
+async function chatPull(t, reset) {  // reset = เปิดห้องใหม่: โหลด 200 ข้อความล่าสุด; ไม่ reset = เอาเฉพาะข้อความที่ใหม่กว่าที่มีอยู่
+  const box = $(t.el), mid = t.mid;
+  if (reset) { t.last = 0; box.innerHTML = ''; }
+  if (!mid) return;
+  const q = sb.from('shop_messages').select('*').eq('member_id', mid).gt('id', t.last);
+  const rows = need(await (t.last ? q.order('id').limit(200) : q.order('id', {ascending: false}).limit(200)), CHAT_SQL);
+  if (mid !== t.mid || !rows.length) return;  // สลับห้องไปแล้วระหว่างรอ
+  if (!t.last) rows.reverse();
+  const stick = reset || box.scrollHeight - box.scrollTop - box.clientHeight < 80;
+  t.last = rows.at(-1).id;
+  box.insertAdjacentHTML('beforeend', rows.map(m => msgHtml(m, t.mine)).join(''));
+  if (stick) box.scrollTop = box.scrollHeight;
+  if (rows.some(m => m.sender !== t.mine)) await sb.rpc('shop_mark_read', {p_member: t.mine === 'admin' ? mid : null});
+}
+const chatWatch = (t, on) => { clearInterval(t.timer); if (on) t.timer = setInterval(() => chatPull(t).catch(() => {}), 5000); };
+async function chatSend(t, form) {
+  const body = form.elements.body.value.trim(); if (!body || !t.mid) return;
+  need(await sb.rpc('shop_send_message', {p_body: body, p_member: t.mine === 'admin' ? t.mid : null}), CHAT_SQL);
+  form.reset(); await chatPull(t); $(t.el).scrollTop = $(t.el).scrollHeight;
+}
+// --- ฝั่งลูกค้า: ปุ่มแชทลอย + กล่องแชทมุมขวาล่าง ---
+async function chatOpen(on) {
+  if (on && !user) return openAuth('login');
+  $('#chatBox').hidden = !on; $('#fabChat').hidden = on;
+  chat.me.mid = on ? user.id : null; chatWatch(chat.me, on);
+  if (on) { $('#chatBadge').hidden = true; await chatPull(chat.me, true); $('#chatForm').elements.body.focus(); }
+}
+$('#fabChat').onclick = act(() => chatOpen(true));
+$('#chatClose').onclick = () => chatOpen(false);
+$('#chatForm').onsubmit = act(e => chatSend(chat.me, e.target));
+// ตัวเลขข้อความที่ยังไม่อ่านบนปุ่มแชท (ลูกค้า) และบนแท็บแชท (แอดมิน): ถามทุก 30 วินาที; ยังไม่ได้รัน supabase-chat.sql = เงียบไว้
+async function chatBadges() {
+  if (!user) return void ($('#chatBadge').hidden = $('#admChatBadge').hidden = true);
+  const unseen = col => sb.from('shop_messages').select('id', {count: 'exact', head: true}).eq(col, false);
+  const mine = $('#chatBox').hidden ? (await unseen('seen_by_member').eq('member_id', user.id)).count || 0 : 0;
+  $('#chatBadge').textContent = mine; $('#chatBadge').hidden = !mine;
+  const adm = me?.is_admin ? (await unseen('seen_by_admin')).count || 0 : 0;
+  $('#admChatBadge').textContent = adm; $('#admChatBadge').hidden = !adm;
+}
+setInterval(() => chatBadges().catch(() => {}), 30000);
+// --- ฝั่งแอดมิน: รายชื่อห้อง (ลูกค้าที่มีข้อความ ล่าสุดอยู่บน) + ห้องที่เปิดอยู่ ---
+let chatRooms = [], chatListT = 0;
+async function adminChat() {
+  // ponytail: สร้างรายชื่อห้องจาก 1,000 ข้อความล่าสุด ลูกค้าที่เงียบไปนานจะหลุดจากรายชื่อ ถ้าต้องการครบค่อยทำ view สรุปต่อห้องใน SQL
+  const r = await sb.from('shop_messages').select('*, m:shop_members(display_name, email)').order('id', {ascending: false}).limit(1000);
+  if (r.error) return void ($('#cList').innerHTML = `<p class="muted">${CHAT_SQL}</p>`);
+  const rooms = new Map();
+  for (const m of r.data) { const x = rooms.get(m.member_id) || rooms.set(m.member_id, {id: m.member_id, name: m.m?.display_name || m.m?.email || 'สมาชิก', last: m, unread: 0}).get(m.member_id); if (!m.seen_by_admin) x.unread++; }
+  chatRooms = [...rooms.values()];
+  $('#cList').innerHTML = chatRooms.map(x => `<button class="crow${x.id === chat.adm.mid ? ' on' : ''}" type="button" data-mid="${esc(x.id)}">
+    <span><b>${esc(x.name)}</b>${x.unread && x.id !== chat.adm.mid ? `<b class="cbadge" style="background:var(--pink);color:#fff">${x.unread}</b>` : `<small>${when(x.last.created_at)}</small>`}</span>
+    <small>${x.last.sender === 'admin' ? 'คุณ: ' : ''}${esc(x.last.body.split('\n')[0])}</small></button>`).join('') || EMPTY;
+  chatBadges().catch(() => {});
+}
+$('#cList').onclick = act(async e => {
+  const b = e.target.closest('[data-mid]'); if (!b) return;
+  const x = chatRooms.find(r => r.id === b.dataset.mid);
+  chat.adm.mid = x.id; $('#cAdmHead').innerHTML = `<span>กำลังสนทนากับ <b>${esc(x.name)}</b></span>`; $('#cAdmForm').hidden = false;
+  $$('#cList .crow').forEach(r => r.classList.toggle('on', r === b));
+  await chatPull(chat.adm, true); chatWatch(chat.adm, true); await adminChat();
+});
+$('#cAdmForm').onsubmit = act(async e => { await chatSend(chat.adm, e.target); await adminChat(); });
+
 async function showTab(t) {
+  chatWatch(chat.adm, t === 'chat' && !!chat.adm.mid); clearInterval(chatListT);
+  if (t === 'chat') chatListT = setInterval(() => adminChat().catch(() => {}), 15000);
   $('#view-admin').dataset.tab = t;
   $$('#aTabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === t));
   $$('.apane').forEach(p => p.hidden = p.id !== 'a-' + t);
-  await ({stats: adminStats, topups: adminTopups, orders: adminOrders, members: adminMembers, subs: adminSubs, products: adminProducts, codes: adminCodes, pay: adminPay})[t]();
+  await ({stats: adminStats, topups: adminTopups, orders: adminOrders, members: adminMembers, subs: adminSubs, products: adminProducts, codes: adminCodes, pay: adminPay, chat: adminChat})[t]();
 }
 $('#aTabs').onclick = act(async e => { const t = e.target.closest('button')?.dataset.tab; if (t) await showTab(t); });
 const loadAdmin = () => showTab($('#view-admin').dataset.tab || 'stats');
