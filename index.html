@@ -321,7 +321,10 @@ button:disabled{opacity:.5;cursor:wait}
 .pimg .oimg{width:84px;height:84px;border-radius:18px;font-size:22px}
 .pimg .f{flex:1;min-width:0}
 .ptbl{overflow-x:auto;padding-bottom:4px}
-.prow{display:grid;grid-template-columns:1.1fr 1fr .8fr 1.5fr 1fr 34px;gap:8px;align-items:center;min-width:620px;margin-bottom:6px}
+.prow{display:grid;grid-template-columns:42px 1.1fr 1fr .8fr 1.5fr 1fr 34px;gap:8px;align-items:center;min-width:670px;margin-bottom:6px}
+.prow .pi{width:42px;height:42px;border-radius:10px;border:1px dashed var(--line);display:grid;place-items:center;cursor:pointer;overflow:hidden;font-size:18px;background:var(--panel2)}
+.prow .pi img{width:100%;height:100%;object-fit:cover}
+.prow .pi:hover{border-color:var(--sky)}
 .prow.ph{font-size:13px;color:var(--muted);margin-bottom:4px}
 .prow input,.prow select{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:9px 10px;color:var(--text);font:inherit;width:100%;min-width:0}
 .prow input:focus,.prow select:focus{outline:none;border-color:var(--sky)}
@@ -792,7 +795,7 @@ img.ico{display:inline-block;object-fit:contain}
       <div class="oright">
         <b class="ostep"><i>1</i>เลือกแพ็กเกจ</b>
         <div class="pks" id="oPk"></div>
-        <b class="ostep"><i>2</i>กรอกข้อมูล</b>
+        <b class="ostep" id="oStep2"><i>2</i>กรอกข้อมูล</b>
         <div id="oFields" style="display:grid;gap:12px"></div>
         <p class="muted" id="oSubNote" hidden></p>
         <b class="ostep"><i>3</i>เลือกวิธีการชำระเงิน</b>
@@ -823,9 +826,10 @@ img.ico{display:inline-block;object-fit:contain}
     <label class="f">หมวดหมู่<select name="sec"></select></label>
     <label class="f">รายละเอียด (ลูกค้าเห็นตอนกดสั่งซื้อ)<textarea name="desc" rows="3" maxlength="2000"></textarea></label>
     <label class="f">ช่องที่ให้ลูกค้ากรอกตอนสั่งซื้อ คั่นด้วย , เช่น อีเมล, LINE ID (ถ้ามี)<input name="ask" maxlength="300" placeholder="เว้นว่าง = ช่องเดียวตามที่ตั้งไว้ในหมวด" autocomplete="off"></label>
+    <label class="f chk"><input name="askshow" type="checkbox">แสดงช่องให้ลูกค้ากรอกบนเว็บ (ไม่ติ๊ก = ลูกค้ากดซื้อได้เลยโดยไม่ต้องกรอกอะไร)</label>
     <b>แพ็กเกจและราคา *</b>
     <div class="ptbl">
-      <div class="prow ph"><span>ประเภท</span><span>ระยะเวลา</span><span>🎁 แถม (วัน)</span><span>✏️ ชื่อ (กรอกเอง)</span><span>💰 ราคาขาย</span><span></span></div>
+      <div class="prow ph"><span>รูป</span><span>ประเภท</span><span>ระยะเวลา</span><span>🎁 แถม (วัน)</span><span>✏️ ชื่อ (กรอกเอง)</span><span>💰 ราคาขาย</span><span></span></div>
       <div id="pRows"></div>
     </div>
     <datalist id="pKinds"></datalist>
@@ -1012,8 +1016,8 @@ const BLANK = {
   //   ask = ช่องที่ให้ลูกค้ากรอกตอนสั่งซื้อ คั่นด้วย , (ว่าง = ช่องเดียวตามที่ตั้งไว้ในหมวด)
   // แพ็กเกจ: kind = ประเภท (เช่น TV, มือถือ ใช้จัดกลุ่มในหน้าสั่งซื้อ), label = ชื่อที่แอดมินกรอกเอง, months / bonus = อายุการใช้งาน
   //   name = ชื่อเต็มที่ระบบประกอบให้ (pkFull) ใช้ตอนสั่งซื้อและอยู่ในออเดอร์ ฐานข้อมูลตรวจราคาจากชื่อนี้
-  items: {n: '', d: '', t: '', img: '', desc: '', closed: false, ask: '', packages: []},
-  packages: {name: '', kind: '', label: '', price: 0, months: 0, bonus: 0, app: ''},
+  items: {n: '', d: '', t: '', img: '', desc: '', closed: false, ask: '', noask: false, packages: []},  // noask = ไม่ต้องให้ลูกค้ากรอกอะไร
+  packages: {name: '', kind: '', label: '', img: '', price: 0, months: 0, bonus: 0, app: ''},  // img = รูปของแพ็กเกจนี้ (ว่าง = ใช้รูปสินค้า)
   steps: {icon: '', title: '', text: ''},
   news: {icon: '', title: '', date: '', link: ''},
 };
@@ -1368,7 +1372,7 @@ function paintPks(ki = 0) {
   let first = true;
   const thumb = `<i class="oimg" style="background:${$('#oImg').style.background}">${$('#oImg').innerHTML}</i>`;  // รูปสินค้าเล็กในการ์ดแพ็กเกจ
   $('#oPk').innerHTML = pks.map((k, i) => k.kind.trim() !== kind ? '' :
-    `<label class="pk"><input type="radio" name="pk" value="${i}"${first ? ' checked' : ''}>${thumb}<span>${esc(pkShort(k) || k.name)}</span><b>${baht(k.price)}</b>${k.label.trim() && pkDur(k) ? `<small class="muted">${pkDur(k)}</small>` : ''}</label>${first = false, ''}`).join('');
+    `<label class="pk"><input type="radio" name="pk" value="${i}"${first ? ' checked' : ''}>${k.img ? `<i class="oimg"><img src="${esc(k.img)}" alt=""></i>` : thumb}<span>${esc(pkShort(k) || k.name)}</span><b>${baht(k.price)}</b>${k.label.trim() && pkDur(k) ? `<small class="muted">${pkDur(k)}</small>` : ''}</label>${first = false, ''}`).join('');
 }
 // แพ็กเกจที่มีวันหมดอายุต้องมีอีเมลไว้อ้างอิง: ใช้ช่องอีเมลช่องแรก ถ้าสินค้านี้ไม่มีช่องอีเมล ช่องแรกจะกลายเป็นช่องอีเมล
 const emailIdx = () => Math.max(0, orderFs.findIndex(f => f.fkind === 'email'));
@@ -1378,7 +1382,7 @@ const orderPk = () => orderPks()[new FormData($('#fOrder')).get('pk')];
 // วาดส่วนที่เปลี่ยนตามแพ็กเกจ / วิธีชำระเงิน / โค้ดส่วนลด: ชนิดของช่องอีเมล ราคา สรุปยอด และปุ่มจ่าย
 function syncOrder() {
   const el = $('#fOrder').elements, k = orderPk(), timed = !!pkDur(k), f = orderFs[emailIdx()], inp = el['f' + emailIdx()], line = el.pm.value === 'line', disc = orderDisc?.amount || 0;
-  inp.type = timed ? 'email' : f.fkind; inp.required = timed || !f.fopt;
+  if (inp) { inp.type = timed ? 'email' : f.fkind; inp.required = timed || !f.fopt; }
   $('#oSubNote').hidden = !timed;
   $('#oSubNote').textContent = timed ? `แพ็กเกจนี้ใช้ได้ ${pkDur(k)} ระบบใช้อีเมลนี้อ้างอิงวันหมดอายุ ซื้อครั้งแรกจะได้ชื่อผู้ใช้และรหัสผ่านสำหรับเช็ควันหมดอายุทันที ซื้อครั้งต่อไปด้วยอีเมลเดิมจะต่ออายุให้` : '';
   $('#oPkName').textContent = k.name + (timed && k.label.trim() ? ` · ${pkDur(k)}` : '');  // ไม่ได้กรอกชื่อเอง = ชื่อคืออายุการใช้งานอยู่แล้ว 
@@ -1404,7 +1408,10 @@ function openOrder(sec, p) {
   $('#fOrder').elements.pm.value = 'wallet';
   paintPks();
   const fs = askFields(p.ask);
-  orderFs = fs.length ? fs : [{fname: sec.hint || 'ข้อมูลสำหรับเติม (UID / อีเมล)', fkind: 'text', fopt: false}];
+  // สินค้าที่ตั้งว่าไม่ต้องให้ลูกค้ากรอก: ไม่มีช่องเลย ยกเว้นมีแพ็กเกจที่มีวันหมดอายุ ซึ่งต้องใช้อีเมลอ้างอิง (บังคับเฉพาะตอนเลือกแพ็กเกจนั้น)
+  orderFs = p.noask ? (orderPks().some(pkDur) ? [{fname: 'อีเมล (ใช้อ้างอิงวันหมดอายุ)', fkind: 'email', fopt: true}] : [])
+    : fs.length ? fs : [{fname: sec.hint || 'ข้อมูลสำหรับเติม (UID / อีเมล)', fkind: 'text', fopt: false}];
+  $('#oStep2').hidden = !orderFs.length;
   $('#oFields').innerHTML = orderFs.map((f, i) => `<label class="f">${esc(f.fname)}<input name="f${i}" type="${f.fkind}" maxlength="200" autocomplete="off"${f.fopt ? '' : ' required'}></label>`).join('');
   $('#oDesc').textContent = p.desc; $('#oDesc').hidden = !p.desc;
   $('#fOrder').elements.code.value = '';
@@ -1429,8 +1436,7 @@ $('#fOrder').onsubmit = act(async e => {
   // แพ็กเกจที่มีวันหมดอายุ: บรรทัดแรกต้องเป็นอีเมลล้วนๆ เพราะฐานข้อมูลใช้บรรทัดแรกอ้างอิงลูกค้า (supabase-subs.sql)
   const vals = orderFs.map((f, i) => String(d.get('f' + i) || '').trim()), timed = !!pkDur(k), ei = emailIdx();
   const lines = vals.map((v, i) => v && (orderFs.length === 1 || (timed && i === ei) ? v : `${orderFs[i].fname.trim()}: ${v}`));
-  const info = (timed ? [lines[ei], ...lines.filter((_, i) => i !== ei)] : lines).filter(Boolean).join('\n');
-  if (!info) throw new Error('กรุณากรอกข้อมูลสำหรับสั่งซื้อ');
+  const info = (timed ? [lines[ei], ...lines.filter((_, i) => i !== ei)] : lines).filter(Boolean).join('\n') || '-';  // ไม่มีช่องให้กรอก = "-" (ฐานข้อมูลไม่รับค่าว่าง)
   if (info.length > 500) throw new Error('ข้อมูลที่กรอกยาวเกินไป (รวมกันไม่เกิน 500 ตัวอักษร)');
   if (line) {  // โอนเงิน: ไม่มีออเดอร์ในระบบ ส่งรายละเอียดเข้าแชต LINE ให้แอดมินตรวจสลิปและทำรายการเอง (โค้ดส่วนลดไม่ถูกนับจำนวนครั้ง)
     window.open(lineUrl([`สั่งซื้อ: ${orderItem.n} — ${k.name}`, info, code ? `โค้ดส่วนลด: ${code}${disc ? ` (ลด ${baht(disc)})` : ' (ยังไม่ได้ตรวจ)'}` : '', `ยอดชำระเงิน: ${baht(total)}`, '(แนบสลิปโอนเงินในแชตนี้)'].filter(Boolean).join('\n')), '_blank', 'noopener');
@@ -1936,6 +1942,7 @@ $('#a-products').addEventListener('click', e => {
 let prodPath = '';  // 'sections.S.items.I' ของสินค้าที่กำลังแก้ ('' = เพิ่มสินค้าใหม่)
 const MONTHS = [0, 1, 2, 3, 6, 12];
 const pRow = k => `<div class="prow">
+  <label class="pi" title="รูปของแพ็กเกจนี้ กดเพื่ออัปโหลด (ไม่ใส่ = ใช้รูปสินค้า)"><input type="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden aria-label="รูปของแพ็กเกจนี้"><input class="i" type="hidden" value="${esc(k.img)}">${k.img ? `<img src="${esc(k.img)}" alt="">` : '<span>📷</span>'}</label>
   <input class="k" value="${esc(k.kind)}" maxlength="30" placeholder="เช่น TV" list="pKinds" aria-label="ประเภท" autocomplete="off">
   <select class="m" aria-label="ระยะเวลา">${[...new Set([...MONTHS, +k.months || 0])].sort((a, b) => a - b).map(m => `<option value="${m}"${m === (+k.months || 0) ? ' selected' : ''}>${m ? m + ' เดือน' : 'ปิด'}</option>`).join('')}</select>
   <input class="b" type="number" min="0" max="3650" step="1" value="${+k.bonus || ''}" placeholder="0" aria-label="แถม (วัน)">
@@ -1952,7 +1959,7 @@ function openProduct(path, sec = 0) {
   const src = view(), [, si, , pi] = path ? path.split('.') : [0, sec], p = path ? src.sections[si].items[pi] : BLANK.items, el = $('#fProduct').elements;
   prodPath = path;
   $('#pTitle').textContent = path ? 'แก้ไขสินค้า' : 'เพิ่มสินค้า';
-  el.n.value = p.n; el.img.value = p.img; el.file.value = ''; el.desc.value = p.desc; el.ask.value = p.ask; el.d.value = p.d; el.show.checked = !p.closed;
+  el.n.value = p.n; el.img.value = p.img; el.file.value = ''; el.desc.value = p.desc; el.ask.value = p.ask; el.askshow.checked = !p.noask; el.d.value = p.d; el.show.checked = !p.closed;
   el.app.value = p.packages.find(k => k.app)?.app || '';
   el.sec.innerHTML = src.sections.map((s, i) => `<option value="${i}">${esc(s.title) || '(หมวดยังไม่มีชื่อ)'}</option>`).join('') + '<option value="new">➕ เพิ่มหมวดใหม่…</option>';
   el.sec.value = src.sections.length ? si : 'new'; el.sec.dataset.was = el.sec.value;
@@ -1976,6 +1983,13 @@ $('#fProduct').elements.sec.onchange = e => {  // เลือก "เพิ่�
 };
 $('#pAdd').onclick = () => { $('#pRows').insertAdjacentHTML('beforeend', pRow({...BLANK.packages, kind: $$('#pRows .k').at(-1)?.value || ''})); $$('#pRows .l').at(-1).focus(); };
 $('#pRows').onclick = e => { if (e.target.closest('[data-del]')) { e.target.closest('.prow').remove(); paintProd(); } };
+// รูปของแพ็กเกจ: กดกล่องรูปในแถว = เลือกไฟล์แล้วอัปโหลด (กดค้างที่รูปเดิมแล้วเลือกใหม่ = เปลี่ยนรูป)
+$('#pRows').addEventListener('change', act(async e => {
+  const f = e.target.files?.[0], box = e.target.closest('.pi'); if (!f || !box) return;
+  const url = await upload(f); e.target.value = '';
+  box.querySelector('.i').value = url; box.querySelector('img, span').outerHTML = `<img src="${esc(url)}" alt="">`;
+  toast('อัปโหลดรูปแพ็กเกจแล้ว อย่าลืมกดบันทึก');
+}));
 $('#pCancel').onclick = () => $('#dlgProduct').close();
 $('#pDel').onclick = act(async () => {
   const [, si, , pi] = prodPath.split('.');
@@ -1985,7 +1999,7 @@ $('#pDel').onclick = act(async () => {
 });
 $('#fProduct').onsubmit = act(async e => {
   const el = e.target.elements, src = view(), [, si, , pi] = prodPath.split('.'), old = prodPath ? src.sections[si].items[pi] : structuredClone(BLANK.items);
-  const pks = $$('#pRows .prow').map(r => { const v = c => r.querySelector(c).value.trim(); return {name: '', kind: v('.k'), label: v('.l'), price: +v('.p') || 0, months: +v('.m') || 0, bonus: Math.max(0, Math.floor(+v('.b') || 0)), app: el.app.value.trim()}; })
+  const pks = $$('#pRows .prow').map(r => { const v = c => r.querySelector(c).value.trim(); return {name: '', kind: v('.k'), label: v('.l'), img: v('.i'), price: +v('.p') || 0, months: +v('.m') || 0, bonus: Math.max(0, Math.floor(+v('.b') || 0)), app: el.app.value.trim()}; })
     .filter(k => k.kind || k.label || k.price || k.months || k.bonus);  // แถวที่ไม่ได้กรอกอะไรเลย = ข้าม
   if (!pks.length) throw new Error('เพิ่มแพ็กเกจอย่างน้อย 1 รายการ');
   pks.forEach((k, i) => {
@@ -1997,7 +2011,7 @@ $('#fProduct').onsubmit = act(async e => {
   if (dup) throw new Error(`มีแพ็กเกจชื่อ "${dup}" ซ้ำกัน ออเดอร์จะแยกไม่ออก ให้ตั้งประเภทหรือชื่อให้ต่างกัน`);
   const newSec = el.sec.value === 'new' ? el.sec.selectedOptions[0].dataset.name : '';
   if (el.sec.value === 'new' && !newSec) throw new Error('เลือกหมวดหมู่ หรือตั้งชื่อหมวดใหม่ก่อน');
-  const item = {...old, n: el.n.value.trim(), img: el.img.value.trim(), desc: el.desc.value.trim(), ask: el.ask.value.trim(), d: el.d.value.trim(), closed: !el.show.checked, packages: pks};
+  const item = {...old, n: el.n.value.trim(), img: el.img.value.trim(), desc: el.desc.value.trim(), ask: el.ask.value.trim(), noask: !el.askshow.checked, d: el.d.value.trim(), closed: !el.show.checked, packages: pks};
   await applyProduct(c => {
     const to = newSec ? c.sections.push({...structuredClone(BLANK.sections), title: newSec}) - 1 : +el.sec.value;
     if (prodPath && +si === to) c.sections[si].items[pi] = item;
