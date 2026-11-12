@@ -1890,8 +1890,14 @@ function custApps() {
   const el = $('#fCust').elements, cur = el.app.value;
   el.app.innerHTML = '<option value="">เลือกแอป</option>' + appItems().map(i => `<option>${esc(i.n)}</option>`).join('');
   el.app.value = appItems().some(i => i.n === cur) ? cur : '';
+  if (codeFill) { el.order.value = codeFill.no; el.app.value = appItems().some(i => i.n === codeFill.p) ? codeFill.p : ''; }
   custPromos();
+  if (codeFill) {  // มาจากปุ่มในการ์ดออเดอร์: เลือกแพ็กเกจที่ชื่อตรงกับที่ลูกค้าซื้อ
+    const o = [...el.promo.options].find(x => x.value && x.textContent === codeFill.k); if (o) el.promo.value = o.value;
+    custExp(); codeFill = null; $('#fCust').scrollIntoView({block: 'nearest'});
+  }
 }
+let codeFill = null;  // {no, p, k} จากการ์ดออเดอร์ในแชท
 function custPromos() {
   const el = $('#fCust').elements, cur = el.promo.value, it = appItems().find(i => i.n === el.app.value);
   // ดึงทุกแพ็กเกจของแอปนี้จากหน้า สินค้า / แพ็กเกจ แยกกลุ่มตามประเภท (มือถือ, TV, ...); แอปที่ยังไม่มีแพ็กเกจ = ระยะเวลามาตรฐาน
@@ -2288,7 +2294,7 @@ async function orderCards(t = chat.adm) {  // ฝั่งลูกค้าเ�
     const no = orders.length - orders.indexOf(o); el.dataset.no = no;
     const img = C.sections.flatMap(s => s.items).find(p => p.n === o.product)?.img, open = adm && o.status === 'pending';
     el.className = 'cm ocard'; el.innerHTML = `
-      <div class="rowb" style="align-items:center"><b>🛒 ออเดอร์ #${no}</b>${badge(o.status)}</div>
+      <div class="rowb" style="align-items:center"><b>🛒 ออเดอร์ #${no}${adm ? ` <small class="muted sel" title="เลขที่ใช้ในหน้าสร้างรหัส (ไม่ซ้ำกันทั้งร้าน)">เลขสร้างรหัส ${o.id}</small>` : ''}</b>${badge(o.status)}</div>
       <div class="ohead">${img ? `<span class="oimg"><img src="${esc(img)}" alt=""></span>` : ''}<div><small class="muted">สินค้า</small><b>${esc(o.product)}</b><small>${esc(o.package_name)}</small></div><b>${baht(o.price)}</b></div>
       <div class="oinfo"><small class="muted">${adm ? 'ข้อมูลจากลูกค้า' : 'ข้อมูลที่คุณกรอก'}</small><span class="sel pre">${esc(o.info)}</span>${o.code ? `<small class="muted">ใช้โค้ด ${esc(o.code)} ลด ${baht(o.discount)}</small>` : ''}</div>
       ${o.admin_note ? `<div class="oinfo"><small class="muted">${adm ? 'ข้อความที่ส่งให้ลูกค้า' : 'ข้อความจากแอดมิน'}</small><span class="sel pre">${esc(o.admin_note)}</span></div>` : ''}
@@ -2296,6 +2302,7 @@ async function orderCards(t = chat.adm) {  // ฝั่งลูกค้าเ�
         <button class="btn obtn wait" type="button" data-st="pending">⏳ รอส่งลูกค้า</button>` : ''}
       ${open || (adm && o.status === 'done') ? `<button class="btn obtn bad" type="button" data-st="refunded">❌ ยกเลิก / คืนเงิน</button>
         <button class="btn obtn off" type="button" data-st="cancelled">🚫 ยกเลิก · ไม่คืนเงิน</button>` : ''}
+      ${adm && (o.status === 'pending' || o.status === 'done') ? `<button class="btn obtn off" type="button" data-code="${o.id}" data-p="${esc(o.product)}" data-k="${esc(o.package_name)}">🔑 สร้างรหัสให้ออเดอร์นี้</button>` : ''}
       <small>${when(o.updated_at || o.created_at)}</small>`;
   }
 }
@@ -2311,6 +2318,8 @@ const pickLine = () => new Promise(done => {
   d.showModal();
 });
 $('#cAdmMsgs').onclick = act(async e => {
+  const c = e.target.closest('button[data-code]');  // ไปหน้าสร้างรหัส กรอกเลขออเดอร์ แอป และโปรโมชั่นของออเดอร์นี้ให้
+  if (c) { codeFill = {no: c.dataset.code, p: c.dataset.p, k: c.dataset.k}; $('#view-admin').dataset.tab = 'subs'; return void (location.hash = '#admin'); }
   const b = e.target.closest('button[data-st]'); if (!b) return;
   const card = b.closest('.ocard'), id = +card.dataset.oid, no = card.dataset.no, st = b.dataset.st; let note = '';  // ข้อความถึงลูกค้า: มาจากไลน์ที่เลือกตอนส่งมอบ
   const ask = {refunded: `ยกเลิกออเดอร์ #${no} และคืนเงินเข้ากระเป๋าตังลูกค้า? (ย้อนกลับไม่ได้)`, cancelled: `ยกเลิกออเดอร์ #${no} โดยไม่คืนเงิน? (ย้อนกลับไม่ได้)`,
