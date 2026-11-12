@@ -197,15 +197,15 @@ button:disabled{opacity:.5;cursor:wait}
 .card{position:relative;display:block;scroll-snap-align:start;transition:transform .2s}
 .card:hover{transform:translateY(-4px)}
 .card:hover .logo{border-color:var(--pink)}
-.card .logo{position:relative;aspect-ratio:3/4.2;border-radius:16px;overflow:hidden;background:var(--panel);border:1px solid var(--line);display:grid;place-items:center;padding:10px;font-size:38px;font-weight:800;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.4);text-align:center;line-height:1.1}
+.card .logo{position:relative;aspect-ratio:1;border-radius:22px;overflow:hidden;background:var(--panel);border:1px solid var(--line);display:grid;place-items:center;padding:10px;font-size:38px;font-weight:800;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.4);text-align:center;line-height:1.1}
 .card .logo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .card .name{padding:8px 4px 0;text-align:center;color:var(--text);font-size:15px;font-weight:600;line-height:1.3;overflow-wrap:anywhere}
 .card .name small{display:block;margin-top:2px;color:var(--pink-t);font-size:13px;font-weight:600}
 .card .off{position:absolute;top:10px;left:10px;z-index:1;background:var(--star);color:#4a3200;font-size:12px;font-weight:700;padding:2px 9px;border-radius:99px;box-shadow:0 2px 6px rgba(0,0,0,.25)}
 /* อันดับ: 3 อันแรกเป็นป้าย TOP มุมขวาบน ที่เหลือเป็นเลขโปร่งตัวใหญ่ */
-.card .top{position:absolute;top:0;right:0;z-index:1;background:var(--pinkgrad);color:#fff;font-size:12px;font-weight:800;font-style:italic;padding:4px 12px;border-radius:0 16px 0 12px}
-/* รูปสูง 140% ของความกว้างการ์ด (3/4.2) และ margin % คิดจากความกว้าง → เลขอยู่ชิดขอบล่างของรูปเสมอ ไม่ว่าชื่อจะกี่บรรทัด */
-.card .rk{position:absolute;left:6px;top:0;margin-top:calc(140% - 78px);z-index:1;font-size:86px;font-weight:800;font-style:italic;line-height:.8;color:transparent;-webkit-text-stroke:2px var(--pink);filter:drop-shadow(0 0 10px color-mix(in srgb,var(--pink) 55%,transparent))}
+.card .top{position:absolute;top:0;right:0;z-index:1;background:var(--pinkgrad);color:#fff;font-size:12px;font-weight:800;font-style:italic;padding:4px 12px;border-radius:0 22px 0 12px}
+/* รูปเป็นสี่เหลี่ยมจัตุรัส สูงเท่าความกว้างการ์ด และ margin % คิดจากความกว้าง → เลขอยู่ชิดขอบล่างของรูปเสมอ ไม่ว่าชื่อจะกี่บรรทัด */
+.card .rk{position:absolute;left:6px;top:0;margin-top:calc(100% - 78px);z-index:1;font-size:86px;font-weight:800;font-style:italic;line-height:.8;color:transparent;-webkit-text-stroke:2px var(--pink);filter:drop-shadow(0 0 10px color-mix(in srgb,var(--pink) 55%,transparent))}
 .empty{display:none;text-align:center;color:var(--muted);padding:40px 0}
 
 /* how-to + news */
@@ -345,7 +345,7 @@ button:disabled{opacity:.5;cursor:wait}
 .editing .edonly{display:block}
 .addtile{border:2px dashed color-mix(in srgb,var(--muted) 60%,transparent);border-radius:var(--r);color:var(--muted);min-height:64px;padding:10px;font-size:14px;width:100%}
 .addtile:hover{border-color:var(--sky);color:var(--sky-t)}
-.row .addtile{min-height:0;aspect-ratio:3/4.2;border-radius:16px}
+.row .addtile{min-height:0;aspect-ratio:1;border-radius:22px}
 .editing{padding-bottom:64px}
 .editing .side{bottom:63px}
 .editing [data-edit]{outline:1px dashed var(--sky-t);outline-offset:3px;cursor:pointer;scroll-margin:90px 0 90px}
@@ -393,6 +393,30 @@ dialog h3{font-size:20px;padding-right:30px}
 .pk span{background:var(--skygrad);color:#fff;font-weight:600;border-radius:99px;padding:4px 14px;text-shadow:0 1px 2px rgba(0,0,0,.25)}
 .pk small{font-size:12px}
 .pk b{margin-left:auto;color:var(--pink-t);font-size:17px}
+/* หน้าชำระเงิน (กล่องสั่งซื้อ): หัวสินค้า > แพ็กเกจ > ช่องข้อมูล > วิธีชำระเงิน > โค้ดส่วนลดและสรุปยอด */
+#dlgOrder{width:min(460px,94vw)}
+.ohead{display:flex;align-items:center;gap:12px;padding-right:34px}
+.ohead>div{flex:1;min-width:0}
+.ohead h3{padding:0}
+.ohead small{display:block}
+.ohead>b{font-size:22px;color:var(--pink-t);white-space:nowrap}
+.oimg{width:56px;height:56px;border-radius:14px;overflow:hidden;flex-shrink:0;display:grid;place-items:center;color:#fff;font-weight:800;font-size:15px}
+.oimg img{width:100%;height:100%;object-fit:cover}
+.pms{display:grid;gap:6px}
+.pm{display:flex;align-items:center;gap:10px;border:2px solid var(--line);border-radius:16px;padding:10px 14px;cursor:pointer}
+.pm:has(:checked){border-color:var(--pink);background:var(--panel2)}
+.pm input{accent-color:var(--pink);flex-shrink:0}
+.pm i{font-style:normal;font-size:24px;line-height:1}
+.pm span{display:grid;min-width:0}
+.pm small{font-size:12px}
+.pm .r{margin-left:auto;text-align:right;flex-shrink:0}
+.pm .r b{color:var(--pink-t)}
+.pm .r a{font-size:13px;color:var(--sky-t);text-decoration:underline}
+.osum{display:grid;gap:8px;background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:14px}
+.osum>div{display:flex;justify-content:space-between;gap:10px;font-size:14px}
+.osum .tot{border-top:1px solid var(--line);padding-top:8px;font-size:17px}
+.osum .rowb{align-items:center}
+.osum .rowb input{flex:1;min-width:0;background:var(--panel)}
 #toast{position:fixed;inset:auto 0 26px 0;margin:auto;width:fit-content;max-width:90vw;background:#12351f;color:#d7ffe4;border:1px solid #2f7a4a;border-radius:14px;padding:12px 18px;font-size:15px;box-shadow:0 8px 24px rgba(0,0,0,.4)}
 #toast.bad{background:#3d1220;color:#ffd9e2;border-color:#8f2f4a}
 
@@ -607,7 +631,13 @@ img.ico{display:inline-block;object-fit:contain}
       <div class="list" id="adjList"></div>
     </div>
     <div class="apane" id="a-products">
-      <p class="muted">กด "แก้ไข" เพื่อเปิดสินค้านั้นในโหมดแก้ไขหน้าเว็บ แก้ชื่อ รูป รายละเอียด แพ็กเกจ ราคา หรือปิดการขายได้ที่นั่น แล้วกดบันทึก</p>
+      <form class="panel" id="fTypes" style="margin-bottom:14px">
+        <b>🧩 ประเภทสินค้า และช่องที่ให้ลูกค้ากรอกตอนสั่งซื้อ</b>
+        <p class="muted">สร้างประเภท (เช่น เติมเกม, แอปสตรีมมิ่ง) แล้วเพิ่มช่องที่ลูกค้าต้องกรอก เช่น UID, อีเมล, LINE ID จากนั้นกด "แก้ไข" ที่สินค้าในตารางด้านล่างเพื่อเลือกประเภทให้สินค้า สินค้าที่ไม่ได้เลือกประเภทจะมีช่องเดียวตามที่ตั้งไว้ในหมวด</p>
+        <div id="typeFields"></div>
+        <button class="btn btn-main" type="submit">บันทึกประเภท</button>
+      </form>
+      <p class="muted">กด "แก้ไข" เพื่อเปิดสินค้านั้นในโหมดแก้ไขหน้าเว็บ แก้ชื่อ รูป รายละเอียด ประเภท แพ็กเกจ ราคา หรือปิดการขายได้ที่นั่น แล้วกดบันทึก</p>
       <div class="tbar">
         <label class="search"><span aria-hidden="true">🔍</span><input id="prodQ" type="search" placeholder="ค้นหาชื่อสินค้า หรือหมวด" aria-label="ค้นหาสินค้า"></label>
         <select id="prodSec" aria-label="หมวดที่จะเพิ่มสินค้า"></select>
@@ -732,15 +762,24 @@ img.ico{display:inline-block;object-fit:contain}
 <dialog id="dlgOrder" aria-labelledby="oName">
   <form id="fOrder">
     <button class="x" type="button" aria-label="ปิด">✕</button>
-    <h3 id="oName"></h3>
+    <div class="ohead"><span class="oimg" id="oImg"></span><div><h3 id="oName"></h3><small class="muted" id="oPkName"></small></div><b id="oPrice"></b></div>
     <div class="pks" id="oPk"></div>
     <p class="muted pre" id="oDesc" hidden></p>
-    <label class="f"><span id="oHint"></span><input name="info" required maxlength="500" autocomplete="off"></label>
+    <div id="oFields" style="display:grid;gap:12px"></div>
     <p class="muted" id="oSubNote" hidden></p>
-    <label class="f">โค้ดส่วนลด (ถ้ามี)<input name="code" maxlength="30" autocomplete="off" autocapitalize="characters"></label>
-    <p class="muted">ยอดเงินคงเหลือ: <b id="oBal"></b></p>
-    <button class="btn btn-main" type="submit">ชำระด้วยกระเป๋าตัง</button>
-    <a class="btn btn-line" id="oLine" href="#" target="_blank" rel="noopener">หรือสั่งซื้อทาง LINE</a>
+    <b>เลือกวิธีการชำระเงิน</b>
+    <div class="pms">
+      <label class="pm"><input type="radio" name="pm" value="wallet" checked><i>💰</i><span><b>เงินในกระเป๋า</b><small class="muted">หักจากกระเป๋าตัง ได้รับออเดอร์ทันที</small></span><span class="r"><small class="muted">ยอดเงินคงเหลือ</small><b id="oBal"></b><a href="#wallet" id="oTopup">เติมเงิน</a></span></label>
+      <label class="pm"><input type="radio" name="pm" value="line"><i>🏦</i><span><b>โอนเงิน / พร้อมเพย์</b><small class="muted">โอนแล้วส่งสลิปให้แอดมินทาง LINE</small></span></label>
+    </div>
+    <div id="oPay" hidden><div class="payrows" id="oPayRows"></div><p class="muted">โอนตามยอดชำระเงินด้านล่าง แล้วกดปุ่ม "ส่งคำสั่งซื้อทาง LINE" และแนบสลิปในแชต แอดมินจะตรวจสลิปแล้วดำเนินการให้</p></div>
+    <div class="osum">
+      <label class="f">โค้ดส่วนลด<span class="rowb"><input name="code" maxlength="30" autocomplete="off" autocapitalize="characters" placeholder="กรอกโค้ดส่วนลด"><button class="btn btn-ghost" type="button" id="oApply">ใช้โค้ด</button></span></label>
+      <div><span>ยอดสั่งซื้อ</span><span id="oSub"></span></div>
+      <div><span>ส่วนลด</span><span id="oDisc"></span></div>
+      <div class="tot"><b>ยอดชำระเงิน</b><b id="oTotal"></b></div>
+    </div>
+    <div class="rowb"><button class="btn btn-ghost" type="button" id="oCancel">ยกเลิก</button><button class="btn btn-main" type="submit" id="oSubmit" style="flex:1">ชำระเงิน</button></div>
   </form>
 </dialog>
 
@@ -893,6 +932,8 @@ const act = fn => async e => {
 // รูปร่างข้อมูล: เพิ่ม field ใหม่แค่เติมใน BLANK + LABEL แล้วแผงแก้ไขจะมีช่องนั้นเอง
 const LABEL = {settings: 'ตั้งค่าร้าน', shop: 'ชื่อร้าน', logo: 'โลโก้ (ลิงก์รูป หรืออัปโหลด)', accent: 'สีฟ้าของธีม (พื้นปุ่มและป้าย)', accent2: 'สีชมพูของธีม (พื้นปุ่มและป้าย)', lineId: 'LINE ID ร้าน (มี @)', fbUrl: 'ลิงก์ Facebook',
   payInfo: 'ข้อความถึงลูกค้าในหน้ากระเป๋าตัง (แสดงใต้ข้อมูลบัญชีรับโอน)', pay: 'ช่องทางชำระเงิน', payBank: 'ธนาคาร (เช่น กสิกรไทย)', payNo: 'เลขบัญชี', payName: 'ชื่อบัญชี', payPromptpay: 'เบอร์พร้อมเพย์',
+  types: 'ประเภทสินค้า', tname: 'ชื่อประเภท (เช่น เติมเกม, แอปสตรีมมิ่ง)', fields: 'ช่องข้อมูล (ที่ลูกค้ากรอกตอนสั่งซื้อ)', fname: 'ชื่อช่อง (เช่น UID, อีเมล, LINE ID)', fkind: 'ชนิดข้อมูล', fopt: 'ไม่บังคับกรอก',
+  type: 'ประเภทสินค้า (กำหนดช่องที่ลูกค้าต้องกรอกตอนสั่งซื้อ)',
   payQr: 'QR สำหรับสแกนจ่าย (ลิงก์รูป หรืออัปโหลด)', desc: 'รายละเอียดสินค้า (ลูกค้าเห็นตอนกดสั่งซื้อ)', closed: 'ปิดการขายชั่วคราว (ซ่อนสินค้านี้จากหน้าร้าน)', about: 'ข้อความท้ายเว็บ', hCats: 'หัวข้อเหนือหมวดสินค้า', hHow: 'หัวข้อส่วนวิธีสั่งซื้อ', hNews: 'หัวข้อส่วนข่าวสาร', lapseDays: 'ออกรหัสผ่านใหม่ให้ลูกค้าที่ขาดต่ออายุเกินกี่วัน',
   slides: 'แบนเนอร์', tag: 'ป้ายเล็ก', title: 'หัวข้อ (ในแบนเนอร์ ใส่ *คำ* เพื่อเน้นสี)', text: 'ข้อความ', btn: 'ข้อความบนปุ่ม',
   link: 'ลิงก์ (เช่น #sec-game หรือ https://...)', color: 'สีพื้น', emoji: 'อีโมจิ (ใช้เมื่อไม่มีรูป)', img: 'รูป (ลิงก์รูป หรืออัปโหลด)', sections: 'หมวดสินค้า',
@@ -910,14 +951,17 @@ const BLANK = {
   links: {label: '', url: ''},
   slides: {tag: '', title: '', text: '', btn: '', link: '', color: '#1f8fd1', emoji: '', img: '', bg: ''},
   sections: {id: '', icon: '', title: '', hint: '', rank: false, items: []},
-  items: {n: '', d: '', t: '', img: '', desc: '', closed: false, packages: []},
+  items: {n: '', d: '', t: '', img: '', desc: '', closed: false, type: '', packages: []},
+  // ประเภทสินค้า: แอดมินสร้างที่ แอดมิน > สินค้า / แพ็กเกจ แล้วเลือกให้สินค้า (items.type เก็บ uid ของประเภท เปลี่ยนชื่อประเภทแล้วสินค้าไม่หลุด)
+  types: {uid: '', tname: '', fields: []},
+  fields: {fname: '', fkind: 'text', fopt: false},
   packages: {name: '', price: 0, months: 0, bonus: 0, app: ''},
   steps: {icon: '', title: '', text: ''},
   news: {icon: '', title: '', date: '', link: ''},
 };
-const NUM = new Set(['price', 'months', 'bonus', 'lapseDays']), LONG = new Set(['text', 'about', 'payInfo', 'desc']), IMG = new Set(['img', 'logo', 'icon', 'bg', 'payQr']), COLOR = new Set(['color', 'accent', 'accent2', 'fabColor']), TITLE = new Set(['n', 'title', 'name', 'label']);
-const LISTS = ['slides', 'sections', 'steps', 'news'], OBJS = ['settings', 'nav', 'footer', 'fab', 'promo', 'pay'];
-const OPTS = {defaultMode: [['dark', 'มืด'], ['light', 'สว่าง']]}, BOOL = new Set(['rank', 'closed']);  // ช่องแบบตัวเลือก / ช่องติ๊ก
+const NUM = new Set(['price', 'months', 'bonus', 'lapseDays']), LONG = new Set(['text', 'about', 'payInfo', 'desc']), IMG = new Set(['img', 'logo', 'icon', 'bg', 'payQr']), COLOR = new Set(['color', 'accent', 'accent2', 'fabColor']), TITLE = new Set(['n', 'title', 'name', 'label', 'tname', 'fname']);
+const LISTS = ['slides', 'sections', 'steps', 'news', 'types'], OBJS = ['settings', 'nav', 'footer', 'fab', 'promo', 'pay'];
+const OPTS = {defaultMode: [['dark', 'มืด'], ['light', 'สว่าง']], fkind: [['text', 'ข้อความ'], ['email', 'อีเมล'], ['tel', 'เบอร์โทร / ตัวเลข']]}, BOOL = new Set(['rank', 'closed', 'fopt']);  // ช่องแบบตัวเลือก / ช่องติ๊ก
 // เติม field ที่ขาดให้ครบตามแม่แบบ (เนื้อหาที่บันทึกไว้ก่อนมี field ใหม่จะไม่พัง)
 const fillT = (o, k) => {
   for (const [f, v] of Object.entries(BLANK[k])) {
@@ -959,7 +1003,7 @@ function renderSite() {
   $('#about').textContent = s.about;
   $('#payInfo').textContent = s.payInfo;
   const payRow = (label, v, copy) => v ? `<div><span class="muted">${label}</span><b class="sel">${esc(v)}</b>${copy ? `<button class="mini" type="button" data-copy="${esc(v)}">คัดลอก</button>` : ''}</div>` : '';
-  $('#payRows').innerHTML = payRow('ธนาคาร', c.pay.payBank) + payRow('เลขบัญชี', c.pay.payNo, 1) + payRow('ชื่อบัญชี', c.pay.payName) + payRow('พร้อมเพย์', c.pay.payPromptpay, 1)
+  $('#payRows').innerHTML = $('#oPayRows').innerHTML = payRow('ธนาคาร', c.pay.payBank) + payRow('เลขบัญชี', c.pay.payNo, 1) + payRow('ชื่อบัญชี', c.pay.payName) + payRow('พร้อมเพย์', c.pay.payPromptpay, 1)
     + (c.pay.payQr ? `<img src="${esc(c.pay.payQr)}" alt="QR สำหรับสแกนจ่าย" loading="lazy">` : '');
   if (!themeChoice()) setTheme(s.defaultMode === 'dark');
   paintPromo();
@@ -1239,39 +1283,83 @@ let orderItem;
 // แพ็กเกจที่ตั้งอายุไว้ (months / bonus) = มีวันหมดอายุ: ต้องกรอกอีเมล แล้วระบบสร้างหรือต่ออายุบัญชีเช็ควันหมดอายุให้ (ดู supabase-subs.sql)
 const pkDur = k => [k.months > 0 ? `${k.months} เดือน` : '', k.bonus > 0 ? `แถม ${k.bonus} วัน` : ''].filter(Boolean).join(' + ');
 const orderPks = () => orderItem.packages.filter(k => k.price > 0);
-function syncOrderField() {
-  const k = orderPks()[new FormData($('#fOrder')).get('pk')], timed = !!(k && pkDur(k));
-  $('#fOrder').elements.info.type = timed ? 'email' : 'text';
+// ช่องที่ลูกค้าต้องกรอก: ตามประเภทของสินค้า (แอดมิน > สินค้า / แพ็กเกจ) สินค้าที่ไม่มีประเภท หรือประเภทยังไม่มีช่อง = ช่องเดียวตามที่ตั้งไว้ในหมวด
+let orderFs = [];
+const orderFields = (sec, p) => {
+  const fs = (C.types.find(t => t.uid && t.uid === p.type)?.fields || []).filter(f => f.fname.trim());
+  return fs.length ? fs : [{fname: sec.hint || 'ข้อมูลสำหรับเติม (UID / อีเมล)', fkind: 'text', fopt: false}];
+};
+// แพ็กเกจที่มีวันหมดอายุต้องมีอีเมลไว้อ้างอิง: ใช้ช่องชนิดอีเมลช่องแรก ถ้าประเภทนี้ไม่มีช่องอีเมล ช่องแรกจะกลายเป็นช่องอีเมล
+const emailIdx = () => Math.max(0, orderFs.findIndex(f => f.fkind === 'email'));
+let orderDisc = null;  // {code, amount} = โค้ดส่วนลดที่ฐานข้อมูลตรวจแล้วสำหรับแพ็กเกจที่เลือกอยู่ (เปลี่ยนแพ็กเกจหรือแก้โค้ด = ต้องใช้โค้ดใหม่)
+const NO_CODE = 'ตอนนี้ยังใช้โค้ดส่วนลดไม่ได้ ลบโค้ดออกแล้วสั่งซื้อได้ตามปกติ';
+const orderPk = () => orderPks()[new FormData($('#fOrder')).get('pk')];
+// วาดส่วนที่เปลี่ยนตามแพ็กเกจ / วิธีชำระเงิน / โค้ดส่วนลด: ชนิดของช่องอีเมล ราคา สรุปยอด และปุ่มจ่าย
+function syncOrder() {
+  const el = $('#fOrder').elements, k = orderPk(), timed = !!pkDur(k), f = orderFs[emailIdx()], inp = el['f' + emailIdx()], line = el.pm.value === 'line', disc = orderDisc?.amount || 0;
+  inp.type = timed ? 'email' : f.fkind; inp.required = timed || !f.fopt;
   $('#oSubNote').hidden = !timed;
   $('#oSubNote').textContent = timed ? `แพ็กเกจนี้ใช้ได้ ${pkDur(k)} ระบบใช้อีเมลนี้อ้างอิงวันหมดอายุ ซื้อครั้งแรกจะได้ชื่อผู้ใช้และรหัสผ่านสำหรับเช็ควันหมดอายุทันที ซื้อครั้งต่อไปด้วยอีเมลเดิมจะต่ออายุให้` : '';
+  $('#oPkName').textContent = k.name + (timed ? ` · ${pkDur(k)}` : ''); $('#oPrice').textContent = baht(k.price);
+  $('#oSub').textContent = baht(k.price); $('#oDisc').textContent = (disc ? '−' : '') + baht(disc); $('#oTotal').textContent = baht(k.price - disc);
+  $('#oPay').hidden = !line; $('#oSubmit').textContent = line ? '💬 ส่งคำสั่งซื้อทาง LINE' : 'ชำระเงิน';
+}
+// ถามส่วนลดของโค้ดที่พิมพ์ไว้จากฐานข้อมูล (ตอนหักเงินจริง ฐานข้อมูลตรวจซ้ำอีกรอบ ดู supabase-codes.sql)
+async function applyCode() {
+  const code = $('#fOrder').elements.code.value.trim().toUpperCase();
+  orderDisc = null;
+  try {
+    if (!code) throw new Error('กรอกโค้ดส่วนลดก่อน');
+    if (!user) throw new Error('เข้าสู่ระบบก่อนจึงจะใช้โค้ดส่วนลดได้');
+    orderDisc = {code, amount: +need(await sb.rpc('shop_check_code', {p_code: code, p_price: orderPk().price}), NO_CODE)};
+  } finally { syncOrder(); }
 }
 function openOrder(sec, p) {
-  orderItem = p;
+  orderItem = p; orderDisc = null;
   $('#oName').textContent = p.n;
+  const hu = hue(p.n || '');
+  $('#oImg').style.background = `linear-gradient(160deg,hsl(${hu} 78% 54%),hsl(${(hu + 30) % 360} 70% 26%))`;
+  $('#oImg').innerHTML = p.img ? `<img src="${esc(p.img)}" alt="">` : esc(p.t || abbr(p.n || ''));
+  $('#fOrder').elements.pm.value = 'wallet';
   $('#oPk').innerHTML = orderPks().map((k, i) =>
     `<label class="pk"><input type="radio" name="pk" value="${i}" ${i ? '' : 'checked'}><span>${esc(k.name)}</span>${pkDur(k) ? `<small class="muted">${pkDur(k)}</small>` : ''}<b>${baht(k.price)}</b></label>`).join('');
   $('#oDesc').textContent = p.desc; $('#oDesc').hidden = !p.desc;
   $('#fOrder').elements.code.value = '';
-  $('#oHint').textContent = sec.hint || 'ข้อมูลสำหรับเติม (UID / อีเมล)';
+  orderFs = orderFields(sec, p);
+  $('#oFields').innerHTML = orderFs.map((f, i) => `<label class="f">${esc(f.fname)}${f.fopt ? ' (ไม่บังคับ)' : ''}<input name="f${i}" type="${esc(f.fkind)}" maxlength="200" autocomplete="off"${f.fopt ? '' : ' required'}></label>`).join('');
   $('#oBal').textContent = user ? baht(me?.balance) : 'ยังไม่ได้เข้าสู่ระบบ';
-  $('#oLine').href = lineUrl('สนใจสั่งซื้อ: ' + p.n);
-  $('#fOrder').elements.info.value = '';
-  syncOrderField();
+  syncOrder();
   $('#dlgOrder').showModal();
 }
-$('#oPk').addEventListener('change', syncOrderField);
+$('#oPk').addEventListener('change', () => { orderDisc = null; syncOrder(); });  // ส่วนลดคิดจากราคาแพ็กเกจ เปลี่ยนแพ็กเกจต้องใช้โค้ดใหม่
+$('#fOrder').elements.code.addEventListener('input', () => { orderDisc = null; syncOrder(); });
+$('.pms').addEventListener('change', syncOrder);
+$('#oApply').onclick = act(async () => { await applyCode(); toast(`ใช้โค้ด ${orderDisc.code} แล้ว ลด ${baht(orderDisc.amount)}`); });
+$('#oCancel').onclick = $('#oTopup').onclick = () => $('#dlgOrder').close();
+// ปุ่มจ่ายในกล่องนี้คือการยืนยัน: ลูกค้าเห็นสรุปยอด (ยอดสั่งซื้อ / ส่วนลด / ยอดชำระเงิน) อยู่เหนือปุ่มแล้ว
 $('#fOrder').onsubmit = act(async e => {
-  const d = new FormData(e.target), k = orderPks()[d.get('pk')];
-  if (!user) { $('#dlgOrder').close(); return openAuth('login'); }
-  // โค้ดส่วนลด: ถามส่วนลดจากฐานข้อมูลก่อนให้ลูกค้ายืนยัน แล้วฐานข้อมูลตรวจซ้ำอีกรอบตอนหักเงินจริง (supabase-codes.sql)
-  const code = String(d.get('code') || '').trim().toUpperCase(), NO_CODE = 'ตอนนี้ยังใช้โค้ดส่วนลดไม่ได้ ลบโค้ดออกแล้วสั่งซื้อได้ตามปกติ';
-  const disc = code ? +need(await sb.rpc('shop_check_code', {p_code: code, p_price: k.price}), NO_CODE) : 0;
-  if (!confirm(`ยืนยันสั่งซื้อ ${orderItem.n} — ${k.name}${pkDur(k) ? ` (${pkDur(k)})` : ''}\nราคา ${baht(k.price)}${disc ? `\nส่วนลดจากโค้ด ${code}: −${baht(disc)}\nยอดที่ต้องจ่าย ${baht(k.price - disc)}` : ''} (หักจากกระเป๋าตัง)`)) return;
-  const args = {p_product: orderItem.n, p_package: k.name, p_price: k.price, p_info: d.get('info')};
+  const d = new FormData(e.target), k = orderPk(), line = d.get('pm') === 'line', code = String(d.get('code') || '').trim().toUpperCase();
+  if (!line && !user) { $('#dlgOrder').close(); return openAuth('login'); }
+  // พิมพ์โค้ดไว้แต่ยังไม่ได้กด "ใช้โค้ด": ตรวจให้ก่อน แล้วให้ลูกค้าเห็นยอดใหม่ก่อนกดจ่ายอีกครั้ง (ไม่หักเงินด้วยยอดที่ลูกค้ายังไม่เห็น)
+  if (code && user && orderDisc?.code !== code) { await applyCode(); return toast(`ใช้โค้ด ${code} แล้ว ลด ${baht(orderDisc.amount)} ตรวจยอดแล้วกดอีกครั้ง`); }
+  const disc = orderDisc?.amount || 0, total = k.price - disc;
+  // ข้อมูลที่เก็บในออเดอร์: ช่องเดียว = ค่านั้นเลย, หลายช่อง = "ชื่อช่อง: ค่า" บรรทัดละช่อง
+  // แพ็กเกจที่มีวันหมดอายุ: บรรทัดแรกต้องเป็นอีเมลล้วนๆ เพราะฐานข้อมูลใช้บรรทัดแรกอ้างอิงลูกค้า (supabase-subs.sql)
+  const vals = orderFs.map((f, i) => String(d.get('f' + i) || '').trim()), timed = !!pkDur(k), ei = emailIdx();
+  const lines = vals.map((v, i) => v && (orderFs.length === 1 || (timed && i === ei) ? v : `${orderFs[i].fname.trim()}: ${v}`));
+  const info = (timed ? [lines[ei], ...lines.filter((_, i) => i !== ei)] : lines).filter(Boolean).join('\n');
+  if (!info) throw new Error('กรุณากรอกข้อมูลสำหรับสั่งซื้อ');
+  if (info.length > 500) throw new Error('ข้อมูลที่กรอกยาวเกินไป (รวมกันไม่เกิน 500 ตัวอักษร)');
+  if (line) {  // โอนเงิน: ไม่มีออเดอร์ในระบบ ส่งรายละเอียดเข้าแชต LINE ให้แอดมินตรวจสลิปและทำรายการเอง (โค้ดส่วนลดไม่ถูกนับจำนวนครั้ง)
+    window.open(lineUrl([`สั่งซื้อ: ${orderItem.n} — ${k.name}`, info, code ? `โค้ดส่วนลด: ${code}${disc ? ` (ลด ${baht(disc)})` : ' (ยังไม่ได้ตรวจ)'}` : '', `ยอดชำระเงิน: ${baht(total)}`, '(แนบสลิปโอนเงินในแชตนี้)'].filter(Boolean).join('\n')), '_blank', 'noopener');
+    return $('#dlgOrder').close();
+  }
+  if (+me?.balance < total) throw new Error('ยอดเงินในกระเป๋าตังไม่พอ กรุณาเติมเงินก่อน หรือเลือกโอนเงิน');
+  const args = {p_product: orderItem.n, p_package: k.name, p_price: k.price, p_info: info};
   const r = code ? need(await sb.rpc('shop_place_order_code', {...args, p_code: code}), NO_CODE) : ok(await sb.rpc('shop_place_order', args));
   if (me) me.balance = r.balance;
   paintAuth(); $('#dlgOrder').close();
-  if (r.sub) return showDone(r.sub, String(d.get('info')).trim().toLowerCase());
+  if (r.sub) return showDone(r.sub, vals[ei].toLowerCase());
   toast('สั่งซื้อสำเร็จ! แอดมินจะดำเนินการให้เร็วที่สุด');
   location.hash = '#orders';
 });
@@ -1294,7 +1382,7 @@ $('#dlgDone').addEventListener('close', () => { if (location.hash !== '#check') 
 async function loadOrders() {
   const rows = ok(await sb.from('shop_orders').select('*').eq('member_id', user.id).order('created_at', {ascending: false}).limit(100));
   $('#oList').innerHTML = rows.map(r => item(`${esc(r.product)} — ${esc(r.package_name)}`,
-    `#${r.id} · ${when(r.created_at)} · ${esc(r.info)}${r.admin_note ? '<br>แอดมิน: ' + esc(r.admin_note) : ''}`,
+    `#${r.id} · ${when(r.created_at)} · ${esc(r.info).replaceAll('\n', ' · ')}${r.admin_note ? '<br>แอดมิน: ' + esc(r.admin_note) : ''}`,
     `${r.code ? `<span class="muted">โค้ด ${esc(r.code)} −${baht(r.discount)}</span>` : ''}<b>${baht(r.price)}</b>${badge(r.status)}`)).join('') || EMPTY;
 }
 
@@ -1337,7 +1425,7 @@ async function adminOrders() {
   const st = $('#aStatus').value;
   const rows = ok(await sb.from('shop_orders').select('*, m:shop_members(display_name, email, phone, line_id)').eq('status', st).order('created_at', {ascending: st === 'pending'}).limit(100));
   $('#aOrders').innerHTML = rows.map(r => item(`#${r.id} ${esc(r.product)} — ${esc(r.package_name)} (${baht(r.price)})`,
-    `${when(r.created_at)} · ${who(r.m)}<br>ข้อมูลเติม: <span class="sel">${esc(r.info)}</span>${r.code ? `<br>ใช้โค้ด ${esc(r.code)} ลด ${baht(r.discount)}` : ''}${r.admin_note ? '<br>โน้ต: ' + esc(r.admin_note) : ''}`,
+    `${when(r.created_at)} · ${who(r.m)}<br>ข้อมูลเติม: <span class="sel pre">${esc(r.info)}</span>${r.code ? `<br>ใช้โค้ด ${esc(r.code)} ลด ${baht(r.discount)}` : ''}${r.admin_note ? '<br>โน้ต: ' + esc(r.admin_note) : ''}`,
     st === 'refunded' ? badge(st) : `<input class="note" placeholder="โน้ตถึงลูกค้า" maxlength="500" aria-label="โน้ตถึงลูกค้า">${st === 'pending' ? `<button class="btn btn-main" type="button" data-id="${r.id}" data-st="done">เสร็จแล้ว</button>` : ''}<button class="btn btn-ghost" type="button" data-id="${r.id}" data-st="refunded">คืนเงิน</button>`)).join('') || EMPTY;
 }
 $('#aStatus').onchange = act(adminOrders);
@@ -1685,13 +1773,16 @@ function adminPay() {
   payDraft = structuredClone({pay: C.pay, settings: C.settings});
   $('#payFields').replaceChildren(...Object.keys(BLANK.pay).map(k => field(payDraft.pay, k)), field(payDraft.settings, 'payInfo'));
 }
-$('#fPay').onsubmit = act(async () => {
+// บันทึกเฉพาะบางส่วนของเนื้อหาหน้าเว็บจากแท็บแอดมิน: อ่านของล่าสุดก่อน แล้วให้ patch แก้เฉพาะส่วนของตัวเอง จะได้ไม่ทับส่วนอื่นที่แอดมินอีกคนเพิ่งแก้
+async function savePart(patch) {
   if (!dbOk) throw new Error('โหลดเนื้อหาจากฐานข้อมูลไม่สำเร็จ รีเฟรชหน้าแล้วลองใหม่');
-  // อ่านเนื้อหาล่าสุดก่อน แล้วแก้เฉพาะส่วนช่องทางชำระเงิน จะได้ไม่ทับส่วนอื่นที่แอดมินอีกคนเพิ่งแก้
   const fresh = norm(ok(await sb.from('shop_content').select('content').eq('id', 1).maybeSingle())?.content || C);
-  fresh.pay = payDraft.pay; fresh.settings.payInfo = payDraft.settings.payInfo;
+  patch(fresh);
   ok(await sb.from('shop_content').upsert({id: 1, content: fresh, updated_at: new Date().toISOString(), updated_by: user.id}));
   setContent(fresh); cacheContent(C);
+}
+$('#fPay').onsubmit = act(async () => {
+  await savePart(c => { c.pay = payDraft.pay; c.settings.payInfo = payDraft.settings.payInfo; });
   toast('บันทึกแล้ว ลูกค้าเห็นในหน้ากระเป๋าตังทันที');
 });
 
@@ -1742,17 +1833,26 @@ $('#codeList').onclick = act(async e => {
 });
 
 // ===== แอดมิน: สินค้า / แพ็กเกจ — ตารางรวมสินค้าทุกหมวด กดแก้ไขแล้วเปิดสินค้านั้นในโหมดแก้ไขหน้าเว็บ (ใช้แผงแก้ไขเดิม ไม่มีฟอร์มซ้ำ) =====
+// ประเภทสินค้า: แก้ในฟอร์มด้านบนของแท็บนี้ (ใช้ตัวสร้างฟอร์มรายการเดียวกับแผงแก้ไขหน้าเว็บ) แล้วกดบันทึกประเภท
+let typeDraft = null;
+const typeName = p => C.types.find(t => t.uid && t.uid === p.type)?.tname || '';
+$('#fTypes').onsubmit = act(async () => {
+  await savePart(c => { c.types = typeDraft; });
+  typeDraft = null; adminProducts();
+  toast('บันทึกประเภทแล้ว');
+});
 function adminProducts() {
   const q = $('#prodQ').value.trim().toLowerCase();
+  if (!typeDraft) { typeDraft = structuredClone(C.types); $('#typeFields').replaceChildren(listEd(typeDraft, 'types')); }  // ไม่วาดทับระหว่างที่แอดมินกำลังแก้ประเภทค้างอยู่
   $('#prodSec').innerHTML = C.sections.map((s, si) => `<option value="${si}">เพิ่มในหมวด: ${esc(s.title) || '(หมวดใหม่)'}</option>`).join('');
   $('#prodAdd').disabled = !C.sections.length;
-  $('#prodList').innerHTML = '<tr><th>#</th><th class="l">สินค้า</th><th class="l">หมวด</th><th>แพ็กเกจ</th><th>ราคา</th><th>สถานะ</th><th>จัดการ</th></tr>'
+  $('#prodList').innerHTML = '<tr><th>#</th><th class="l">สินค้า</th><th class="l">หมวด</th><th class="l">ประเภท</th><th>แพ็กเกจ</th><th>ราคา</th><th>สถานะ</th><th>จัดการ</th></tr>'
     + (C.sections.flatMap((s, si) => s.items.map((p, pi) => ({s, p, path: `sections.${si}.items.${pi}`}))).filter(x => !q || `${x.p.n} ${x.s.title}`.toLowerCase().includes(q)).map((x, i) => {
       const prices = x.p.packages.map(k => +k.price).filter(v => v > 0), lo = Math.min(...prices), hi = Math.max(...prices);
-      return `<tr data-path="${x.path}"><td>${i + 1}</td><td class="l">${x.p.img ? `<img src="${esc(x.p.img)}" alt="" loading="lazy">` : ''}<b>${esc(x.p.n) || '(ยังไม่มีชื่อ)'}</b></td><td class="l">${esc(x.s.title)}</td>
+      return `<tr data-path="${x.path}"><td>${i + 1}</td><td class="l">${x.p.img ? `<img src="${esc(x.p.img)}" alt="" loading="lazy">` : ''}<b>${esc(x.p.n) || '(ยังไม่มีชื่อ)'}</b></td><td class="l">${esc(x.s.title)}</td><td class="l">${esc(typeName(x.p)) || '<span class="muted">-</span>'}</td>
         <td>${x.p.packages.length} รายการ</td><td>${!prices.length ? '-' : lo === hi ? baht(lo) : `${baht(lo)} – ${baht(hi)}`}</td>
         <td><span class="badge ${x.p.closed ? 'r' : 'g'}">${x.p.closed ? 'ปิดการขาย' : 'เปิดการขาย'}</span></td>
-        <td><div class="r"><button class="mini" type="button" data-act="edit">แก้ไขสินค้า / แพ็กเกจ</button></div></td></tr>`; }).join('') || `<tr><td colspan="7">${EMPTY}</td></tr>`);
+        <td><div class="r"><button class="mini" type="button" data-act="edit">แก้ไขสินค้า / แพ็กเกจ</button></div></td></tr>`; }).join('') || `<tr><td colspan="8">${EMPTY}</td></tr>`);
 }
 $('#prodQ').addEventListener('input', adminProducts);
 async function editProduct(path) {  // ไม่ส่ง path = เพิ่มสินค้าใหม่ในหมวดที่เลือก
@@ -1785,8 +1885,10 @@ async function upload(file) {
 }
 function field(obj, k) {
   if (Array.isArray(obj[k])) return listEd(obj[k], k);
-  if (OPTS[k]) {  // ตัวเลือกตายตัว
-    const sel = h('select', {}, ...OPTS[k].map(([value, textContent]) => h('option', {value, textContent})));
+  // ตัวเลือก: ตายตัวจาก OPTS ยกเว้น "ประเภทสินค้า" ที่มาจากรายการประเภทที่แอดมินสร้างไว้
+  const opts = k === 'type' ? [['', 'ไม่เลือก (ใช้ช่องเดียวตามที่ตั้งไว้ในหมวด)'], ...view().types.filter(t => t.uid).map(t => [t.uid, t.tname || '(ประเภทยังไม่มีชื่อ)'])] : OPTS[k];
+  if (opts) {
+    const sel = h('select', {}, ...opts.map(([value, textContent]) => h('option', {value, textContent})));
     sel.value = obj[k]; sel.oninput = () => obj[k] = sel.value;
     return h('label', {className: 'f'}, LABEL[k] || k, sel);
   }
@@ -1818,7 +1920,7 @@ function field(obj, k) {
 }
 function objEd(obj, tpl) {
   const d = h('div', {className: 'ed-obj'});
-  for (const k of Object.keys(tpl)) { if (!(k in obj)) obj[k] = structuredClone(tpl[k]); d.append(field(obj, k)); }
+  for (const k of Object.keys(tpl)) { if (!(k in obj)) obj[k] = structuredClone(tpl[k]); if (k !== 'uid') d.append(field(obj, k)); }  // uid = รหัสภายใน ไม่ต้องให้แก้
   return d;
 }
 function listEd(arr, k) {
@@ -1829,13 +1931,13 @@ function listEd(arr, k) {
     ...arr.map((it, i) => {
       const det = h('details', {open: openSet.has(it)});
       det.ontoggle = () => det.open ? openSet.add(it) : openSet.delete(it);
-      det.append(h('summary', {}, h('span', {textContent: it.n || it.title || it.name || it.label || '(ยังไม่มีชื่อ)'}), h('i', {},
+      det.append(h('summary', {}, h('span', {textContent: it.n || it.title || it.name || it.label || it.tname || it.fname || '(ยังไม่มีชื่อ)'}), h('i', {},
         btn('↑', () => i && arr.splice(i - 1, 2, arr[i], arr[i - 1]), 'mini', 'เลื่อนขึ้น'),
         btn('↓', () => i < arr.length - 1 && arr.splice(i, 2, arr[i + 1], arr[i]), 'mini', 'เลื่อนลง'),
         btn('ลบ', () => confirm('ลบรายการนี้?') && arr.splice(i, 1)))), objEd(it, BLANK[k]));
       return det;
     }),
-    btn('+ เพิ่ม' + (LABEL[k] || '').split(' ')[0], () => { const n = structuredClone(BLANK[k]); arr.push(n); openSet.add(n); }, 'btn btn-ghost add'));
+    btn('+ เพิ่ม' + (LABEL[k] || '').split(' ')[0], () => { const n = structuredClone(BLANK[k]); if ('uid' in n) n.uid = Math.random().toString(36).slice(2, 10); arr.push(n); openSet.add(n); }, 'btn btn-ghost add'));
   draw();
   return box;
 }
