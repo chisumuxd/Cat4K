@@ -416,6 +416,16 @@ dialog h3{font-size:20px;padding-right:30px}
 .pk span,.pk b,.pk small{grid-column:2}
 /* หน้าชำระเงิน (กล่องสั่งซื้อ): หัวสินค้า > แพ็กเกจ > ช่องข้อมูล > วิธีชำระเงิน > โค้ดส่วนลดและสรุปยอด */
 #dlgOrder{width:min(1040px,96vw)}
+/* 2 ขั้น: ยังไม่ได้กดแพ็กเกจ = เห็นรูป ประเภท และการ์ดแพ็กเกจ; กดแพ็กเกจแล้ว (.pay) = เห็นเฉพาะหน้าชำระเงิน กล่องแคบลง */
+.os1,.os2{display:grid;gap:12px;min-width:0}
+#fOrder:not(.pay) .os2,#fOrder.pay .os1,#fOrder.pay .oleft{display:none}
+#fOrder.pay .ogrid{grid-template-columns:1fr}
+#dlgOrder:has(.pay){width:min(520px,94vw)}
+.otitle{text-align:center;padding:0 30px}
+.ohead{display:flex;align-items:center;gap:12px}
+.ohead>div{flex:1;min-width:0;display:grid}
+.ohead>b{font-size:22px;color:var(--pink-t);white-space:nowrap}
+.ohead .oimg{width:72px;height:72px;border-radius:16px}
 .ogrid{display:grid;grid-template-columns:250px 1fr;gap:18px;align-items:start}
 .oleft,.oright{display:grid;gap:12px;min-width:0}
 .oleft{position:sticky;top:0}
@@ -793,8 +803,13 @@ img.ico{display:inline-block;object-fit:contain}
         <div class="obox" id="oKindBox" hidden><b>เลือกประเภท</b><div class="kinds" id="oKinds"></div></div>
       </div>
       <div class="oright">
+        <div class="os1">
         <b class="ostep"><i>1</i>เลือกแพ็กเกจ</b>
         <div class="pks" id="oPk"></div>
+        </div>
+        <div class="os2">
+        <h3 class="otitle">คุณต้องการซื้อสินค้า</h3>
+        <div class="ohead"><span class="oimg" id="oPkImg"></span><div><small class="muted" id="oPkOf"></small><b id="oPkName"></b></div><b id="oPrice"></b></div>
         <b class="ostep" id="oStep2"><i>2</i>กรอกข้อมูล</b>
         <div id="oFields" style="display:grid;gap:12px"></div>
         <p class="muted" id="oSubNote" hidden></p>
@@ -806,11 +821,12 @@ img.ico{display:inline-block;object-fit:contain}
     <div id="oPay" hidden><div class="payrows" id="oPayRows"></div><p class="muted">โอนตามยอดชำระเงินด้านล่าง แล้วกดปุ่ม "ส่งคำสั่งซื้อทาง LINE" และแนบสลิปในแชต แอดมินจะตรวจสลิปแล้วดำเนินการให้</p></div>
     <div class="osum">
       <label class="f">โค้ดส่วนลด<span class="rowb"><input name="code" maxlength="30" autocomplete="off" autocapitalize="characters" placeholder="กรอกโค้ดส่วนลด"><button class="btn btn-ghost" type="button" id="oApply">ใช้โค้ด</button></span></label>
-      <div><span id="oPkName"></span><span id="oSub"></span></div>
+      <div><span>ยอดสั่งซื้อ</span><span id="oSub"></span></div>
       <div><span>ส่วนลด</span><span id="oDisc"></span></div>
       <div class="tot"><b>ยอดชำระเงิน</b><b id="oTotal"></b></div>
     </div>
     <div class="rowb"><button class="btn btn-ghost" type="button" id="oCancel">ยกเลิก</button><button class="btn btn-main" type="submit" id="oSubmit" style="flex:1">ชำระเงิน</button></div>
+        </div>
       </div>
     </div>
   </form>
@@ -1385,6 +1401,8 @@ function syncOrder() {
   if (inp) { inp.type = timed ? 'email' : f.fkind; inp.required = timed || !f.fopt; }
   $('#oSubNote').hidden = !timed;
   $('#oSubNote').textContent = timed ? `แพ็กเกจนี้ใช้ได้ ${pkDur(k)} ระบบใช้อีเมลนี้อ้างอิงวันหมดอายุ ซื้อครั้งแรกจะได้ชื่อผู้ใช้และรหัสผ่านสำหรับเช็ควันหมดอายุทันที ซื้อครั้งต่อไปด้วยอีเมลเดิมจะต่ออายุให้` : '';
+  $('#oPkOf').textContent = 'แพ็กเกจ · ' + orderItem.n; $('#oPrice').textContent = baht(k.price);
+  $('#oPkImg').style.background = $('#oImg').style.background; $('#oPkImg').innerHTML = k.img ? `<img src="${esc(k.img)}" alt="">` : $('#oImg').innerHTML;
   $('#oPkName').textContent = k.name + (timed && k.label.trim() ? ` · ${pkDur(k)}` : '');  // ไม่ได้กรอกชื่อเอง = ชื่อคืออายุการใช้งานอยู่แล้ว 
   $('#oSub').textContent = baht(k.price); $('#oDisc').textContent = (disc ? '−' : '') + baht(disc); $('#oTotal').textContent = baht(k.price - disc);
   $('#oPay').hidden = !line; $('#oSubmit').textContent = line ? '💬 ส่งคำสั่งซื้อทาง LINE' : 'ชำระเงิน';
@@ -1417,14 +1435,20 @@ function openOrder(sec, p) {
   $('#fOrder').elements.code.value = '';
   $('#oBal').textContent = user ? baht(me?.balance) : 'ยังไม่ได้เข้าสู่ระบบ';
   syncOrder();
+  orderStep(false);
   $('#dlgOrder').showModal();
 }
+// ขั้นของกล่องสั่งซื้อ: false = เลือกแพ็กเกจ, true = หน้าชำระเงินของแพ็กเกจที่กด
+const orderStep = pay => { $('#fOrder').classList.toggle('pay', pay); $('#dlgOrder').scrollTop = 0; };
+$('#oPk').addEventListener('click', e => { if (e.target.matches('input')) orderStep(true); });
+$('#oPk').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); orderStep(true); } });
 $('#oPk').addEventListener('change', () => { orderDisc = null; syncOrder(); });  // ส่วนลดคิดจากราคาแพ็กเกจ เปลี่ยนแพ็กเกจต้องใช้โค้ดใหม่
 $('#oKinds').addEventListener('change', e => { orderDisc = null; paintPks(+e.target.value); syncOrder(); });
 $('#fOrder').elements.code.addEventListener('input', () => { orderDisc = null; syncOrder(); });
 $('.pms').addEventListener('change', syncOrder);
 $('#oApply').onclick = act(async () => { await applyCode(); toast(`ใช้โค้ด ${orderDisc.code} แล้ว ลด ${baht(orderDisc.amount)}`); });
-$('#oCancel').onclick = $('#oTopup').onclick = () => $('#dlgOrder').close();
+$('#oCancel').onclick = () => orderStep(false);  // ยกเลิก = กลับไปเลือกแพ็กเกจ (ปิดกล่องใช้ปุ่ม ✕)
+$('#oTopup').onclick = () => $('#dlgOrder').close();
 // ปุ่มจ่ายในกล่องนี้คือการยืนยัน: ลูกค้าเห็นสรุปยอด (ยอดสั่งซื้อ / ส่วนลด / ยอดชำระเงิน) อยู่เหนือปุ่มแล้ว
 $('#fOrder').onsubmit = act(async e => {
   const d = new FormData(e.target), k = orderPk(), line = d.get('pm') === 'line', code = String(d.get('code') || '').trim().toUpperCase();
