@@ -8,10 +8,11 @@
 <link rel="icon" href="logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script>try{if(localStorage.getItem('cat4k_theme')==='dark')document.documentElement.dataset.theme='dark'}catch(e){}</script>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700;1,800&display=swap" rel="stylesheet">
+<script>/* โหมดสี ก่อนวาดหน้า: ที่ผู้ชมเลือกไว้ > โหมดเริ่มต้นที่แอดมินตั้ง (จากเนื้อหาที่ cache) > มืด */
+try{var t=localStorage.getItem('cat4k_theme')||(JSON.parse(localStorage.getItem('cat4k_content')||'{}').settings||{}).defaultMode||'dark';if(t==='dark')document.documentElement.dataset.theme='dark'}catch(e){document.documentElement.dataset.theme='dark'}</script>
 <style>
-/* ---- สี: โทนโปสเตอร์ Cat4K (ฟ้าสด ชมพูสด เหลืองดาว) มี 2 โหมด สลับด้วย data-theme บน <html> ---- */
+/* ---- สี: ชมพู/ฟ้า/เหลืองดาวของ Cat4K มี 2 โหมด สลับด้วย data-theme บน <html> ---- */
 :root{
   color-scheme:light;
   --sky:#1a82e8; --pink:#ff2d7a; --star:#ffd23f;  /* สีแบรนด์ ใช้เป็นพื้นปุ่ม/ป้าย: --sky/--pink ตั้งจากหน้าตั้งค่าร้าน */
@@ -25,28 +26,28 @@
   --pinkgrad:linear-gradient(180deg,color-mix(in srgb,var(--pink) 78%,#fff),var(--pink));
   --skygrad:linear-gradient(180deg,color-mix(in srgb,var(--sky) 78%,#fff),var(--sky));
   --line-green:#06c755; --r:18px;
+  --side:214px;                                   /* ความกว้างแถบเมนูซ้าย */
 }
 :root[data-theme=dark]{
   color-scheme:dark;
-  --bg:#071226; --bg2:#123066;
-  --panel:#11224a; --panel2:#1a3063; --line:#2a4683;
-  --text:#eaf3ff; --muted:#a3b8da;
+  --bg:#06080f; --bg2:#0d1322;
+  --panel:#10151f; --panel2:#19213a; --line:#262f47;
+  --text:#eef2fb; --muted:#9aa6c0;
   --sky-t:color-mix(in srgb,var(--sky) 50%,#fff); --pink-t:color-mix(in srgb,var(--pink) 58%,#fff);
-  --glow:rgba(0,0,0,.35);
+  --glow:rgba(0,0,0,.45);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 [hidden]{display:none!important}
 html{scroll-behavior:smooth}
 body{font-family:Prompt,system-ui,sans-serif;color:var(--text);line-height:1.5;background:
-  radial-gradient(760px 460px at 100% 0,color-mix(in srgb,var(--pink) 24%,transparent),transparent 70%),
-  radial-gradient(760px 520px at 0 100%,color-mix(in srgb,var(--pink) 18%,transparent),transparent 70%),
+  radial-gradient(900px 520px at 100% 0,color-mix(in srgb,var(--pink) 16%,transparent),transparent 70%),
   linear-gradient(180deg,var(--bg2),var(--bg) 620px);background-color:var(--bg);background-attachment:fixed}
 a{color:inherit;text-decoration:none}
 img{max-width:100%;display:block}
 button{font:inherit;cursor:pointer;border:0;color:inherit;background:none}
 button:disabled{opacity:.5;cursor:wait}
 :focus-visible{outline:2px solid var(--sky);outline-offset:2px}
-.wrap{max-width:1180px;margin:auto;padding:0 16px}
+.wrap{max-width:1320px;margin:auto;padding:0 24px}
 .muted{color:var(--muted);font-size:14px}
 .pre{white-space:pre-line}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 20px;border-radius:99px;font-weight:600;font-size:15px;white-space:nowrap;transition:filter .2s}
@@ -55,21 +56,49 @@ button:disabled{opacity:.5;cursor:wait}
 .btn-ghost{border:1px solid var(--line);background:var(--panel);color:var(--sky-t)}
 .btn-line{background:var(--line-green);color:#fff}
 
-/* header */
-header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--panel) 90%,transparent);backdrop-filter:blur(10px);box-shadow:0 2px 14px var(--glow)}
-header::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--grad)}
-.bar{display:flex;align-items:center;gap:16px;height:66px}
+/* ===== โครงหน้า: แถบเมนูซ้ายคงที่ + แถบบน + เนื้อหา ===== */
+.side{position:fixed;left:0;top:0;bottom:0;width:var(--side);z-index:55;display:flex;flex-direction:column;padding:18px 12px 14px;overflow-y:auto;scrollbar-width:none;
+  border-right:1px solid var(--line);background:linear-gradient(180deg,color-mix(in srgb,var(--pink) 20%,var(--panel)),var(--panel) 36%)}
+.side::-webkit-scrollbar{display:none}
+.app{margin-left:var(--side);min-height:100vh;display:flex;flex-direction:column}
+.app>main{flex:1;width:100%}
+.scrim{display:none}
 .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:22px}
 .brand img{width:42px;height:42px;border-radius:50%;border:2px solid transparent;background:linear-gradient(var(--panel),var(--panel)) padding-box,var(--grad) border-box;object-fit:cover}
 .brand b{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-nav{display:flex;align-items:center;gap:2px;flex:1;min-width:0}
-nav a{padding:8px 10px;border-radius:99px;color:var(--muted);font-size:15px;white-space:nowrap}
-nav a:hover{color:var(--text);background:var(--panel2)}
-/* ปุ่มสลับโหมด: ติดขอบขวาของแถวเมนูเสมอ แม้แถวเมนูจะเลื่อนได้บนมือถือ */
-.themebtn{margin-left:auto;position:sticky;right:0;flex-shrink:0;width:34px;height:34px;border-radius:50%;background:var(--panel);border:1px solid var(--line);font-size:15px;box-shadow:-10px 0 8px -2px var(--panel)}
+.side .brand{flex-direction:column;gap:6px;font-size:21px;font-style:italic;padding:4px 0 10px}
+.side .brand img{width:76px;height:76px;border-width:3px}
+.side nav{display:grid;gap:4px;margin-top:8px}
+.side nav a,.slink{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:12px;color:var(--muted);font-size:15px;font-weight:500}
+.side nav a i,.slink i{font-style:normal;width:24px;text-align:center;font-size:17px;flex-shrink:0}
+.slink span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.slink img.ico{width:22px;height:22px;margin:auto}
+.side nav a:hover,.slink:hover{background:var(--panel2);color:var(--text)}
+.side nav a.on{background:var(--pinkgrad);color:#fff;box-shadow:0 6px 16px color-mix(in srgb,var(--pink) 38%,transparent)}
+.side-h{margin:14px 2px 6px;padding:14px 12px 0;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+.side-cats{display:grid;gap:2px;margin-bottom:14px}
+/* กล่องล่างสุดของแถบซ้าย: ชวนสมัคร (ผู้เยี่ยมชม) หรือยอดเงิน (สมาชิก) */
+.promo{margin-top:auto;display:grid;gap:6px;justify-items:center;text-align:center;padding:16px 12px;border-radius:16px;
+  border:1px solid color-mix(in srgb,var(--pink) 45%,var(--line));background:linear-gradient(180deg,color-mix(in srgb,var(--pink) 16%,var(--panel)),var(--panel))}
+.promo i{font-style:normal;font-size:26px;line-height:1}
+.promo p{font-size:13px;color:var(--muted)}
+.promo .big{font-size:22px}
+.promo .btn{padding:8px 18px;font-size:14px;margin-top:4px}
+
+.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:12px;height:66px;padding:0 24px;background:color-mix(in srgb,var(--bg) 74%,transparent);backdrop-filter:blur(14px)}
+.burger{display:none;align-items:center;justify-content:center;flex-shrink:0;width:38px;height:38px;border-radius:10px;font-size:19px;border:1px solid var(--line);background:var(--panel)}
+.tb-brand{display:none}
+.pills{display:flex;gap:6px;flex:1;min-width:0;overflow-x:auto;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent)}  /* จางปลายขวา บอกว่าเลื่อนได้ */
+.pills::-webkit-scrollbar{display:none}
+.pill{display:inline-flex;align-items:center;gap:6px;flex-shrink:0;padding:8px 14px;border-radius:99px;font-size:15px;font-weight:500;color:var(--muted);white-space:nowrap}
+.pill i{font-style:normal}
+.pill img.ico{width:18px;height:18px}
+.pill:hover{color:var(--text);background:var(--panel2)}
+.pill.home{background:var(--pinkgrad);color:#fff;box-shadow:0 4px 12px color-mix(in srgb,var(--pink) 35%,transparent)}
+.themebtn{flex-shrink:0;width:36px;height:36px;border-radius:50%;background:var(--panel);border:1px solid var(--line);font-size:15px}
 .themebtn:hover{border-color:var(--sky)}
-.auth{display:flex;gap:8px;margin-left:auto}
-.auth .btn{display:inline-block;padding:8px 14px;font-size:14px;max-width:170px;overflow:hidden;text-overflow:ellipsis}
+.auth{display:flex;gap:8px;flex-shrink:0}
+.auth .btn{display:inline-block;padding:8px 14px;font-size:14px;max-width:170px;overflow:hidden;text-overflow:ellipsis;border-radius:10px}
 /* เมนูผู้ใช้: กดปุ่มชื่อแล้วเปิดรายการ (บัญชีของฉัน / แอดมิน / ออกจากระบบ) */
 .umenu{position:relative}
 .umenu summary{list-style:none;cursor:pointer;vertical-align:top}
@@ -79,45 +108,69 @@ nav a:hover{color:var(--text);background:var(--panel2)}
 .umenu-list a,.umenu-list button{display:block;width:100%;text-align:left;padding:9px 12px;border-radius:10px;font-size:15px;color:var(--text);white-space:nowrap}
 .umenu-list a:hover,.umenu-list button:hover{background:var(--panel2)}
 @media (max-width:980px){
-  .bar{flex-wrap:wrap;height:auto;padding:10px 0 0;gap:8px}
-  nav{order:3;flex-basis:100%;overflow-x:auto;padding-bottom:6px;scrollbar-width:none}
-  .auth .btn{max-width:120px;padding:8px 12px}
+  /* มือถือ: แถบซ้ายเป็นลิ้นชัก เปิดด้วยปุ่ม ☰ */
+  .side{transform:translateX(-105%);transition:transform .25s;box-shadow:0 0 40px rgba(0,0,0,.45)}
+  .side-open .side{transform:none}
+  .side-open .scrim{display:block;position:fixed;inset:0;z-index:54;background:rgba(0,0,0,.55)}
+  .app{margin-left:0}
+  .wrap{padding:0 14px}
+  .topbar{flex-wrap:wrap;height:auto;padding:10px 14px;gap:8px}
+  .burger{display:flex}
+  .tb-brand{display:flex}
+  .tb-brand img{width:38px;height:38px}
+  .tb-brand span{display:none}
+  .pills{display:none}
+  .themebtn{margin-left:auto}
+  .tb-search{order:9;flex-basis:100%}
+  .auth .btn{max-width:118px;padding:8px 10px}
 }
+@media (max-width:440px){.auth>a.btn-ghost{display:none}}  /* จอแคบ: ยอดเงินดูได้ในแถบซ้ายแทน */
 
-/* hero slider */
-.hero{position:relative;margin-top:20px}
-.slides{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;border-radius:24px;scrollbar-width:none;border:3px solid var(--panel);box-shadow:0 8px 24px var(--glow)}
+/* ===== แบนเนอร์ใหญ่ ===== */
+.hero{position:relative;margin-top:8px}
+.slides{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;border-radius:26px;scrollbar-width:none;box-shadow:0 14px 40px var(--glow)}
 .slides::-webkit-scrollbar{display:none}
-.slide{color:#fff;flex:0 0 100%;scroll-snap-align:start;min-height:320px;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:32px 64px;
-  background:radial-gradient(circle at 80% 30%,#ffffff2e,transparent 45%),linear-gradient(120deg,color-mix(in srgb,var(--c) 40%,var(--pink)),var(--c) 55%,color-mix(in srgb,var(--c) 40%,var(--sky)))}
-.slide h1,.slide h2{font-size:clamp(24px,4vw,44px);line-height:1.2;text-shadow:0 2px 8px rgba(0,0,0,.2)}
-.slide p{color:#f2f8ff;margin:8px 0 18px;font-size:clamp(14px,1.6vw,18px)}
-.slide img{width:clamp(110px,22vw,230px);border-radius:24px;transform:rotate(4deg);box-shadow:0 20px 40px rgba(0,0,0,.35)}
-.slide .emo{font-size:clamp(70px,14vw,150px);filter:drop-shadow(0 10px 20px rgba(0,0,0,.3))}
-.slide .btn{background:#fff;color:color-mix(in srgb,var(--pink) 78%,#4d0020);box-shadow:0 4px 10px rgba(0,0,0,.15)}
-.tag{display:inline-block;background:var(--star);color:#4a3200;font-size:12px;font-weight:700;padding:2px 12px;border-radius:99px;margin-bottom:8px}
-.arrow{position:absolute;top:calc(50% - 10px);translate:0 -50%;width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.35);color:#fff}
+.slide{position:relative;color:#fff;flex:0 0 100%;scroll-snap-align:start;min-height:clamp(260px,40vw,500px);display:flex;align-items:center;justify-content:space-between;gap:24px;padding:44px 60px 56px;
+  background:radial-gradient(circle at 82% 28%,#ffffff26,transparent 46%),linear-gradient(120deg,color-mix(in srgb,var(--c) 40%,var(--pink)),var(--c) 55%,color-mix(in srgb,var(--c) 40%,var(--sky)))}
+/* มีภาพพื้นหลัง: ภาพเต็มแบนเนอร์ + เงามืดด้านซ้ายให้อ่านตัวหนังสือออก */
+.slide.has-bg{background:linear-gradient(90deg,rgba(5,8,18,.9),rgba(5,8,18,.55) 46%,rgba(5,8,18,.08)),var(--bgimg) center/cover no-repeat,#0b1020}
+.slide .st{position:relative;max-width:min(680px,100%)}
+.slide h1,.slide h2{font-size:clamp(28px,5vw,64px);font-weight:800;font-style:italic;line-height:1.16;text-shadow:0 3px 14px rgba(0,0,0,.3)}
+.slide h1 em,.slide h2 em{font-style:inherit;background:linear-gradient(90deg,var(--star),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;padding-right:.12em}
+.slide .rule{width:min(440px,70%);height:3px;margin:16px 0 14px;border-radius:9px;background:linear-gradient(90deg,var(--star),var(--pink),transparent)}
+.slide p{color:#f2f6ff;margin:0 0 22px;font-size:clamp(15px,1.7vw,21px);font-weight:500}
+.slide p:empty{display:none}
+.slide img{width:clamp(120px,24vw,320px);border-radius:28px;box-shadow:0 22px 50px rgba(0,0,0,.4);flex-shrink:0}
+.slide .emo{font-size:clamp(76px,15vw,170px);filter:drop-shadow(0 10px 22px rgba(0,0,0,.3));flex-shrink:0}
+.slide .btn{padding:13px 34px;font-size:17px;border-radius:14px;background:var(--pinkgrad);color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.28);box-shadow:inset 0 2px 0 rgba(255,255,255,.35),0 8px 22px color-mix(in srgb,var(--pink) 45%,transparent)}
+.tag{display:inline-block;background:var(--star);color:#4a3200;font-size:12px;font-weight:700;letter-spacing:.5px;padding:3px 12px;border-radius:99px;margin-bottom:12px}
+.arrow{position:absolute;top:50%;translate:0 -50%;width:42px;height:42px;border-radius:50%;background:rgba(0,0,0,.35);color:#fff}
 .arrow:hover{background:rgba(0,0,0,.6)}
-.prev{left:14px}.next{right:14px}
-.dots{display:flex;justify-content:center;gap:6px;margin-top:10px}
-.dots button{width:8px;height:8px;border-radius:99px;background:color-mix(in srgb,var(--text) 25%,transparent);transition:width .3s}
-.dots button.on{width:26px;background:var(--pinkgrad)}
+.prev{left:12px}.next{right:12px}
+.dots{position:absolute;right:28px;bottom:20px;display:flex;gap:7px}
+.dots button{width:9px;height:9px;border-radius:99px;background:rgba(255,255,255,.5);transition:width .3s}
+.dots button.on{width:28px;background:var(--pink)}
 @media (max-width:640px){
-  .slide{min-height:190px;padding:22px 24px}
+  .slide{padding:26px 22px 44px}
+  .slide img{width:96px;border-radius:18px}
   .arrow{display:none}
+  .dots{right:18px;bottom:14px}
 }
 
 /* search */
 .search{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:99px;padding:0 20px;margin:22px 0 28px}
 .search:focus-within{border-color:var(--sky)}
 .search input{flex:1;min-width:0;background:none;border:0;color:var(--text);font:inherit;padding:14px 0;outline:none}
+.tb-search{margin:0;width:min(270px,26vw);flex-shrink:0;padding:0 16px;box-shadow:none!important}
+.tb-search input{padding:9px 0;font-size:15px}
 
-/* headings: แคปซูลขาวตัวหนังสือชมพู แบบป้ายในโปสเตอร์ */
-.h{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:34px 0 14px}
-.h h2{font-size:21px;color:var(--pink-t);background:var(--panel);padding:6px 20px;border-radius:22px;box-shadow:0 4px 12px var(--glow)}
+/* headings */
+.h{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:40px 0 16px}
+.h h2{font-size:24px;font-weight:700;line-height:1.3}
+.h h2 .chev{color:var(--pink-t);font-weight:500;margin-left:6px}
 .h h3{font-size:17px}
-.more{flex-shrink:0;color:var(--sky-t);font-size:14px;background:var(--panel);padding:4px 14px;border-radius:99px;box-shadow:0 2px 8px var(--glow)}
-.more:hover{filter:brightness(1.06)}
+.more{color:var(--pink-t);font-size:14px;font-weight:500}
+.more:hover{text-decoration:underline}
 
 /* categories */
 .cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,170px));gap:12px}  /* กล่องกว้างไม่เกิน 170px ไม่ยืดเต็มแถวเมื่อมีไม่กี่หมวด */
@@ -127,24 +180,28 @@ nav a:hover{color:var(--text);background:var(--panel2)}
 .cat span{font-size:14px;font-weight:500}
 @media (max-width:760px){.cats{grid-template-columns:repeat(3,1fr)}}
 
-/* product rows */
-.sec{scroll-margin-top:120px}
-.row-wrap{position:relative}
-.row{display:grid;grid-auto-flow:column;grid-auto-columns:150px;gap:12px;overflow-x:auto;scroll-snap-type:x proximity;padding:4px 2px 14px;scrollbar-width:thin;scrollbar-color:color-mix(in srgb,var(--text) 25%,transparent) transparent}
-.sec.all .row{grid-auto-flow:row;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));overflow:visible}
-.rarr{position:absolute;top:38%;z-index:2;width:36px;height:36px;border-radius:50%;background:var(--panel);border:1px solid var(--line);box-shadow:0 2px 8px var(--glow)}
-.rarr:hover{border-color:var(--sky)}
-.rarr.l{left:-14px}.rarr.r{right:-14px}
-.sec.all .rarr{display:none}
-@media (max-width:760px){.rarr{display:none}.row{grid-auto-columns:128px}}
-.card{background:var(--panel);border:2px solid var(--panel);border-radius:var(--r);overflow:hidden;position:relative;scroll-snap-align:start;transition:transform .2s}
-.card:hover{border-color:var(--pink);transform:translateY(-3px)}
-.card .logo{aspect-ratio:1;display:grid;place-items:center;font-size:30px;font-weight:700;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.35);text-align:center;line-height:1.1;padding:6px}
-.card .logo img{width:100%;height:100%;object-fit:cover}
-.card:has(.logo img) .logo{padding:0}
-.card .off{position:absolute;top:8px;left:8px;background:var(--star);color:#4a3200;font-size:12px;font-weight:700;padding:2px 9px;border-radius:99px;box-shadow:0 2px 6px rgba(0,0,0,.2)}
-.card .name{padding:10px 12px;font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.card .name small{display:block;color:var(--pink-t);font-weight:600}
+/* ===== แถวสินค้า: การ์ดแนวตั้ง ชื่อทับบนภาพ ลูกศรเลื่อนอยู่ที่หัวแถว ===== */
+.sec{scroll-margin-top:84px}
+.hnav{display:flex;gap:8px;flex-shrink:0}
+.rarr{width:40px;height:40px;border-radius:50%;font-size:17px;background:var(--panel);border:1px solid var(--line)}
+.rarr:hover{border-color:var(--pink)}
+.row{display:grid;grid-auto-flow:column;grid-auto-columns:190px;gap:16px;overflow-x:auto;scroll-snap-type:x proximity;padding:6px 2px 12px;scrollbar-width:none}
+.row::-webkit-scrollbar{display:none}
+.sec.all .row{grid-auto-flow:row;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));overflow:visible}
+.sec.all .hnav{display:none}
+.row-foot{display:flex;justify-content:flex-end}
+@media (max-width:760px){.hnav{display:none}.row{grid-auto-columns:148px;gap:12px}.sec.all .row{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}}
+.card{position:relative;display:block;aspect-ratio:3/4.2;border-radius:16px;overflow:hidden;background:var(--panel);border:1px solid var(--line);scroll-snap-align:start;transition:transform .2s}
+.card:hover{border-color:var(--pink);transform:translateY(-4px)}
+.card .logo{position:absolute;inset:0;display:grid;place-items:center;padding:10px 10px 32%;font-size:38px;font-weight:800;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.4);text-align:center;line-height:1.1}
+.card .logo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.card::after{content:"";position:absolute;inset:42% 0 0;background:linear-gradient(transparent,rgba(4,6,14,.95));pointer-events:none}
+.card .name{position:absolute;inset:auto 0 0;z-index:1;padding:12px 10px;text-align:center;color:#fff;font-size:15px;font-weight:600;line-height:1.3;overflow-wrap:anywhere}
+.card .name small{display:block;margin-top:2px;color:var(--star);font-size:13px;font-weight:600}
+.card .off{position:absolute;top:10px;left:10px;z-index:1;background:var(--star);color:#4a3200;font-size:12px;font-weight:700;padding:2px 9px;border-radius:99px;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+/* อันดับ: 3 อันแรกเป็นป้าย TOP มุมขวาบน ที่เหลือเป็นเลขโปร่งตัวใหญ่ */
+.card .top{position:absolute;top:0;right:0;z-index:1;background:var(--pinkgrad);color:#fff;font-size:12px;font-weight:800;font-style:italic;padding:4px 12px;border-bottom-left-radius:12px}
+.card .rk{position:absolute;left:6px;bottom:30%;z-index:1;font-size:86px;font-weight:800;font-style:italic;line-height:.8;color:transparent;-webkit-text-stroke:2px var(--pink);filter:drop-shadow(0 0 10px color-mix(in srgb,var(--pink) 55%,transparent))}
 .empty{display:none;text-align:center;color:var(--muted);padding:40px 0}
 
 /* how-to + news */
@@ -173,6 +230,8 @@ nav a:hover{color:var(--text);background:var(--panel2)}
 .f input:disabled{opacity:.6}
 .f input[type=color]{padding:2px;height:42px}
 .f input[type=file]{border:0;background:none;padding:4px 0;font-size:13px}
+.f.chk{display:flex;align-items:center;gap:10px;color:var(--text)}
+.f.chk input{width:18px;height:18px;padding:0;accent-color:var(--pink)}
 .list{display:grid;gap:8px}
 .item{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px}
 .item>div:first-child{min-width:0;overflow-wrap:anywhere}
@@ -210,12 +269,15 @@ nav a:hover{color:var(--text);background:var(--panel2)}
 .editing .edonly{display:block}
 .addtile{border:2px dashed color-mix(in srgb,var(--muted) 60%,transparent);border-radius:var(--r);color:var(--muted);min-height:64px;padding:10px;font-size:14px;width:100%}
 .addtile:hover{border-color:var(--sky);color:var(--sky-t)}
+.row .addtile{min-height:0;aspect-ratio:3/4.2;border-radius:16px}
 .editing{padding-bottom:64px}
-.editing [data-edit]{outline:1px dashed var(--sky-t);outline-offset:3px;cursor:pointer;scroll-margin:130px 0 90px}
+.editing .side{bottom:63px}
+.editing [data-edit]{outline:1px dashed var(--sky-t);outline-offset:3px;cursor:pointer;scroll-margin:90px 0 90px}
+.editing .side [data-edit],.editing .topbar [data-edit]{outline-offset:-2px}
 .editing [data-edit]:hover{outline:2px solid var(--sky)}
 .editing [data-edit].picked{outline:3px solid var(--pink)}
-.editing .sec .row{grid-auto-flow:row;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));overflow:visible}
-.editing .rarr,.editing .more,.editing .fab-edit{display:none}
+.editing .sec .row{grid-auto-flow:row;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));overflow:visible}
+.editing .hnav,.editing .more,.editing .fab-edit{display:none}
 .editing .fab{bottom:78px}
 .fab.off{display:none}                         /* แอดมินเว้นข้อความว่าง = ซ่อนปุ่ม */
 .editing .fab.off{display:inline-flex;opacity:.55}  /* ...แต่ตอนแก้ไขยังต้องกดได้ */
@@ -227,7 +289,7 @@ nav a:hover{color:var(--text);background:var(--panel2)}
 .dr-tools{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
 .has-drawer{padding-right:380px}
 .has-drawer .fab{right:398px}
-.has-drawer nav{overflow:hidden}
+.has-drawer .pills{display:none}
 @media (max-width:760px){
   #edBar span{display:none}
   #edBar .btn{flex:1}
@@ -239,7 +301,7 @@ nav a:hover{color:var(--text);background:var(--panel2)}
 
 /* dialogs + toast */
 dialog{margin:auto;background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:22px;padding:26px;width:min(420px,92vw)}
-dialog::backdrop{background:rgba(5,20,50,.6)}
+dialog::backdrop{background:rgba(3,6,16,.7)}
 dialog form{display:grid;gap:12px}
 dialog h3{font-size:20px;padding-right:30px}
 .x{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;color:var(--muted)}
@@ -248,7 +310,7 @@ dialog h3{font-size:20px;padding-right:30px}
 .rowb{display:flex;justify-content:space-between;gap:10px}
 .f input[name=otp]{font-size:24px;letter-spacing:8px;text-align:center}
 .linkbtn{color:var(--sky-t);font-size:14px}
-/* แพ็กเกจ: แคปซูลฟ้า + ราคาชมพู แบบตารางราคาในโปสเตอร์ */
+/* แพ็กเกจ: แคปซูลฟ้า + ราคาชมพู */
 .pks{display:grid;gap:6px;max-height:40vh;overflow:auto;padding:2px}
 .pk{display:flex;align-items:center;gap:10px;border:2px solid var(--line);border-radius:99px;padding:6px 16px 6px 12px;cursor:pointer}
 .pk:has(:checked){border-color:var(--pink);background:var(--panel2)}
@@ -260,17 +322,18 @@ dialog h3{font-size:20px;padding-right:30px}
 
 /* footer */
 footer{margin-top:60px;background:var(--panel);border-top:1px solid var(--line)}
-.fcols{display:grid;grid-template-columns:2fr 1fr 1fr;gap:30px;padding:40px 16px}
+.fcols{display:grid;grid-template-columns:2fr 1fr 1fr;gap:30px;padding:40px 24px}
 footer h4{color:var(--pink-t);margin-bottom:10px}
 footer p,footer li{color:var(--muted);font-size:14px}
 footer ul{list-style:none;display:grid;gap:6px}
 footer a:hover{color:var(--sky-t)}
 .copy{border-top:1px solid var(--line);text-align:center;padding:16px;color:var(--muted);font-size:13px}
-@media (max-width:760px){.fcols{grid-template-columns:1fr}}
+@media (max-width:760px){.fcols{grid-template-columns:1fr;padding:30px 14px}}
 
-.fab{position:fixed;right:18px;bottom:18px;z-index:40;padding:12px 18px;box-shadow:0 8px 22px rgba(0,40,100,.28)}
-.card,.cat,.panel,.item,.step,.post,.search{box-shadow:0 6px 18px var(--glow)}
-.fab-edit{right:auto;left:18px}
+.fab{position:fixed;right:18px;bottom:18px;z-index:40;padding:12px 18px;box-shadow:0 8px 22px rgba(0,20,60,.35)}
+.cat,.panel,.item,.step,.post,.search{box-shadow:0 6px 18px var(--glow)}
+.fab-edit{right:auto;left:calc(var(--side) + 18px)}
+@media (max-width:980px){.fab-edit{left:18px}}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 @media (max-width:760px){.grid3{grid-template-columns:1fr}}
 .grid3>.btn{align-self:end}
@@ -289,20 +352,30 @@ img.ico{display:inline-block;object-fit:contain}
 </head>
 <body id="top">
 
-<header>
-  <div class="wrap bar">
-    <a class="brand" href="#top" data-edit="settings"><img class="js-logo" src="logo.png" alt=""><span class="js-name">Cat<b>4K</b></span></a>
-    <nav aria-label="เมนูหลัก" data-edit="nav">
-      <a href="#top" data-nav="home">หน้าหลัก</a>
-      <a href="#wallet" data-nav="wallet">กระเป๋าตัง</a>
-      <a href="#orders" data-nav="orders">ประวัติสั่งซื้อ</a>
-      <a href="#check" data-nav="check">เช็ควันหมดอายุ</a>
-      <a href="#how" data-nav="how">วิธีสั่งซื้อ</a>
-      <a href="#contact" data-nav="contact">ติดต่อเรา</a>
-      <button class="themebtn" id="themeBtn" type="button" aria-label="สลับโหมดสว่าง/มืด"></button>
-    </nav>
-    <div class="auth" id="authBox"></div>
-  </div>
+<aside class="side" id="side">
+  <a class="brand" href="#top" data-edit="settings"><img class="js-logo" src="logo.png" alt=""><span class="js-name">Cat<b>4K</b></span></a>
+  <nav aria-label="เมนูหลัก" data-edit="nav">
+    <a href="#top"><i>🏠</i><span data-nav="home">หน้าหลัก</span></a>
+    <a href="#wallet"><i>💰</i><span data-nav="wallet">กระเป๋าตัง</span></a>
+    <a href="#orders"><i>🧾</i><span data-nav="orders">ประวัติสั่งซื้อ</span></a>
+    <a href="#check"><i>📅</i><span data-nav="check">เช็ควันหมดอายุ</span></a>
+    <a href="#how"><i>📖</i><span data-nav="how">วิธีสั่งซื้อ</span></a>
+    <a href="#contact"><i>💬</i><span data-nav="contact">ติดต่อเรา</span></a>
+  </nav>
+  <div class="side-h js-hside" data-edit="settings">หมวดหมู่</div>
+  <div class="side-cats" id="sideCats"></div>
+  <div class="promo" id="sidePromo" data-edit="promo"></div>
+</aside>
+<div class="scrim" id="scrim"></div>
+
+<div class="app">
+<header class="topbar">
+  <button class="burger" id="burger" type="button" aria-label="เปิดเมนู">☰</button>
+  <a class="brand tb-brand" href="#top" data-edit="settings"><img class="js-logo" src="logo.png" alt=""><span class="js-name">Cat<b>4K</b></span></a>
+  <div class="pills" id="topCats"></div>
+  <label class="search tb-search"><span aria-hidden="true">🔍</span><input id="q" type="search" placeholder="ค้นหาสินค้า..." aria-label="ค้นหาสินค้า"></label>
+  <button class="themebtn" id="themeBtn" type="button" aria-label="สลับโหมดสว่าง/มืด"></button>
+  <div class="auth" id="authBox"></div>
 </header>
 
 <main class="wrap">
@@ -314,8 +387,6 @@ img.ico{display:inline-block;object-fit:contain}
       <div class="dots" id="dots"></div>
       <button class="addtile edonly" type="button" data-add="slides">+ เพิ่มแบนเนอร์</button>
     </section>
-
-    <label class="search"><span aria-hidden="true">🔍</span><input id="q" type="search" placeholder="ค้นหาเกม แอพ หรือ Gift Card..." aria-label="ค้นหาสินค้า"></label>
 
     <div class="h"><h2 class="js-hcats" data-edit="settings">สินค้าแนะนำ</h2></div>
     <div class="cats" id="cats"></div>
@@ -471,6 +542,7 @@ img.ico{display:inline-block;object-fit:contain}
   </div>
   <div class="copy" data-edit="footer"><span class="js-name">Cat4K</span> © <span id="yr"></span> <span id="fCopy">สงวนสิทธิ์</span></div>
 </footer>
+</div><!-- /.app -->
 
 <a class="btn btn-line fab" id="fabContact" data-edit="fab" href="#" target="_blank" rel="noopener">💬 ติดต่อเรา</a>
 <button class="btn btn-main fab fab-edit" id="fabEdit" type="button" data-start-edit hidden>✏️ แก้ไขหน้าเว็บ</button>
@@ -546,9 +618,11 @@ const DEFAULT = {
     about: 'Cat4K เป็นตัวแทนจำหน่ายสินค้าดิจิทัลเท่านั้น ไม่มีส่วนเกี่ยวข้องกับเจ้าของเกมหรือแอพใดๆ เครดิตในเว็บใช้ซื้อสินค้าภายในเว็บเท่านั้น ชำระเงินผ่านช่องทางที่ระบุในเว็บหรือ LINE ทางการเท่านั้น ระวังมิจฉาชีพแอบอ้าง',
     hCats: 'สินค้าแนะนำ', hHow: 'วิธีสั่งซื้อ', hNews: 'บทความ-ข่าวสาร',
     lapseDays: 15,  // ลูกค้าที่ทุกแอปหมดอายุมาเกินกี่วัน จะได้รหัสผ่านใหม่เมื่อกลับมาซื้อ/ต่ออายุ
+    defaultMode: 'dark', hSide: 'หมวดหมู่',
   },
   nav: {home: 'หน้าหลัก', wallet: 'กระเป๋าตัง', orders: 'ประวัติสั่งซื้อ', account: 'บัญชีของฉัน', check: 'เช็ควันหมดอายุ', how: 'วิธีสั่งซื้อ', contact: 'ติดต่อเรา'},
   fab: {fabText: '💬 ติดต่อเรา', fabUrl: '', fabColor: '#06c755'},  // ปุ่มลอยมุมขวาล่าง
+  promo: {promoTitle: 'สมัครสมาชิก', promoText: 'เติมเงิน สั่งซื้อ และเช็ควันหมดอายุได้ในที่เดียว', promoBtn: 'สมัครเลย'},  // กล่องล่างสุดของแถบซ้าย
   footer: {hContact: 'ติดต่อเรา', hHelp: 'ช่วยเหลือ', copy: 'สงวนสิทธิ์', links: [
     {label: 'วิธีสั่งซื้อ', url: '#how'}, {label: 'วิธีเติมเงิน', url: '#wallet'}, {label: 'เช็ควันหมดอายุ', url: '#check'}, {label: 'ระบบเบิกโค้ด (ทีมงาน)', url: 'Cat4K-Giftcard.html'},
   ]},
@@ -604,6 +678,9 @@ const hue = s => 195 + [...s].reduce((h, c) => (h * 31 + c.charCodeAt(0)) % 150,
 // ไอคอน: ถ้าค่าเป็นลิงก์รูป (http, data:, หรือชื่อไฟล์รูป) แสดงเป็นรูป ไม่งั้นถือว่าเป็นอีโมจิ/ตัวหนังสือ
 const isImg = v => /^(https?:|data:image\/)|\.(png|jpe?g|webp|gif|svg)(\?.*)?$/i.test(String(v || '').trim());
 const ico = v => isImg(v) ? `<img class="ico" src="${esc(String(v).trim())}" alt="">` : esc(v);
+const hl = t => esc(t).replace(/\*([^*]+)\*/g, '<em>$1</em>');  // *คำ* ในหัวข้อแบนเนอร์ = เน้นสี
+// ลิงก์รูปที่ใส่ใน url('...') ของ CSS ได้อย่างปลอดภัย: แปลงอักขระที่ปิด url() หรือเริ่มคำสั่ง CSS ใหม่ได้ (encodeURIComponent ไม่แปลง ' ( ) ให้)
+const cssUrl = u => String(u).trim().replace(/['"()\\\s;]/g, ch => '%' + ch.charCodeAt(0).toString(16).padStart(2, '0').toUpperCase());
 const abbr = s => { const w = s.match(/[A-Za-z0-9]+/g) || [s]; return (w.length > 1 ? w[0][0] + w[1][0] : w[0].slice(0, 2)).toUpperCase(); };
 const secId = (s, i) => String(s.id || i).replace(/[^\w-]/g, '');
 const lineUrl = msg => { const id = encodeURIComponent(view().settings.lineId); return `https://line.me/R/${msg ? `oaMessage/${id}/?${encodeURIComponent(msg)}` : `ti/p/${id}`}`; };
@@ -641,27 +718,30 @@ const act = fn => async e => {
 // รูปร่างข้อมูล: เพิ่ม field ใหม่แค่เติมใน BLANK + LABEL แล้วแผงแก้ไขจะมีช่องนั้นเอง
 const LABEL = {settings: 'ตั้งค่าร้าน', shop: 'ชื่อร้าน', logo: 'โลโก้ (ลิงก์รูป หรืออัปโหลด)', accent: 'สีฟ้าของธีม (พื้นปุ่มและป้าย)', accent2: 'สีชมพูของธีม (พื้นปุ่มและป้าย)', lineId: 'LINE ID ร้าน (มี @)', fbUrl: 'ลิงก์ Facebook',
   payInfo: 'ข้อมูลบัญชีรับโอน (แสดงในหน้ากระเป๋าตัง)', about: 'ข้อความท้ายเว็บ', hCats: 'หัวข้อเหนือหมวดสินค้า', hHow: 'หัวข้อส่วนวิธีสั่งซื้อ', hNews: 'หัวข้อส่วนข่าวสาร', lapseDays: 'ออกรหัสผ่านใหม่ให้ลูกค้าที่ขาดต่ออายุเกินกี่วัน',
-  slides: 'แบนเนอร์', tag: 'ป้ายเล็ก', title: 'หัวข้อ', text: 'ข้อความ', btn: 'ข้อความบนปุ่ม',
+  slides: 'แบนเนอร์', tag: 'ป้ายเล็ก', title: 'หัวข้อ (ในแบนเนอร์ ใส่ *คำ* เพื่อเน้นสี)', text: 'ข้อความ', btn: 'ข้อความบนปุ่ม',
   link: 'ลิงก์ (เช่น #sec-game หรือ https://...)', color: 'สีพื้น', emoji: 'อีโมจิ (ใช้เมื่อไม่มีรูป)', img: 'รูป (ลิงก์รูป หรืออัปโหลด)', sections: 'หมวดสินค้า',
   id: 'รหัสหมวด ภาษาอังกฤษ (ใช้ทำลิงก์ #sec-รหัส)', icon: 'ไอคอน (พิมพ์อีโมจิ หรือใส่รูป: วางลิงก์รูป หรืออัปโหลด)', hint: 'ข้อมูลที่ให้ลูกค้ากรอกตอนสั่งซื้อ', items: 'สินค้า', n: 'ชื่อสินค้า', d: 'ป้ายมุมรูป (เช่น ลด 5%)',
   t: 'ตัวหนังสือบนรูป (ใช้เมื่อไม่มีรูป)', packages: 'แพ็กเกจ / ราคา', name: 'ชื่อแพ็กเกจ', price: 'ราคา (บาท)', months: 'อายุการใช้งาน (เดือน) ใส่ 0 ถ้าแพ็กเกจนี้ไม่มีวันหมดอายุ', bonus: 'แถมเพิ่ม (วัน)',
   app: 'ชื่อแอปในหน้าเช็ควันหมดอายุ (เว้นว่าง = ใช้ชื่อสินค้า)', steps: 'วิธีสั่งซื้อ', news: 'ข่าวสาร', date: 'วันที่',
-  nav: 'เมนูด้านบน', home: 'เมนู: หน้าหลัก', wallet: 'เมนู: กระเป๋าตัง (ใช้เป็นหัวข้อหน้านั้นด้วย)', orders: 'เมนู: ประวัติสั่งซื้อ (ใช้เป็นหัวข้อหน้านั้นด้วย)', account: 'บัญชีของฉัน (อยู่ในเมนูผู้ใช้มุมขวา และเป็นหัวข้อหน้านั้น)', check: 'เมนู: เช็ควันหมดอายุ (ใช้เป็นหัวข้อหน้านั้นด้วย)',
+  nav: 'เมนูหลัก (แถบซ้าย)', home: 'เมนู: หน้าหลัก', wallet: 'เมนู: กระเป๋าตัง (ใช้เป็นหัวข้อหน้านั้นด้วย)', orders: 'เมนู: ประวัติสั่งซื้อ (ใช้เป็นหัวข้อหน้านั้นด้วย)', account: 'บัญชีของฉัน (อยู่ในเมนูผู้ใช้มุมขวา และเป็นหัวข้อหน้านั้น)', check: 'เมนู: เช็ควันหมดอายุ (ใช้เป็นหัวข้อหน้านั้นด้วย)',
   how: 'เมนู: วิธีสั่งซื้อ', contact: 'เมนู: ติดต่อเรา', footer: 'ท้ายเว็บ', hContact: 'หัวข้อคอลัมน์ติดต่อ', hHelp: 'หัวข้อคอลัมน์ลิงก์', copy: 'ข้อความลิขสิทธิ์ (ต่อท้ายชื่อร้านและปี)',
   links: 'ลิงก์ท้ายเว็บ', label: 'ข้อความลิงก์', url: 'ลิงก์ (เช่น #how หรือ https://...)',
-  fab: 'ปุ่มลอยมุมขวาล่าง', fabText: 'ข้อความบนปุ่ม (เว้นว่าง = ซ่อนปุ่ม)', fabUrl: 'ลิงก์เมื่อกดปุ่ม (เว้นว่าง = เปิดแชต LINE ของร้าน)', fabColor: 'สีปุ่ม'};
+  fab: 'ปุ่มลอยมุมขวาล่าง', fabText: 'ข้อความบนปุ่ม (เว้นว่าง = ซ่อนปุ่ม)', fabUrl: 'ลิงก์เมื่อกดปุ่ม (เว้นว่าง = เปิดแชต LINE ของร้าน)', fabColor: 'สีปุ่ม',
+  bg: 'ภาพพื้นหลังเต็มแบนเนอร์ (ลิงก์รูป หรืออัปโหลด)', rank: 'แสดงอันดับ TOP บนสินค้าในหมวดนี้', defaultMode: 'โหมดเริ่มต้นสำหรับผู้เข้าชมที่ยังไม่เคยเลือก', hSide: 'หัวข้อหมวดในแถบซ้าย',
+  promo: 'กล่องชวนสมัครในแถบซ้าย', promoTitle: 'หัวข้อในกล่อง', promoText: 'ข้อความในกล่อง', promoBtn: 'ข้อความบนปุ่มในกล่อง'};
 const BLANK = {
-  settings: DEFAULT.settings, nav: DEFAULT.nav, footer: DEFAULT.footer, fab: DEFAULT.fab,
+  settings: DEFAULT.settings, nav: DEFAULT.nav, footer: DEFAULT.footer, fab: DEFAULT.fab, promo: DEFAULT.promo,
   links: {label: '', url: ''},
-  slides: {tag: '', title: '', text: '', btn: '', link: '', color: '#1f8fd1', emoji: '', img: ''},
-  sections: {id: '', icon: '', title: '', hint: '', items: []},
+  slides: {tag: '', title: '', text: '', btn: '', link: '', color: '#1f8fd1', emoji: '', img: '', bg: ''},
+  sections: {id: '', icon: '', title: '', hint: '', rank: false, items: []},
   items: {n: '', d: '', t: '', img: '', packages: []},
   packages: {name: '', price: 0, months: 0, bonus: 0, app: ''},
   steps: {icon: '', title: '', text: ''},
   news: {icon: '', title: '', date: '', link: ''},
 };
-const NUM = new Set(['price', 'months', 'bonus', 'lapseDays']), LONG = new Set(['text', 'about', 'payInfo']), IMG = new Set(['img', 'logo', 'icon']), COLOR = new Set(['color', 'accent', 'accent2', 'fabColor']), TITLE = new Set(['n', 'title', 'name', 'label']);
-const LISTS = ['slides', 'sections', 'steps', 'news'], OBJS = ['settings', 'nav', 'footer', 'fab'];
+const NUM = new Set(['price', 'months', 'bonus', 'lapseDays']), LONG = new Set(['text', 'about', 'payInfo']), IMG = new Set(['img', 'logo', 'icon', 'bg']), COLOR = new Set(['color', 'accent', 'accent2', 'fabColor']), TITLE = new Set(['n', 'title', 'name', 'label']);
+const LISTS = ['slides', 'sections', 'steps', 'news'], OBJS = ['settings', 'nav', 'footer', 'fab', 'promo'];
+const OPTS = {defaultMode: [['dark', 'มืด'], ['light', 'สว่าง']]}, BOOL = new Set(['rank']);  // ช่องแบบตัวเลือก / ช่องติ๊ก
 // เติม field ที่ขาดให้ครบตามแม่แบบ (เนื้อหาที่บันทึกไว้ก่อนมี field ใหม่จะไม่พัง)
 const fillT = (o, k) => {
   for (const [f, v] of Object.entries(BLANK[k])) {
@@ -697,9 +777,11 @@ function renderSite() {
   fabEl.classList.toggle('off', !c.fab.fabText);
   $$('.js-fb').forEach(a => a.href = s.fbUrl || '#');
   $$('.js-line-id').forEach(e => e.textContent = s.lineId);
-  $('.js-hcats').textContent = s.hCats; $('.js-hhow').textContent = s.hHow; $('.js-hnews').textContent = s.hNews;
+  $('.js-hside').textContent = s.hSide; $('.js-hcats').textContent = s.hCats; $('.js-hhow').textContent = s.hHow; $('.js-hnews').textContent = s.hNews;
   $('#about').textContent = s.about;
   $('#payInfo').textContent = s.payInfo;
+  if (!themeChoice()) setTheme(s.defaultMode === 'dark');
+  paintPromo();
   $$('[data-nav]').forEach(a => a.textContent = c.nav[a.dataset.nav]);
   $('#view-wallet h2').textContent = '💰 ' + c.nav.wallet; $('#view-orders h2').textContent = '🧾 ' + c.nav.orders; $('#view-account h2').textContent = '👤 ' + c.nav.account; $('#view-check h2').textContent = '📅 ' + c.nav.check;
   $('.js-hcontact').textContent = c.footer.hContact; $('.js-hhelp').textContent = c.footer.hHelp; $('#fCopy').textContent = c.footer.copy;
@@ -708,32 +790,34 @@ function renderSite() {
   const sl = $('#slides'), x0 = sl.scrollLeft;  // วาดใหม่แล้วอยู่แบนเนอร์เดิม
   $('.hero').hidden = !c.slides.length && !editing;
   sl.innerHTML = c.slides.map((x, i) => `
-    <div class="slide" data-edit="slides.${i}" style="--c:${esc(x.color || '#1f8fd1')}">
-      <div>${x.tag ? `<span class="tag">${esc(x.tag)}</span>` : ''}<h${i ? 2 : 1}>${esc(x.title) || ph('(ยังไม่มีหัวข้อ)')}</h${i ? 2 : 1}><p>${esc(x.text)}</p>${x.btn ? `<a class="btn" href="${esc(x.link || '#products')}">${esc(x.btn)}</a>` : ''}</div>
-      ${x.img ? `<img src="${esc(x.img)}" alt="">` : `<span class="emo" aria-hidden="true">${esc(x.emoji)}</span>`}
+    <div class="slide${x.bg ? ' has-bg' : ''}" data-edit="slides.${i}" style="--c:${esc(x.color || '#1f8fd1')}${x.bg ? `;--bgimg:url('${esc(cssUrl(x.bg))}')` : ''}">
+      <div class="st">${x.tag ? `<span class="tag">${esc(x.tag)}</span>` : ''}<h${i ? 2 : 1}>${hl(x.title) || ph('(ยังไม่มีหัวข้อ)')}</h${i ? 2 : 1}><div class="rule"></div><p>${esc(x.text)}</p>${x.btn ? `<a class="btn" href="${esc(x.link || '#products')}">${esc(x.btn)}</a>` : ''}</div>
+      ${x.img ? `<img src="${esc(x.img)}" alt="">` : x.bg ? '' : `<span class="emo" aria-hidden="true">${esc(x.emoji)}</span>`}
     </div>`).join('');
   sl.scrollLeft = x0;
   $('#dots').innerHTML = c.slides.map((_, i) => `<button type="button" aria-label="สไลด์ ${i + 1}"></button>`).join('');
   mark();
 
-  $('#cats').innerHTML = c.sections.map((x, i) => `<a class="cat" data-edit="sections.${i}" href="#sec-${secId(x, i)}"><i>${ico(x.icon)}</i><span>${esc(x.title) || ph('(หมวดใหม่)')}</span></a>`).join('');
+  // หมวดสินค้าแสดง 3 ที่: แถบซ้าย, แถบบน, กล่องในหน้าหลัก
+  const catLinks = cls => c.sections.map((x, i) => `<a class="${cls}" data-edit="sections.${i}" href="#sec-${secId(x, i)}"><i>${ico(x.icon)}</i><span>${esc(x.title) || ph('(หมวดใหม่)')}</span></a>`).join('');
+  $('#sideCats').innerHTML = catLinks('slink');
+  $('#topCats').innerHTML = `<a class="pill home" href="#top">${esc(c.nav.home)}</a>` + catLinks('pill');
+  $('#cats').innerHTML = catLinks('cat');
   $('#products').innerHTML = c.sections.map((x, si) => `
     <section class="sec" id="sec-${secId(x, si)}">
-      <div class="h" data-edit="sections.${si}"><h2>${ico(x.icon)} ${esc(x.title) || ph('(หมวดใหม่)')}</h2><button class="more" type="button">ดูทั้งหมด</button></div>
-      <div class="row-wrap">
-        <button class="rarr l" type="button" aria-label="เลื่อนซ้าย">❮</button>
-        <div class="row">${x.items.map((p, pi) => {
-          const n = p.n || '', hu = hue(n), min = Math.min(...p.packages.map(k => +k.price).filter(v => v > 0));
-          return `
-          <a class="card" data-edit="sections.${si}.items.${pi}" data-s="${si}" data-i="${pi}" data-name="${esc(n.toLowerCase())}" href="${esc(lineUrl('สนใจสั่งซื้อ: ' + n))}" target="_blank" rel="noopener">
-            <div class="logo" style="background:linear-gradient(135deg,hsl(${hu} 78% 54%),hsl(${(hu + 30) % 360} 70% 30%))">${p.img ? `<img src="${esc(p.img)}" alt="" loading="lazy">` : esc(p.t || abbr(n))}</div>
-            ${p.d ? `<span class="off">${esc(p.d)}</span>` : ''}
-            <div class="name">${esc(n) || ph('(ยังไม่มีชื่อ)')}${isFinite(min) ? `<small>เริ่ม ${baht(min)}</small>` : ''}</div>
-          </a>`; }).join('')}
-          <button class="addtile edonly" type="button" data-add="sections.${si}.items">+ เพิ่มสินค้า</button>
-        </div>
-        <button class="rarr r" type="button" aria-label="เลื่อนขวา">❯</button>
+      <div class="h" data-edit="sections.${si}"><h2>${ico(x.icon)} ${esc(x.title) || ph('(หมวดใหม่)')}<span class="chev">›</span></h2>
+        <span class="hnav"><button class="rarr l" type="button" aria-label="เลื่อนซ้าย">‹</button><button class="rarr r" type="button" aria-label="เลื่อนขวา">›</button></span></div>
+      <div class="row">${x.items.map((p, pi) => {
+        const n = p.n || '', hu = hue(n), min = Math.min(...p.packages.map(k => +k.price).filter(v => v > 0));
+        return `
+        <a class="card" data-edit="sections.${si}.items.${pi}" data-s="${si}" data-i="${pi}" data-name="${esc(n.toLowerCase())}" href="${esc(lineUrl('สนใจสั่งซื้อ: ' + n))}" target="_blank" rel="noopener">
+          <div class="logo" style="background:linear-gradient(160deg,hsl(${hu} 78% 54%),hsl(${(hu + 30) % 360} 70% 26%))">${p.img ? `<img src="${esc(p.img)}" alt="" loading="lazy">` : esc(p.t || abbr(n))}</div>
+          ${p.d ? `<span class="off">${esc(p.d)}</span>` : ''}${x.rank ? (pi < 3 ? `<span class="top">TOP ${pi + 1}</span>` : `<span class="rk" aria-hidden="true">${pi + 1}</span>`) : ''}
+          <div class="name">${esc(n) || ph('(ยังไม่มีชื่อ)')}${isFinite(min) ? `<small>เริ่ม ${baht(min)}</small>` : ''}</div>
+        </a>`; }).join('')}
+        <button class="addtile edonly" type="button" data-add="sections.${si}.items">+ เพิ่มสินค้า</button>
       </div>
+      <div class="row-foot"><button class="more" type="button">ดูหมวดนี้ทั้งหมด →</button></div>
     </section>`).join('');
 
   $('#how').hidden = !c.steps.length && !editing;
@@ -752,7 +836,7 @@ const cacheContent = c => { try { localStorage.setItem('cat4k_content', JSON.str
 // product rows: ดูทั้งหมด / ลูกศร / กดสินค้า
 $('#products').addEventListener('click', e => {
   const t = e.target, sec = t.closest('.sec'), row = sec?.querySelector('.row'), c = t.closest('.card');
-  if (t.closest('.more')) t.textContent = sec.classList.toggle('all') ? 'ย่อ' : 'ดูทั้งหมด';
+  if (t.closest('.more')) t.textContent = sec.classList.toggle('all') ? 'ย่อ ↑' : 'ดูหมวดนี้ทั้งหมด →';
   else if (t.closest('.rarr')) row.scrollBy({left: row.clientWidth * (t.closest('.l') ? -.8 : .8), behavior: 'smooth'});
   else if (c) {
     const x = C.sections[c.dataset.s], p = x?.items?.[c.dataset.i];
@@ -762,12 +846,13 @@ $('#products').addEventListener('click', e => {
 
 $('#q').addEventListener('input', e => {
   const q = e.target.value.trim().toLowerCase();
+  if (e.isTrusted && $('#home').hidden) { history.replaceState(null, '', here); route(); }  // พิมพ์ค้นหาจากหน้าอื่น: กลับมาหน้าสินค้า
   let any = !view().sections.length;
   $$('#products .sec').forEach(sec => {
     let hit = 0;
     sec.querySelectorAll('.card').forEach(c => { const yes = c.dataset.name.includes(q); c.hidden = !yes; hit += yes; });
     sec.hidden = !hit && !(editing && !q); sec.classList.toggle('all', !!q); any ||= hit > 0;
-    sec.querySelector('.more').textContent = q ? 'ย่อ' : 'ดูทั้งหมด';
+    sec.querySelector('.more').textContent = q ? 'ย่อ ↑' : 'ดูหมวดนี้ทั้งหมด →';
   });
   $('#empty').style.display = any ? 'none' : 'block';
 });
@@ -788,13 +873,15 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) setInterval(() => p
 $$('dialog .x').forEach(b => b.onclick = () => b.closest('dialog').close());
 $('#yr').textContent = new Date().getFullYear() + 543;
 
-// โหมดสว่าง/มืด: จำไว้ในเครื่องของผู้ชม (สคริปต์ใน <head> ใส่ data-theme ก่อนวาดหน้า กันกะพริบ)
+// โหมดสว่าง/มืด: ผู้ชมกดเลือกแล้วจำไว้ในเครื่อง; ยังไม่เคยเลือก = ใช้โหมดเริ่มต้นที่แอดมินตั้ง (ตั้งค่าร้าน > defaultMode)
+// (สคริปต์ใน <head> ใส่ data-theme ก่อนวาดหน้า กันกะพริบ)
+const themeChoice = () => { try { return localStorage.getItem('cat4k_theme'); } catch { return null; } };
 const paintTheme = () => { const d = document.documentElement.dataset.theme === 'dark'; $('#themeBtn').textContent = d ? '☀️' : '🌙'; $('#themeBtn').title = d ? 'เปลี่ยนเป็นโหมดสว่าง' : 'เปลี่ยนเป็นโหมดมืด'; };
+const setTheme = dark => { const root = document.documentElement; if (dark) root.dataset.theme = 'dark'; else delete root.dataset.theme; paintTheme(); };
 $('#themeBtn').onclick = () => {
-  const root = document.documentElement, dark = root.dataset.theme !== 'dark';
-  if (dark) root.dataset.theme = 'dark'; else delete root.dataset.theme;
+  const dark = document.documentElement.dataset.theme !== 'dark';
+  setTheme(dark);
   try { localStorage.setItem('cat4k_theme', dark ? 'dark' : 'light'); } catch {}
-  paintTheme();
 };
 paintTheme();
 
@@ -810,8 +897,24 @@ function paintAuth() {
          </div>
        </details>`
     : `<button class="btn btn-ghost" type="button" data-auth="login">เข้าสู่ระบบ</button><button class="btn btn-main" type="button" data-auth="register">สมัครสมาชิก</button>`;
-  adminFab();
+  adminFab(); paintPromo();
 }
+// กล่องล่างสุดของแถบซ้าย: ผู้เยี่ยมชมเห็นคำชวนสมัคร (แอดมินแก้ข้อความได้), สมาชิกเห็นยอดเงิน
+function paintPromo() {
+  const p = view().promo;
+  $('#sidePromo').innerHTML = user && !editing
+    ? `<i>💰</i><b>ยอดเงินคงเหลือ</b><span class="big">${baht(me?.balance)}</span><a class="btn btn-main" href="#wallet">เติมเงิน ›</a>`
+    : `<i>👑</i><b>${esc(p.promoTitle)}</b><p>${esc(p.promoText)}</p><button class="btn btn-main" type="button" data-auth="register">${esc(p.promoBtn)} ›</button>`;
+}
+// มือถือ: แถบซ้ายเป็นลิ้นชัก เปิด/ปิดด้วยปุ่ม ☰ ปิดเองเมื่อกดลิงก์หรือพื้นที่มืดด้านนอก
+const sideOpen = on => document.body.classList.toggle('side-open', on);
+$('#burger').onclick = () => sideOpen(!document.body.classList.contains('side-open'));
+$('#scrim').onclick = () => sideOpen(false);
+$('#side').addEventListener('click', e => {
+  const m = e.target.closest('[data-auth]')?.dataset.auth;
+  if (m) openAuth(m);
+  if (m || e.target.closest('a')) sideOpen(false);
+});
 // ปุ่มลอย "แก้ไขหน้าเว็บ" เห็นเฉพาะแอดมิน ตอนอยู่หน้าหลักและยังไม่ได้เข้าโหมดแก้ไข
 function adminFab() { $('#fabEdit').hidden = !me?.is_admin || editing || $('#home').hidden; }
 // ลิงก์ที่มี data-atab = เปิดหน้าแอดมินที่แท็บนั้นเลย
@@ -898,6 +1001,8 @@ function route() {
   $$('.view').forEach(x => x.hidden = x.id !== 'view-' + v);
   $('.fab').hidden = v === 'admin';  // ไม่ให้บังปุ่มบันทึก
   adminFab();
+  $$('.side nav a').forEach(a => a.classList.toggle('on', a.getAttribute('href') === (VIEWS[v] ? '#' + v : '#top')));  // ไฮไลต์เมนูของหน้าที่เปิดอยู่
+  sideOpen(false);
   if (VIEWS[v]) { scrollTo(0, 0); VIEWS[v]().catch(fail); }
   else if (!wasHome) document.getElementById(location.hash.slice(1))?.scrollIntoView({behavior: 'instant'});
 }
@@ -1263,6 +1368,16 @@ async function upload(file) {
 }
 function field(obj, k) {
   if (Array.isArray(obj[k])) return listEd(obj[k], k);
+  if (OPTS[k]) {  // ตัวเลือกตายตัว
+    const sel = h('select', {}, ...OPTS[k].map(([value, textContent]) => h('option', {value, textContent})));
+    sel.value = obj[k]; sel.oninput = () => obj[k] = sel.value;
+    return h('label', {className: 'f'}, LABEL[k] || k, sel);
+  }
+  if (BOOL.has(k)) {  // ช่องติ๊ก
+    const cb = h('input', {type: 'checkbox', checked: !!obj[k]});
+    cb.oninput = () => obj[k] = cb.checked;
+    return h('label', {className: 'f chk'}, cb, LABEL[k] || k);
+  }
   const inp = h(LONG.has(k) ? 'textarea' : 'input');
   if (LONG.has(k)) inp.rows = 3; else inp.type = NUM.has(k) ? 'number' : COLOR.has(k) ? 'color' : 'text';
   if (NUM.has(k)) { inp.min = 0; inp.step = k === 'price' ? 'any' : 1; }
@@ -1354,7 +1469,7 @@ const dirty = () => editing && JSON.stringify(draft) !== JSON.stringify(C);
 document.addEventListener('click', e => { if (e.target.closest('[data-start-edit]')) startEdit().catch(fail); });
 // ระหว่างแก้ไข: คลิกบนหน้าเว็บ = เลือกชิ้นนั้นมาแก้ ลิงก์/ปุ่มอื่นไม่ทำงาน (ยกเว้นแผงแก้ไข และปุ่มเลื่อนแบนเนอร์)
 document.addEventListener('click', e => {
-  if (!editing || e.target.closest('#drawer, #edBar, .arrow, #dots, #themeBtn')) return;
+  if (!editing || e.target.closest('#drawer, #edBar, .arrow, #dots, #themeBtn, #burger, #scrim')) return;
   e.preventDefault(); e.stopPropagation();
   const add = e.target.closest('[data-add]'), blk = e.target.closest('[data-edit]');
   if (add) {
