@@ -433,7 +433,6 @@ dialog h3{font-size:20px;padding-right:30px}
 .obox{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:grid;gap:8px}
 .obox h3{padding:0}
 .ostep{display:flex;align-items:center;gap:8px;font-size:17px}
-.ostep i{font-style:normal;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--pinkgrad);color:#fff;font-size:14px}
 @media (max-width:760px){.ogrid{grid-template-columns:1fr}.oleft{position:static;grid-template-columns:96px 1fr;align-items:center}.oleft>.oimg{font-size:26px}.oleft #oKindBox{grid-column:1/-1}.obox h3{padding-right:30px}}
 .oimg{width:56px;height:56px;border-radius:14px;overflow:hidden;flex-shrink:0;display:grid;place-items:center;color:#fff;font-weight:800;font-size:15px}
 .oimg img{width:100%;height:100%;object-fit:cover}
@@ -804,16 +803,16 @@ img.ico{display:inline-block;object-fit:contain}
       </div>
       <div class="oright">
         <div class="os1">
-        <b class="ostep"><i>1</i>เลือกแพ็กเกจ</b>
+        <b class="ostep">เลือกแพ็กเกจ</b>
         <div class="pks" id="oPk"></div>
         </div>
         <div class="os2">
         <h3 class="otitle">คุณต้องการซื้อสินค้า</h3>
         <div class="ohead"><span class="oimg" id="oPkImg"></span><div><small class="muted" id="oPkOf"></small><b id="oPkName"></b></div><b id="oPrice"></b></div>
-        <b class="ostep" id="oStep2"><i>2</i>กรอกข้อมูล</b>
+        <b class="ostep" id="oStep2">กรอกข้อมูล</b>
         <div id="oFields" style="display:grid;gap:12px"></div>
         <p class="muted" id="oSubNote" hidden></p>
-        <b class="ostep"><i>3</i>เลือกวิธีการชำระเงิน</b>
+        <b class="ostep">เลือกวิธีการชำระเงิน</b>
     <div class="pms">
       <label class="pm"><input type="radio" name="pm" value="wallet" checked><i>💰</i><span><b>เงินในกระเป๋า</b><small class="muted">หักจากกระเป๋าตัง ได้รับออเดอร์ทันที</small></span><span class="r"><small class="muted">ยอดเงินคงเหลือ</small><b id="oBal"></b><a href="#wallet" id="oTopup">เติมเงิน</a></span></label>
       <label class="pm"><input type="radio" name="pm" value="line"><i>🏦</i><span><b>โอนเงิน / พร้อมเพย์</b><small class="muted">โอนแล้วส่งสลิปให้แอดมินทาง LINE</small></span></label>
@@ -1447,7 +1446,9 @@ $('#oKinds').addEventListener('change', e => { orderDisc = null; paintPks(+e.tar
 $('#fOrder').elements.code.addEventListener('input', () => { orderDisc = null; syncOrder(); });
 $('.pms').addEventListener('change', syncOrder);
 $('#oApply').onclick = act(async () => { await applyCode(); toast(`ใช้โค้ด ${orderDisc.code} แล้ว ลด ${baht(orderDisc.amount)}`); });
-$('#oCancel').onclick = () => orderStep(false);  // ยกเลิก = กลับไปเลือกแพ็กเกจ (ปิดกล่องใช้ปุ่ม ✕)
+// ยกเลิก หรือ ✕ ในหน้าชำระเงิน = กลับไปเลือกแพ็กเกจ; ✕ ในหน้าเลือกแพ็กเกจ = ปิดกล่อง
+$('#oCancel').onclick = () => orderStep(false);
+$('#dlgOrder .x').onclick = () => $('#fOrder').classList.contains('pay') ? orderStep(false) : $('#dlgOrder').close();
 $('#oTopup').onclick = () => $('#dlgOrder').close();
 // ปุ่มจ่ายในกล่องนี้คือการยืนยัน: ลูกค้าเห็นสรุปยอด (ยอดสั่งซื้อ / ส่วนลด / ยอดชำระเงิน) อยู่เหนือปุ่มแล้ว
 $('#fOrder').onsubmit = act(async e => {
