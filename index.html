@@ -494,6 +494,7 @@ footer a:hover{color:var(--sky-t)}
 .cmr.me>div{justify-items:end}
 .cmr .cm{max-width:100%}
 .cn{font-size:12px;color:var(--muted);margin:0 4px 2px}
+.cm+.cn{font-size:11px;margin:2px 4px 0}  /* เวลา: อยู่ใต้กล่องข้อความ */
 .cm{max-width:82%;align-self:flex-start;background:var(--panel2);border-radius:14px 14px 14px 4px;padding:8px 12px;white-space:pre-line;overflow-wrap:anywhere;font-size:15px}
 .cm.me{align-self:flex-end;background:var(--pinkgrad);color:#fff;border-radius:14px 14px 4px 14px}
 /* การ์ดจัดการออเดอร์ในแชทแอดมิน */
@@ -502,7 +503,6 @@ footer a:hover{color:var(--sky-t)}
 .ocard .ohead small{display:block;font-size:12px;opacity:1}
 .ocard .oinfo{display:grid;gap:2px;background:var(--panel2);border-radius:10px;padding:8px 10px;font-size:14px}
 .ocard .oinfo small{font-size:12px;opacity:1;margin:0}
-.ocard .onote{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:9px 10px;color:var(--text);font:inherit;font-size:14px;resize:vertical}
 .obtn{width:100%;border-radius:10px;padding:9px}
 .obtn.ok{background:#12b76a;color:#fff}.obtn.wait{background:var(--star);color:#4a3200}
 .obtn.bad{border:1px solid var(--down);color:var(--down)}.obtn.off{border:1px solid var(--line);color:var(--muted)}
@@ -769,6 +769,12 @@ img.ico{display:inline-block;object-fit:contain}
       </div>
     </div>
     <div class="apane" id="a-pay">
+      <form class="panel" id="fLines" style="margin-bottom:14px">
+        <b>💬 ข้อความสำเร็จรูปตอนส่งมอบ (ไลน์ที่ให้ลูกค้าแอด)</b>
+        <p class="muted">เพิ่มไลน์ของแต่ละสินค้า เช่น ไลน์ Youtube, ไลน์ Netflix พร้อมข้อความที่จะส่งให้ลูกค้า ตอนกด "ยืนยันส่งมอบให้ลูกค้า" ในการ์ดออเดอร์ (แท็บแชท) จะมีปุ่มให้เลือกว่าจะส่งไลน์ไหน</p>
+        <div id="lineFields"></div>
+        <button class="btn btn-main" type="submit">บันทึกข้อความสำเร็จรูป</button>
+      </form>
       <form class="panel" id="fPay">
         <b>🏦 ช่องทางชำระเงิน</b>
         <p class="muted">ข้อมูลนี้แสดงในหน้ากระเป๋าตัง ตอนลูกค้าแจ้งเติมเงิน ช่องไหนเว้นว่างจะไม่แสดง</p>
@@ -935,6 +941,15 @@ img.ico{display:inline-block;object-fit:contain}
   </form>
 </dialog>
 
+<dialog id="dlgLine" aria-labelledby="lTitle">
+  <form method="dialog">
+    <button class="x" type="button" aria-label="ปิด">✕</button>
+    <h3 id="lTitle">ส่งลูกค้าไปไลน์ไหน</h3>
+    <p class="muted">ข้อความของไลน์ที่เลือกจะถูกส่งให้ลูกค้าในการ์ดออเดอร์</p>
+    <div id="lineBtns" style="display:grid;gap:8px"></div>
+  </form>
+</dialog>
+
 <dialog id="dlgMember" aria-labelledby="mTitle">
   <form id="fMember">
     <button class="x" type="button" aria-label="ปิด">✕</button>
@@ -1089,7 +1104,7 @@ const LABEL = {settings: 'ตั้งค่าร้าน', shop: 'ชื่�
   link: 'ลิงก์ (เช่น #sec-game หรือ https://...)', color: 'สีพื้น', emoji: 'อีโมจิ (ใช้เมื่อไม่มีรูป)', img: 'รูป (ลิงก์รูป หรืออัปโหลด)', sections: 'หมวดสินค้า',
   id: 'รหัสหมวด ภาษาอังกฤษ (ใช้ทำลิงก์ #sec-รหัส)', icon: 'ไอคอน (พิมพ์อีโมจิ หรือใส่รูป: วางลิงก์รูป หรืออัปโหลด)', hint: 'ข้อมูลที่ให้ลูกค้ากรอกตอนสั่งซื้อ', items: 'สินค้า', n: 'ชื่อสินค้า', d: 'ป้ายมุมรูป (เช่น ลด 5%)',
   t: 'ตัวหนังสือบนรูป (ใช้เมื่อไม่มีรูป)', packages: 'แพ็กเกจ / ราคา', name: 'ชื่อแพ็กเกจ', price: 'ราคา (บาท)', months: 'อายุการใช้งาน (เดือน) ใส่ 0 ถ้าแพ็กเกจนี้ไม่มีวันหมดอายุ', bonus: 'แถมเพิ่ม (วัน)',
-  app: 'ชื่อแอปในหน้าเช็ควันหมดอายุ (เว้นว่าง = ใช้ชื่อสินค้า)', steps: 'วิธีสั่งซื้อ', news: 'ข่าวสาร', date: 'วันที่',
+  app: 'ชื่อแอปในหน้าเช็ควันหมดอายุ (เว้นว่าง = ใช้ชื่อสินค้า)', steps: 'วิธีสั่งซื้อ', news: 'ข่าวสาร', lines: 'ไลน์สำหรับส่งลูกค้าหลังส่งมอบ', lname: 'ชื่อปุ่ม (เช่น ไลน์ Youtube)', ltext: 'ข้อความสำเร็จรูปที่ส่งให้ลูกค้า (เช่น กรุณาแอดไลน์ @xxx เพื่อรับบัญชี)', date: 'วันที่',
   nav: 'เมนูหลัก (แถบซ้าย)', home: 'เมนู: หน้าหลัก', wallet: 'เมนู: กระเป๋าตัง (ใช้เป็นหัวข้อหน้านั้นด้วย)', orders: 'เมนู: ประวัติสั่งซื้อ (ใช้เป็นหัวข้อหน้านั้นด้วย)', account: 'บัญชีของฉัน (อยู่ในเมนูผู้ใช้มุมขวา และเป็นหัวข้อหน้านั้น)', check: 'เมนู: เช็ควันหมดอายุ (ใช้เป็นหัวข้อหน้านั้นด้วย)',
   how: 'เมนู: วิธีสั่งซื้อ', contact: 'เมนู: ติดต่อเรา', footer: 'ท้ายเว็บ', hContact: 'หัวข้อคอลัมน์ติดต่อ', hHelp: 'หัวข้อคอลัมน์ลิงก์', copy: 'ข้อความลิขสิทธิ์ (ต่อท้ายชื่อร้านและปี)',
   links: 'ลิงก์ท้ายเว็บ', label: 'ข้อความลิงก์', url: 'ลิงก์ (เช่น #how หรือ https://...)',
@@ -1109,9 +1124,10 @@ const BLANK = {
   packages: {name: '', kind: '', label: '', img: '', price: 0, months: 0, bonus: 0, app: ''},  // img = รูปของแพ็กเกจนี้ (ว่าง = ใช้รูปสินค้า)
   steps: {icon: '', title: '', text: ''},
   news: {icon: '', title: '', date: '', link: ''},
+  lines: {lname: '', ltext: ''},  // ข้อความสำเร็จรูปของแต่ละไลน์ แอดมินเลือกตอนกดยืนยันส่งมอบในการ์ดออเดอร์
 };
-const NUM = new Set(['price', 'months', 'bonus', 'lapseDays']), LONG = new Set(['text', 'about', 'payInfo', 'desc']), IMG = new Set(['img', 'logo', 'icon', 'bg', 'payQr']), COLOR = new Set(['color', 'accent', 'accent2', 'fabColor']), TITLE = new Set(['n', 'title', 'name', 'label']);
-const LISTS = ['slides', 'sections', 'steps', 'news'], OBJS = ['settings', 'nav', 'footer', 'fab', 'promo', 'pay'];
+const NUM = new Set(['price', 'months', 'bonus', 'lapseDays']), LONG = new Set(['text', 'about', 'payInfo', 'desc', 'ltext']), IMG = new Set(['img', 'logo', 'icon', 'bg', 'payQr']), COLOR = new Set(['color', 'accent', 'accent2', 'fabColor']), TITLE = new Set(['n', 'title', 'name', 'label', 'lname']);
+const LISTS = ['slides', 'sections', 'steps', 'news', 'lines'], OBJS = ['settings', 'nav', 'footer', 'fab', 'promo', 'pay'];
 const OPTS = {defaultMode: [['dark', 'มืด'], ['light', 'สว่าง']]}, BOOL = new Set(['rank', 'closed']);  // ช่องแบบตัวเลือก / ช่องติ๊ก
 // อายุการใช้งานของแพ็กเกจเป็นคำ: "1 เดือน" / "1 เดือน + แถม 3 วัน" / "7 วัน" (ไม่ตั้งเดือน ตั้งแต่วัน = แพ็กเกจนับเป็นวัน) / '' = ไม่มีวันหมดอายุ
 // แพ็กเกจที่มีวันหมดอายุ: ลูกค้าต้องกรอกอีเมล แล้วระบบสร้างหรือต่ออายุบัญชีเช็ควันหมดอายุให้ (ดู supabase-subs.sql)
@@ -1570,8 +1586,8 @@ $('#dlgDone').addEventListener('close', () => { if (location.hash !== '#check') 
 
 async function loadOrders() {
   const rows = ok(await sb.from('shop_orders').select('*').eq('member_id', user.id).order('created_at', {ascending: false}).limit(100));
-  $('#oList').innerHTML = rows.map(r => item(`${esc(r.product)} — ${esc(r.package_name)}`,
-    `#${r.id} · ${when(r.created_at)} · ${esc(r.info).replaceAll('\n', ' · ')}${r.admin_note ? '<br>แอดมิน: ' + esc(r.admin_note) : ''}`,
+  $('#oList').innerHTML = rows.map((r, i) => item(`${esc(r.product)} — ${esc(r.package_name)}`,
+    `#${rows.length - i} · ${when(r.created_at)} · ${esc(r.info).replaceAll('\n', ' · ')}${r.admin_note ? '<br>แอดมิน: ' + esc(r.admin_note) : ''}`,
     `${r.code ? `<span class="muted">โค้ด ${esc(r.code)} −${baht(r.discount)}</span>` : ''}<b>${baht(r.price)}</b>${badge(r.status)}`)).join('') || EMPTY;
 }
 
@@ -1970,9 +1986,15 @@ $('#stCharts').addEventListener('pointerleave', e => {
 // ===== แอดมิน: ช่องทางชำระเงิน — บัญชีรับโอน / พร้อมเพย์ / QR ที่แสดงในหน้ากระเป๋าตัง (เก็บในเนื้อหาหน้าเว็บ ไม่ต้องมีตารางเพิ่ม) =====
 // ไม่เก็บชื่อผู้ใช้/รหัสผ่านธนาคารออนไลน์: เนื้อหาหน้าเว็บเป็นข้อมูลที่ทุกคนอ่านได้
 let payDraft;
+let lineDraft = [];
+$('#fLines').onsubmit = act(async () => {
+  await savePart(c => { c.lines = lineDraft.filter(l => l.lname.trim() || l.ltext.trim()); });
+  adminPay(); toast('บันทึกข้อความสำเร็จรูปแล้ว');
+});
 function adminPay() {
   payDraft = structuredClone({pay: C.pay, settings: C.settings});
   $('#payFields').replaceChildren(...Object.keys(BLANK.pay).map(k => field(payDraft.pay, k)), field(payDraft.settings, 'payInfo'));
+  lineDraft = structuredClone(C.lines); $('#lineFields').replaceChildren(listEd(lineDraft, 'lines'));
 }
 // บันทึกเฉพาะบางส่วนของเนื้อหาหน้าเว็บจากแท็บแอดมิน: อ่านของล่าสุดก่อน แล้วให้ patch แก้เฉพาะส่วนของตัวเอง จะได้ไม่ทับส่วนอื่นที่แอดมินอีกคนเพิ่งแก้
 async function savePart(patch) {
@@ -2142,7 +2164,7 @@ const chat = {me: {el: '#chatMsgs', mid: null, mine: 'member', last: 0, timer: 0
 const av = (w, cls = '') => `<span class="av ${cls}">${w?.img ? `<img src="${esc(w.img)}" alt="">` : esc(String(w?.name || '?').trim()[0] || '?')}</span>`;
 // ข้อความในแชท: ของระบบ = กล่องกลาง; ของคน = รูป + ชื่อ + ข้อความ (t.who = ชื่อและรูปของฝั่งลูกค้าและฝั่งแอดมินในห้องนี้)
 const msgHtml = (m, t) => m.sender === 'system' ? `<div class="cm sys"${m.order_id ? ` data-oid="${+m.order_id}"` : ''}>${esc(m.body)}<small>${when(m.created_at)}</small></div>`
-  : `<div class="cmr${m.sender === t.mine ? ' me' : ''}">${av(t.who?.[m.sender])}<div><small class="cn">${esc(t.who?.[m.sender]?.name || '')}</small><div class="cm${m.sender === t.mine ? ' me' : ''}">${esc(m.body)}<small>${when(m.created_at)}</small></div></div></div>`;
+  : `<div class="cmr${m.sender === t.mine ? ' me' : ''}">${av(t.who?.[m.sender])}<div><small class="cn">${esc(t.who?.[m.sender]?.name || '')}</small><div class="cm${m.sender === t.mine ? ' me' : ''}">${esc(m.body)}</div><small class="cn">${when(m.created_at)}</small></div></div>`;
 // ลูกค้าเห็นฝั่งร้านเป็นชื่อร้านและโลโก้ร้าน (ไม่เปิดเผยบัญชีของแอดมินแต่ละคน); แอดมินเห็นชื่อและรูปของลูกค้า
 const shopWho = () => ({name: 'แอดมิน ' + C.settings.shop, img: C.settings.logo});
 async function chatPull(t, reset) {  // reset = เปิดห้องใหม่: โหลด 200 ข้อความล่าสุด; ไม่ reset = เอาเฉพาะข้อความที่ใหม่กว่าที่มีอยู่
@@ -2170,28 +2192,44 @@ async function orderCards(t = chat.adm) {  // ฝั่งลูกค้าเ�
   els.forEach(e => { if (lastOf.get(e.dataset.oid) !== e) e.remove(); });  // ออเดอร์ละหนึ่งการ์ด: ข้อความแจ้งสถานะก่อนหน้าและการ์ดเก่าไม่ต้องแสดง
   for (const [oid, el] of lastOf) {
     const o = orders.find(x => x.id === +oid); if (!o) continue;
+    // เลขออเดอร์ที่แสดง = ลำดับออเดอร์ของลูกค้าคนนี้ (ออเดอร์แรก = #1) ไม่ใช่เลขรวมทั้งร้าน
+    // ponytail: นับจาก 200 ออเดอร์ล่าสุดของลูกค้า ถ้าลูกค้าคนเดียวเกิน 200 ออเดอร์ เลขจะเริ่มเพี้ยน ค่อยเก็บลำดับไว้ในฐานข้อมูล
+    const no = orders.length - orders.indexOf(o); el.dataset.no = no;
     const img = C.sections.flatMap(s => s.items).find(p => p.n === o.product)?.img, open = adm && o.status === 'pending';
     el.className = 'cm ocard'; el.innerHTML = `
-      <div class="rowb" style="align-items:center"><b>🛒 ออเดอร์ #${o.id}</b>${badge(o.status)}</div>
+      <div class="rowb" style="align-items:center"><b>🛒 ออเดอร์ #${no}</b>${badge(o.status)}</div>
       <div class="ohead">${img ? `<span class="oimg"><img src="${esc(img)}" alt=""></span>` : ''}<div><small class="muted">สินค้า</small><b>${esc(o.product)}</b><small>${esc(o.package_name)}</small></div><b>${baht(o.price)}</b></div>
       <div class="oinfo"><small class="muted">${adm ? 'ข้อมูลจากลูกค้า' : 'ข้อมูลที่คุณกรอก'}</small><span class="sel pre">${esc(o.info)}</span>${o.code ? `<small class="muted">ใช้โค้ด ${esc(o.code)} ลด ${baht(o.discount)}</small>` : ''}</div>
       ${o.admin_note ? `<div class="oinfo"><small class="muted">${adm ? 'ข้อความที่ส่งให้ลูกค้า' : 'ข้อความจากแอดมิน'}</small><span class="sel pre">${esc(o.admin_note)}</span></div>` : ''}
-      ${open ? `<textarea class="onote" rows="3" maxlength="500" placeholder="พิมพ์ข้อมูลส่งมอบ เช่น อีเมล / รหัสผ่าน / PIN / วันหมดอายุ ..." aria-label="ข้อมูลส่งมอบให้ลูกค้า"></textarea>
-        <button class="btn obtn ok" type="button" data-st="done">✅ ยืนยันส่งมอบให้ลูกค้า</button>
+      ${open ? `        <button class="btn obtn ok" type="button" data-st="done">✅ ยืนยันส่งมอบให้ลูกค้า</button>
         <button class="btn obtn wait" type="button" data-st="pending">⏳ รอส่งลูกค้า</button>` : ''}
       ${open || (adm && o.status === 'done') ? `<button class="btn obtn bad" type="button" data-st="refunded">❌ ยกเลิก / คืนเงิน</button>
         <button class="btn obtn off" type="button" data-st="cancelled">🚫 ยกเลิก · ไม่คืนเงิน</button>` : ''}
       <small>${when(o.updated_at || o.created_at)}</small>`;
   }
 }
+// กล่องเลือกไลน์ตอนส่งมอบ: คืนข้อความสำเร็จรูปของไลน์ที่เลือก, '' = ไม่แนบข้อความไลน์, null = ปิดกล่อง (ยังไม่ส่งมอบ)
+const pickLine = () => new Promise(done => {
+  const d = $('#dlgLine'), presets = C.lines.filter(l => l.lname.trim());
+  $('#lineBtns').innerHTML = presets.map((l, i) => `<button class="btn btn-line" type="button" data-i="${i}">💬 ${esc(l.lname)}</button>`).join('')
+    + '<button class="btn btn-ghost" type="button" data-i="-1">ส่งมอบโดยไม่แนบข้อความไลน์</button>';
+  const end = v => { if (d.open) d.close(); done(v); };  // เรียกซ้ำได้: promise รับค่าแรกค่าเดียว
+  $('#lineBtns').onclick = e => { const b = e.target.closest('[data-i]'); if (b) end(presets[+b.dataset.i]?.ltext.trim() || ''); };
+  d.querySelector('.x').onclick = () => end(null);
+  d.addEventListener('close', () => done(null), {once: true});  // กด Esc
+  d.showModal();
+});
 $('#cAdmMsgs').onclick = act(async e => {
   const b = e.target.closest('button[data-st]'); if (!b) return;
-  const card = b.closest('.ocard'), id = +card.dataset.oid, st = b.dataset.st, note = card.querySelector('.onote')?.value.trim() || '';
-  const ask = {refunded: `ยกเลิกออเดอร์ #${id} และคืนเงินเข้ากระเป๋าตังลูกค้า? (ย้อนกลับไม่ได้)`, cancelled: `ยกเลิกออเดอร์ #${id} โดยไม่คืนเงิน? (ย้อนกลับไม่ได้)`,
-    done: note ? '' : `ยืนยันส่งมอบออเดอร์ #${id} โดยไม่ได้พิมพ์ข้อมูลส่งมอบ?`}[st];
+  const card = b.closest('.ocard'), id = +card.dataset.oid, no = card.dataset.no, st = b.dataset.st; let note = '';  // ข้อความถึงลูกค้า: มาจากไลน์ที่เลือกตอนส่งมอบ
+  const ask = {refunded: `ยกเลิกออเดอร์ #${no} และคืนเงินเข้ากระเป๋าตังลูกค้า? (ย้อนกลับไม่ได้)`, cancelled: `ยกเลิกออเดอร์ #${no} โดยไม่คืนเงิน? (ย้อนกลับไม่ได้)`,
+    done: `ยืนยันส่งมอบออเดอร์ #${no} ให้ลูกค้า?`}[st];
   // "รอส่งลูกค้า": ออเดอร์ยังรอดำเนินการ ไม่แจ้งอะไรในแชทของลูกค้า แค่พาไปแท็บ "รอดำเนินการ" ที่รวมห้องที่มีออเดอร์ค้างอยู่
   if (st === 'pending') { chatFilter = 'pending'; await adminChat(); return toast('อยู่ในแท็บ "รอดำเนินการ" แล้ว ลูกค้าไม่ได้รับแจ้ง'); }
-  if (ask && !confirm(ask)) return;
+  if (st === 'done' && C.lines.some(l => l.lname.trim())) {  // มีไลน์ตั้งไว้: ถามว่าจะส่งลูกค้าไปไลน์ไหน แทนคำถามยืนยันธรรมดา
+    const text = await pickLine(); if (text === null) return;
+    note = text.slice(0, 500);
+  } else if (ask && !confirm(ask)) return;
   const r = await sb.rpc('shop_update_order', {p_id: id, p_status: st, p_note: note});
   if (r.error?.message === 'สถานะไม่ถูกต้อง') throw new Error(SETUP('supabase-order-actions.sql'));  // ฟังก์ชันรุ่นเดิมยังไม่รู้จักสถานะนี้
   ok(r); toast('บันทึกแล้ว ลูกค้าเห็นในแชททันที');
@@ -2322,7 +2360,7 @@ function listEd(arr, k) {
     ...arr.map((it, i) => {
       const det = h('details', {open: openSet.has(it)});
       det.ontoggle = () => det.open ? openSet.add(it) : openSet.delete(it);
-      det.append(h('summary', {}, h('span', {textContent: it.n || it.title || it.name || it.label || '(ยังไม่มีชื่อ)'}), h('i', {},
+      det.append(h('summary', {}, h('span', {textContent: it.n || it.title || it.name || it.label || it.lname || '(ยังไม่มีชื่อ)'}), h('i', {},
         btn('↑', () => i && arr.splice(i - 1, 2, arr[i], arr[i - 1]), 'mini', 'เลื่อนขึ้น'),
         btn('↓', () => i < arr.length - 1 && arr.splice(i, 2, arr[i + 1], arr[i]), 'mini', 'เลื่อนลง'),
         btn('ลบ', () => confirm('ลบรายการนี้?') && arr.splice(i, 1)))),
