@@ -520,7 +520,34 @@ footer a:hover{color:var(--sky-t)}
 .cform input{flex:1;min-width:0;background:var(--panel2);border:1px solid var(--line);border-radius:99px;padding:10px 14px;color:var(--text);font:inherit}
 .cform input:focus{outline:none;border-color:var(--sky)}
 .cform .btn{padding:9px 16px}
-.chatadm{display:grid;grid-template-columns:300px 1fr;gap:12px;height:calc(100vh - 200px);min-height:420px}  /* หน้าแชทเต็มหน้า: สูงเท่าจอ */
+/* หน้าแชทหลังร้านแบบ LINE OA: เต็มความกว้างและความสูงจอ 3 ช่อง รายชื่อ | แชท | ข้อมูลลูกค้า */
+.back .wrap:has(#view-chat:not([hidden])){max-width:none;padding:0}
+.chatadm{display:grid;grid-template-columns:320px 1fr 300px;height:calc(100dvh - 66px);min-height:420px;border-top:1px solid var(--line)}
+.chatadm.noinfo{grid-template-columns:320px 1fr}
+.chatadm.noinfo .cinfo{display:none}
+.chatadm .cbox{border-radius:0;border-width:0 1px}
+.csearch{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:99px;padding:9px 14px;color:var(--text);font:inherit;font-size:14px;flex-shrink:0}
+.csearch:focus{outline:none;border-color:var(--sky)}
+.cres-h{font-size:13px;color:var(--muted);padding:8px 2px 0;border-top:1px solid var(--line)}
+.crow mark,.cmr.hit .cm{background:var(--star);color:#4a3200;border-radius:4px}
+.ctags{display:flex;flex-wrap:wrap;gap:6px}
+.crow .ctags{justify-content:flex-start;gap:4px}
+.ctag{display:inline-flex;align-items:center;gap:4px;padding:2px 10px;border-radius:99px;background:color-mix(in srgb,var(--sky) 25%,transparent);color:var(--text);font-size:12px;font-style:normal;border:0}
+button.ctag:hover{background:color-mix(in srgb,var(--down) 30%,transparent)}
+.ctag.add{background:none;border:1px dashed var(--line);color:var(--muted)}
+.ctag.add:hover{border-color:var(--sky);color:var(--text);background:none}
+.cinfo{overflow-y:auto;padding:16px;display:grid;gap:16px;align-content:start;background:var(--bg)}
+.cinfo h4{margin:0 0 6px;font-size:13px;color:var(--muted);font-weight:600}
+.cprof{display:grid;justify-items:center;gap:4px;text-align:center;overflow-wrap:anywhere}
+.cprof .av{width:72px;height:72px;font-size:28px}
+.cstat{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;text-align:center;font-size:12px;color:var(--muted)}
+.cstat span{background:var(--panel2);border-radius:10px;padding:8px 4px;display:grid;gap:2px}
+.cstat b{color:var(--text);font-size:13px}
+.cline{font-size:13px;line-height:1.7;overflow-wrap:anywhere}
+.cinfo input,.cinfo textarea{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px 10px;color:var(--text);font:inherit;font-size:14px;margin-top:6px}
+.cinfo textarea{min-height:140px;resize:vertical}
+.cinfo .btn{width:100%;margin-top:6px}
+@media (max-width:1100px){.chatadm{grid-template-columns:280px 1fr}.cinfo{position:fixed;right:0;top:66px;bottom:0;width:min(320px,92vw);z-index:40;border-left:1px solid var(--line);box-shadow:-10px 0 30px #0006}}
 #view-chat{min-height:0;padding-bottom:0}
 .chatadm>*{min-height:0}
 .cleft{display:flex;flex-direction:column;gap:8px;min-height:0}
@@ -531,7 +558,7 @@ footer a:hover{color:var(--sky-t)}
 .crow.on{border-color:var(--pink);background:var(--panel2)}
 .crow span{display:flex;justify-content:space-between;gap:8px;align-items:center}
 .crow small{color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-@media (max-width:760px){.chatadm{grid-template-columns:1fr;height:auto}.clist{max-height:220px}.chatadm .cbox{height:60vh}}
+@media (max-width:760px){.chatadm,.chatadm.noinfo{grid-template-columns:1fr;height:auto}.cinfo{top:0}.clist{max-height:220px}.chatadm .cbox{height:60vh}}
 @media (max-width:980px){.fab-edit{left:18px}}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 @media (max-width:760px){.grid3{grid-template-columns:1fr}}
@@ -697,9 +724,9 @@ img.ico{display:inline-block;object-fit:contain}
   </section>
 
   <section class="view" id="view-chat" hidden>
-    <div class="h"><h2>💬 แชทลูกค้า</h2></div>
-      <div class="chatadm">
+      <div class="chatadm" id="chatAdm">
         <div class="cleft">
+          <input class="csearch" id="cSearch" type="search" placeholder="🔍 ค้นหาชื่อ แท็ก หรือข้อความในแชท" aria-label="ค้นหาแชท" autocomplete="off">
           <div class="tabs" id="cTabs">
             <button type="button" data-f="all">ทั้งหมด</button>
             <button type="button" data-f="unread">ยังไม่อ่าน</button>
@@ -708,10 +735,11 @@ img.ico{display:inline-block;object-fit:contain}
           <div class="clist" id="cList"></div>
         </div>
         <div class="cbox">
-          <div class="chead" id="cAdmHead">เลือกลูกค้าทางซ้ายเพื่อเปิดแชท</div>
+          <div class="chead"><span id="cAdmHead">เลือกลูกค้าทางซ้ายเพื่อเปิดแชท</span><button class="mini" type="button" id="cInfoBtn" hidden>ℹ️ ข้อมูลลูกค้า</button></div>
           <div class="cmsgs" id="cAdmMsgs"></div>
           <form class="cform" id="cAdmForm" hidden><input name="body" maxlength="2000" placeholder="พิมพ์ข้อความ..." autocomplete="off" required aria-label="ข้อความ"><button class="btn btn-main" type="submit" aria-label="ส่งข้อความ">➤</button></form>
         </div>
+        <aside class="cinfo" id="cInfo" aria-label="ข้อมูลลูกค้า"><p class="muted">เลือกแชทเพื่อดูข้อมูลลูกค้า โน้ต และแท็ก</p></aside>
       </div>
   </section>
 
@@ -2215,7 +2243,7 @@ const chat = {me: {el: '#chatMsgs', mid: null, mine: 'member', last: 0, timer: 0
 const av = (w, cls = '') => `<span class="av ${cls}">${w?.img ? `<img src="${esc(w.img)}" alt="">` : esc(String(w?.name || '?').trim()[0] || '?')}</span>`;
 // ข้อความในแชท: ของระบบ = กล่องกลาง; ของคน = รูป + ชื่อ + ข้อความ (t.who = ชื่อและรูปของฝั่งลูกค้าและฝั่งแอดมินในห้องนี้)
 const msgHtml = (m, t) => m.sender === 'system' ? `<div class="cm sys"${m.order_id ? ` data-oid="${+m.order_id}"` : ''}>${esc(m.body)}<small>${when(m.created_at)}</small></div>`
-  : `<div class="cmr${m.sender === t.mine ? ' me' : ''}">${av(t.who?.[m.sender])}<div><small class="cn">${esc(t.who?.[m.sender]?.name || '')}</small><div class="cm${m.sender === t.mine ? ' me' : ''}">${esc(m.body)}</div><small class="cn">${when(m.created_at)}</small></div></div>`;
+  : `<div class="cmr${m.sender === t.mine ? ' me' : ''}" data-m="${m.id}">${av(t.who?.[m.sender])}<div><small class="cn">${esc(t.who?.[m.sender]?.name || '')}</small><div class="cm${m.sender === t.mine ? ' me' : ''}">${esc(m.body)}</div><small class="cn">${when(m.created_at)}</small></div></div>`;
 // ลูกค้าเห็นฝั่งร้านเป็นชื่อร้านและโลโก้ร้าน (ไม่เปิดเผยบัญชีของแอดมินแต่ละคน); แอดมินเห็นชื่อและรูปของลูกค้า
 const shopWho = () => ({name: 'แอดมิน ' + C.settings.shop, img: C.settings.logo});
 async function chatPull(t, reset) {  // reset = เปิดห้องใหม่: โหลด 200 ข้อความล่าสุด; ไม่ reset = เอาเฉพาะข้อความที่ใหม่กว่าที่มีอยู่
@@ -2330,23 +2358,97 @@ async function adminChat() {
   const rooms = new Map();
   for (const m of r.data) { const x = rooms.get(m.member_id) || rooms.set(m.member_id, {id: m.member_id, name: m.m?.display_name || m.m?.email || 'สมาชิก', img: m.m?.avatar, last: m, unread: 0}).get(m.member_id); if (!m.seen_by_admin) x.unread++; }
   chatRooms = [...rooms.values()];
-  const pend = new Set(((await sb.from('shop_orders').select('member_id').eq('status', 'pending').limit(1000)).data || []).map(o => o.member_id));
-  const show = {all: () => true, unread: x => x.unread > 0, pending: x => pend.has(x.id)};
-  $$('#cTabs button').forEach(b => { const n = chatRooms.filter(show[b.dataset.f]).length; b.classList.toggle('on', b.dataset.f === chatFilter); b.textContent = `${{all: 'ทั้งหมด', unread: 'ยังไม่อ่าน', pending: 'รอดำเนินการ'}[b.dataset.f]}${b.dataset.f !== 'all' && n ? ` (${n})` : ''}`; });
-  $('#cList').innerHTML = chatRooms.filter(show[chatFilter]).map(x => `<button class="crow${x.id === chat.adm.mid ? ' on' : ''}" type="button" data-mid="${esc(x.id)}">
-    <span><span class="chd">${av(x)}<b>${esc(x.name)}</b></span>${x.unread && x.id !== chat.adm.mid ? `<b class="cbadge" style="background:var(--pink);color:#fff">${x.unread}</b>` : `<small>${when(x.last.created_at)}</small>`}</span>
-    <small>${x.last.sender === 'admin' ? 'คุณ: ' : ''}${esc(x.last.body.split('\n')[0])}</small></button>`).join('') || EMPTY;
-  chatBadges().catch(() => {});
+  const [o, mt] = await Promise.all([sb.from('shop_orders').select('member_id').eq('status', 'pending').limit(1000), sb.from('shop_chat_meta').select('member_id, tags, note').limit(1000)]);
+  chatPend = new Set((o.data || []).map(r => r.member_id));
+  metaOk = !mt.error; chatMeta = new Map((mt.data || []).map(r => [r.member_id, r]));  // ยังไม่ได้รัน supabase-chat-notes.sql = ไม่มีโน้ต/แท็ก
+  paintRooms(); chatBadges().catch(() => {});
 }
+// ---- โน้ต แท็ก ค้นหา (ตาราง shop_chat_meta ดู supabase-chat-notes.sql: แอดมินเท่านั้นที่อ่าน/แก้ได้ ลูกค้ามองไม่เห็น) ----
+const NOTES_SQL = SETUP('supabase-chat-notes.sql');
+let chatPend = new Set(), chatMeta = new Map(), metaOk = true, chatQ = '', chatHits = [], chatCur = null, cSearchT = 0;
+const tagsOf = id => chatMeta.get(id)?.tags || [];
+function paintRooms() {
+  const show = {all: () => true, unread: x => x.unread > 0, pending: x => chatPend.has(x.id)}, q = chatQ.toLowerCase();
+  $$('#cTabs button').forEach(b => { const n = chatRooms.filter(show[b.dataset.f]).length; b.classList.toggle('on', b.dataset.f === chatFilter); b.textContent = `${{all: 'ทั้งหมด', unread: 'ยังไม่อ่าน', pending: 'รอดำเนินการ'}[b.dataset.f]}${b.dataset.f !== 'all' && n ? ` (${n})` : ''}`; });
+  // ช่องค้นหา: กรองห้องจากชื่อหรือแท็ก + แสดงข้อความในแชทที่มีคำนี้ (จากฐานข้อมูล) ต่อท้าย
+  const rooms = chatRooms.filter(show[chatFilter]).filter(x => !q || x.name.toLowerCase().includes(q) || tagsOf(x.id).some(t => t.toLowerCase().includes(q)));
+  const hits = chatHits.map(m => {
+    const x = chatRooms.find(r => r.id === m.member_id) || {name: 'สมาชิก'}, i = Math.max(0, m.body.toLowerCase().indexOf(q)), s = Math.max(0, i - 20);
+    return `<button class="crow" type="button" data-mid="${esc(m.member_id)}" data-hit="${m.id}"><span><b>${esc(x.name)}</b><small>${when(m.created_at)}</small></span>
+      <small>${s ? '…' : ''}${esc(m.body.slice(s, i))}<mark>${esc(m.body.slice(i, i + q.length))}</mark>${esc(m.body.slice(i + q.length, i + q.length + 80))}</small></button>`;
+  }).join('');
+  $('#cList').innerHTML = (rooms.map(x => `<button class="crow${x.id === chat.adm.mid ? ' on' : ''}" type="button" data-mid="${esc(x.id)}">
+    <span><span class="chd">${av(x)}<b>${esc(x.name)}</b></span>${x.unread && x.id !== chat.adm.mid ? `<b class="cbadge" style="background:var(--pink);color:#fff">${x.unread}</b>` : `<small>${when(x.last.created_at)}</small>`}</span>
+    <small>${x.last.sender === 'admin' ? 'คุณ: ' : ''}${esc(x.last.body.split('\n')[0])}</small>
+    ${tagsOf(x.id).length ? `<span class="ctags">${tagsOf(x.id).map(t => `<i class="ctag">${esc(t)}</i>`).join('')}</span>` : ''}</button>`).join('')
+    + (q.length >= 2 ? `<div class="cres-h">ข้อความที่พบ${chatHits.length ? ` (${chatHits.length}${chatHits.length === 50 ? '+' : ''})` : ''}</div>${hits || '<p class="muted">ไม่พบข้อความที่มีคำนี้</p>'}` : '')) || EMPTY;
+}
+async function chatSearch(q) {
+  chatQ = q; chatHits = [];
+  if (q.length >= 2) {  // ค้นข้อความของลูกค้าและแอดมินทุกห้อง (ไม่รวมข้อความระบบเรื่องออเดอร์) ล่าสุด 50 ข้อความ
+    const r = await sb.from('shop_messages').select('id, member_id, body, created_at').neq('sender', 'system')
+      .ilike('body', `%${q.replace(/[%_\\]/g, '\\$&')}%`).order('id', {ascending: false}).limit(50);
+    if (q !== chatQ) return;  // พิมพ์ต่อไปแล้วระหว่างรอ
+    chatHits = ok(r);
+  }
+  paintRooms();
+}
+$('#cSearch').oninput = e => { clearTimeout(cSearchT); cSearchT = setTimeout(() => chatSearch(e.target.value.trim()).catch(fail), 300); };
+// ช่องขวา: โปรไฟล์ สรุปการซื้อ ช่องทางติดต่อ แท็ก โน้ต ของลูกค้าห้องที่เปิดอยู่
+async function roomInfo(x) {
+  const [m, o] = await Promise.all([sb.from('shop_members').select('*').eq('id', x.id).maybeSingle(), sb.from('shop_orders').select('price, status').eq('member_id', x.id).limit(1000)]);
+  if (x.id !== chat.adm.mid) return;
+  const os = o.data || [];
+  chatCur = {x, mem: m.data || {}, n: os.length, paid: os.filter(r => r.status === 'done').reduce((s, r) => s + +r.price, 0)};
+  paintInfo();
+}
+function paintInfo() {
+  if (!chatCur) return;
+  const {x, mem, n, paid} = chatCur, meta = chatMeta.get(x.id) || {tags: [], note: ''};
+  const more = [...new Set([...chatMeta.values()].flatMap(v => v.tags))].filter(t => !meta.tags.includes(t)).sort();  // แท็กที่เคยใช้กับลูกค้าคนอื่น กดเพิ่มได้เลย
+  $('#cInfo').innerHTML = `
+    <div class="cprof">${av(x)}<b>${esc(x.name)}</b><small class="muted">${esc(mem.email || '')}</small></div>
+    <div class="cstat"><span>ออเดอร์<b>${n}</b></span><span>ซื้อสำเร็จ<b>${baht(paid)}</b></span><span>เงินคงเหลือ<b>${baht(mem.balance)}</b></span></div>
+    <div class="cline">${mem.phone ? `📞 ${esc(mem.phone)}<br>` : ''}${mem.line_id ? `💬 LINE: ${esc(mem.line_id)}<br>` : ''}<span class="muted">สมัครเมื่อ ${mem.created_at ? when(mem.created_at) : '-'}</span></div>
+    ${metaOk ? `<div><h4>🏷️ แท็ก</h4>
+      <div class="ctags">${meta.tags.map(t => `<button class="ctag" type="button" data-del="${esc(t)}" title="กดเพื่อเอาแท็กนี้ออก">${esc(t)} ✕</button>`).join('') || '<small class="muted">ยังไม่มีแท็ก</small>'}</div>
+      <form id="cTagForm"><input name="t" maxlength="30" placeholder="พิมพ์แท็กใหม่ แล้วกด Enter" autocomplete="off" aria-label="เพิ่มแท็ก"></form>
+      ${more.length ? `<div class="ctags" style="margin-top:8px">${more.map(t => `<button class="ctag add" type="button" data-add="${esc(t)}">+ ${esc(t)}</button>`).join('')}</div>` : ''}</div>
+    <div><h4>📝 โน้ต <small>(ลูกค้าไม่เห็น)</small></h4><textarea id="cNote" maxlength="5000" placeholder="จดข้อมูลลูกค้า เช่น ชอบแพ็กเกจไหน นัดอะไรไว้" aria-label="โน้ต">${esc(meta.note)}</textarea>
+      <button class="btn btn-main" type="button" id="cNoteSave">บันทึกโน้ต</button></div>` : `<p class="muted">${NOTES_SQL}</p>`}`;
+}
+async function saveMeta(patch) {
+  const mid = chat.adm.mid, row = {member_id: mid, tags: tagsOf(mid), note: chatMeta.get(mid)?.note || '', ...patch, updated_at: new Date().toISOString()};
+  need(await sb.from('shop_chat_meta').upsert(row), NOTES_SQL);
+  chatMeta.set(mid, row); paintInfo(); paintRooms();
+}
+$('#cInfo').onclick = act(async e => {
+  const b = e.target.closest('button'); if (!b) return;
+  const tags = tagsOf(chat.adm.mid);
+  if (b.dataset.del != null) await saveMeta({tags: tags.filter(t => t !== b.dataset.del)});
+  else if (b.dataset.add != null) await saveMeta({tags: [...tags, b.dataset.add]});
+  else if (b.id === 'cNoteSave') { await saveMeta({note: $('#cNote').value}); toast('บันทึกโน้ตแล้ว'); }
+});
+$('#cInfo').onsubmit = act(async e => {
+  const t = e.target.elements.t.value.trim(), tags = tagsOf(chat.adm.mid);
+  if (t && !tags.includes(t)) await saveMeta({tags: [...tags, t]}); else e.target.reset();
+});
+$('#cInfoBtn').onclick = () => $('#chatAdm').classList.toggle('noinfo');
+if (innerWidth < 1100) $('#chatAdm').classList.add('noinfo');  // จอแคบ: ช่องข้อมูลลูกค้าเปิดเมื่อกดปุ่ม
 $('#cList').onclick = act(async e => {
   const b = e.target.closest('[data-mid]'); if (!b) return;
-  const x = chatRooms.find(r => r.id === b.dataset.mid);
-  chat.adm.mid = x.id; $('#cAdmHead').innerHTML = `<span class="chd">${av(x)}<span>กำลังสนทนากับ <b>${esc(x.name)}</b></span></span>`;
+  const x = chatRooms.find(r => r.id === b.dataset.mid) || {id: b.dataset.mid, name: 'สมาชิก'};
+  chat.adm.mid = x.id; chatCur = null; $('#cInfoBtn').hidden = false; roomInfo(x).catch(fail); $('#cAdmHead').innerHTML = `<span class="chd">${av(x)}<span>กำลังสนทนากับ <b>${esc(x.name)}</b></span></span>`;
   chat.adm.who = {member: x, admin: {name: me?.display_name || 'แอดมิน', img: me?.avatar || C.settings.logo}}; $('#cAdmForm').hidden = false;
   $$('#cList .crow').forEach(r => r.classList.toggle('on', r === b));
-  await chatPull(chat.adm, true); chatWatch(chat.adm, true); await adminChat();
+  await chatPull(chat.adm, true); chatWatch(chat.adm, true);
+  const hit = b.dataset.hit && $(`#cAdmMsgs [data-m="${b.dataset.hit}"]`);  // มาจากผลค้นหา: เลื่อนไปที่ข้อความนั้นแล้วไฮไลต์
+  // ponytail: เปิดห้องโหลด 200 ข้อความล่าสุด ข้อความที่เก่ากว่านั้นกระโดดไปไม่ได้ ถ้าต้องใช้บ่อยค่อยโหลดย้อนหลังถึงข้อความนั้น
+  if (hit) { hit.scrollIntoView({block: 'center'}); hit.classList.add('hit'); setTimeout(() => hit.classList.remove('hit'), 3000); }
+  else if (b.dataset.hit) toast('ข้อความนี้เก่ากว่า 200 ข้อความล่าสุดของห้อง เลื่อนขึ้นไปดูไม่ได้');
+  await adminChat();
 });
-$('#cTabs').onclick = act(async e => { const f = e.target.closest('button')?.dataset.f; if (f) { chatFilter = f; await adminChat(); } });
+$('#cTabs').onclick = e => { const f = e.target.closest('button')?.dataset.f; if (f) { chatFilter = f; paintRooms(); } };
 $('#cAdmForm').onsubmit = act(async e => { await chatSend(chat.adm, e.target); await adminChat(); });
 
 async function showTab(t) {
