@@ -483,8 +483,29 @@ footer a:hover{color:var(--sky-t)}
 .chead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line);background:var(--panel2);font-size:14px}
 .cmsgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px}
 .cmsgs:empty::before{content:'ยังไม่มีข้อความ';color:var(--muted);text-align:center;margin-top:30px}
+.av{width:32px;height:32px;border-radius:50%;overflow:hidden;flex-shrink:0;display:inline-grid;place-items:center;background:var(--skygrad);color:#fff;font-weight:700;font-size:14px;vertical-align:middle;text-shadow:none}
+.av img{width:100%;height:100%;object-fit:cover}
+.av.big{width:84px;height:84px;font-size:30px}
+.umenu summary .av{width:24px;height:24px;margin-right:4px}
+.chd{display:flex;align-items:center;gap:8px;min-width:0}
+.cmr{display:flex;gap:8px;align-items:flex-end;max-width:88%;align-self:flex-start}
+.cmr.me{align-self:flex-end;flex-direction:row-reverse}
+.cmr>div{display:grid;justify-items:start;min-width:0}
+.cmr.me>div{justify-items:end}
+.cmr .cm{max-width:100%}
+.cn{font-size:12px;color:var(--muted);margin:0 4px 2px}
 .cm{max-width:82%;align-self:flex-start;background:var(--panel2);border-radius:14px 14px 14px 4px;padding:8px 12px;white-space:pre-line;overflow-wrap:anywhere;font-size:15px}
 .cm.me{align-self:flex-end;background:var(--pinkgrad);color:#fff;border-radius:14px 14px 4px 14px}
+/* การ์ดจัดการออเดอร์ในแชทแอดมิน */
+.cm.ocard{align-self:center;width:min(440px,100%);max-width:100%;display:grid;gap:8px;white-space:normal;background:var(--panel);border:1px solid color-mix(in srgb,var(--star) 55%,var(--line));border-radius:14px;padding:12px}
+.ocard .ohead .oimg{width:52px;height:52px;border-radius:12px}
+.ocard .ohead small{display:block;font-size:12px;opacity:1}
+.ocard .oinfo{display:grid;gap:2px;background:var(--panel2);border-radius:10px;padding:8px 10px;font-size:14px}
+.ocard .oinfo small{font-size:12px;opacity:1;margin:0}
+.ocard .onote{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:9px 10px;color:var(--text);font:inherit;font-size:14px;resize:vertical}
+.obtn{width:100%;border-radius:10px;padding:9px}
+.obtn.ok{background:#12b76a;color:#fff}.obtn.wait{background:var(--star);color:#4a3200}
+.obtn.bad{border:1px solid var(--down);color:var(--down)}.obtn.off{border:1px solid var(--line);color:var(--muted)}
 .cm.sys{align-self:center;max-width:94%;text-align:center;background:none;border:1px dashed var(--line);border-radius:12px;font-size:13px;color:var(--muted)}
 .cm small{display:block;font-size:11px;opacity:.7;margin-top:2px}
 .cform{display:flex;gap:8px;padding:10px;border-top:1px solid var(--line)}
@@ -602,6 +623,7 @@ img.ico{display:inline-block;object-fit:contain}
     <div class="grid2">
       <form class="panel" id="fAcct">
         <p class="muted" id="acctRole"></p>
+        <div class="pimg"><span class="av big" id="acctAv"></span><label class="f">รูปโปรไฟล์ (ไฟล์รูป ไม่เกิน 2 MB)<input name="avatar" type="file" accept="image/png,image/jpeg,image/webp,image/gif"></label></div>
         <label class="f">อีเมล<input name="email" disabled></label>
         <label class="f">ชื่อที่แสดง<input name="display_name" maxlength="60" required></label>
         <label class="f">เบอร์โทร<input name="phone" maxlength="30" autocomplete="tel"></label>
@@ -683,7 +705,7 @@ img.ico{display:inline-block;object-fit:contain}
     <div class="apane list" id="a-topups"></div>
     <div class="apane" id="a-orders">
       <label class="f" style="max-width:220px;margin-bottom:12px">สถานะ
-        <select id="aStatus"><option value="pending">รอดำเนินการ</option><option value="done">สำเร็จ</option><option value="refunded">คืนเงินแล้ว</option></select>
+        <select id="aStatus"><option value="pending">รอดำเนินการ</option><option value="done">สำเร็จ</option><option value="refunded">คืนเงินแล้ว</option><option value="cancelled">ยกเลิก ไม่คืนเงิน</option></select>
       </label>
       <div class="list" id="aOrders"></div>
     </div>
@@ -794,7 +816,7 @@ img.ico{display:inline-block;object-fit:contain}
 
 <button class="btn btn-main fab fab-chat" id="fabChat" type="button">💬 แชทกับแอดมิน <b class="cbadge" id="chatBadge" hidden></b></button>
 <section class="cbox chatbox" id="chatBox" aria-label="แชทกับแอดมิน" hidden>
-  <div class="chead"><b>💬 แชทกับแอดมิน</b><button class="mini" type="button" id="chatClose" aria-label="ปิดแชท">✕</button></div>
+  <div class="chead"><span class="chd" id="chatHead"></span><button class="mini" type="button" id="chatClose" aria-label="ปิดแชท">✕</button></div>
   <div class="cmsgs" id="chatMsgs"></div>
   <form class="cform" id="chatForm"><input name="body" maxlength="2000" placeholder="พิมพ์ข้อความ..." autocomplete="off" required aria-label="ข้อความ"><button class="btn btn-main" type="submit" aria-label="ส่งข้อความ">➤</button></form>
 </section>
@@ -1022,7 +1044,7 @@ document.addEventListener('click', e => { const b = e.target.closest('[data-copy
 const h = (tag, props = {}, ...kids) => { const e = Object.assign(document.createElement(tag), props); e.append(...kids); return e; };
 const here = location.origin + location.pathname;
 const EMPTY = '<p class="muted" style="padding:16px 0">ยังไม่มีรายการ</p>';
-const ST = {pending: ['รอดำเนินการ', 'y'], approved: ['อนุมัติแล้ว', 'g'], done: ['สำเร็จ', 'g'], rejected: ['ปฏิเสธ', 'r'], refunded: ['คืนเงินแล้ว', 'r']};
+const ST = {pending: ['รอดำเนินการ', 'y'], approved: ['อนุมัติแล้ว', 'g'], done: ['สำเร็จ', 'g'], rejected: ['ปฏิเสธ', 'r'], refunded: ['คืนเงินแล้ว', 'r'], cancelled: ['ยกเลิก ไม่คืนเงิน', 'r']};
 const badge = s => `<span class="badge ${ST[s]?.[1] || ''}">${ST[s]?.[0] || esc(s)}</span>`;
 const item = (title, sub, right = '') => `<div class="item"><div><b>${title}</b><small>${sub}</small></div><div class="r">${right}</div></div>`;  // ผู้เรียกต้อง esc เอง
 
@@ -1259,7 +1281,7 @@ paintTheme();
 function paintAuth() {
   $('#authBox').innerHTML = user
     ? `<a class="btn btn-ghost" href="#wallet">💰 ${baht(me?.balance)}</a>
-       <details class="umenu"><summary class="btn btn-main" aria-label="เมนูผู้ใช้">${me?.is_admin ? '<b class="adm">ADMIN</b>' : '👤'} ${esc(me?.display_name || 'บัญชี')} ▾</summary>
+       <details class="umenu"><summary class="btn btn-main" aria-label="เมนูผู้ใช้">${me?.avatar ? av({img: me.avatar}) : me?.is_admin ? '' : '👤'}${me?.is_admin ? '<b class="adm">ADMIN</b>' : ''} ${esc(me?.display_name || 'บัญชี')} ▾</summary>
          <div class="umenu-list">
            <a class="bal" href="#wallet">💰 ${baht(me?.balance)}</a>
            <a href="#account">👤 <span data-nav="account">${esc(view().nav.account)}</span></a>
@@ -1550,11 +1572,23 @@ async function loadAccount() {
   f.email.value = user.email; f.display_name.value = me?.display_name || ''; f.phone.value = me?.phone || ''; f.line_id.value = me?.line_id || '';
   $('#acctRole').innerHTML = me?.is_admin ? 'สถานะ: <b class="adm">ADMIN</b> ผู้ดูแลร้าน' : 'สถานะ: สมาชิก';
   $('#acctAdmin').hidden = !me?.is_admin;
+  $('#acctAv').outerHTML = av({name: me?.display_name || user.email, img: me?.avatar}, 'big').replace('<span', '<span id="acctAv"');
 }
 $('#fAcct').onsubmit = act(async e => {
   const d = Object.fromEntries(new FormData(e.target));
   ok(await sb.from('shop_members').update({display_name: d.display_name, phone: d.phone, line_id: d.line_id}).eq('id', user.id));
   await loadMe(); paintAuth(); toast('บันทึกแล้ว');
+});
+// รูปโปรไฟล์: อัปโหลดเข้าโฟลเดอร์ของตัวเองใน Storage แล้วเก็บลิงก์ไว้ที่ shop_members.avatar (ต้องรัน supabase-avatar.sql ก่อน)
+$('#fAcct').elements.avatar.onchange = act(async e => {
+  const f = e.target.files[0], NEED = SETUP('supabase-avatar.sql'); if (!f) return;
+  if (f.size > 2097152) throw new Error('รูปใหญ่เกิน 2 MB เลือกรูปที่เล็กกว่านี้');
+  const path = `avatars/${user.id}/${Date.now()}.${(f.name.split('.').pop() || 'png').toLowerCase().replace(/[^a-z0-9]/g, '')}`;
+  const up = await sb.storage.from('site').upload(path, f); e.target.value = '';
+  if (up.error) throw new Error(/security|policy|unauthorized/i.test(up.error.message) ? NEED : up.error.message);
+  const r = await sb.from('shop_members').update({avatar: sb.storage.from('site').getPublicUrl(path).data.publicUrl}).eq('id', user.id);
+  if (r.error) throw new Error(NEED);
+  await loadAccount(); toast('เปลี่ยนรูปโปรไฟล์แล้ว');
 });
 $('#fPass').onsubmit = act(async e => {
   ok(await sb.auth.updateUser({password: e.target.elements.password.value}));
@@ -1583,7 +1617,7 @@ async function adminOrders() {
   const rows = ok(await sb.from('shop_orders').select('*, m:shop_members(display_name, email, phone, line_id)').eq('status', st).order('created_at', {ascending: st === 'pending'}).limit(100));
   $('#aOrders').innerHTML = rows.map(r => item(`#${r.id} ${esc(r.product)} — ${esc(r.package_name)} (${baht(r.price)})`,
     `${when(r.created_at)} · ${who(r.m)}<br>ข้อมูลเติม: <span class="sel pre">${esc(r.info)}</span>${r.code ? `<br>ใช้โค้ด ${esc(r.code)} ลด ${baht(r.discount)}` : ''}${r.admin_note ? '<br>โน้ต: ' + esc(r.admin_note) : ''}`,
-    st === 'refunded' ? badge(st) : `<input class="note" placeholder="โน้ตถึงลูกค้า" maxlength="500" aria-label="โน้ตถึงลูกค้า">${st === 'pending' ? `<button class="btn btn-main" type="button" data-id="${r.id}" data-st="done">เสร็จแล้ว</button>` : ''}<button class="btn btn-ghost" type="button" data-id="${r.id}" data-st="refunded">คืนเงิน</button>`)).join('') || EMPTY;
+    st === 'refunded' || st === 'cancelled' ? badge(st) : `<input class="note" placeholder="โน้ตถึงลูกค้า" maxlength="500" aria-label="โน้ตถึงลูกค้า">${st === 'pending' ? `<button class="btn btn-main" type="button" data-id="${r.id}" data-st="done">เสร็จแล้ว</button>` : ''}<button class="btn btn-ghost" type="button" data-id="${r.id}" data-st="refunded">คืนเงิน</button>`)).join('') || EMPTY;
 }
 $('#aStatus').onchange = act(adminOrders);
 $('#aOrders').onclick = act(async e => {
@@ -2094,7 +2128,13 @@ $('#fProduct').onsubmit = act(async e => {
 // ponytail: ดึงข้อความใหม่ด้วยการถามซ้ำทุก 5 วินาทีตอนเปิดแชทอยู่ ถ้าคนใช้เยอะจนเปลือง ค่อยเปลี่ยนเป็น Supabase Realtime
 const CHAT_SQL = SETUP('supabase-chat.sql');
 const chat = {me: {el: '#chatMsgs', mid: null, mine: 'member', last: 0, timer: 0}, adm: {el: '#cAdmMsgs', mid: null, mine: 'admin', last: 0, timer: 0}};
-const msgHtml = (m, mine) => `<div class="cm ${m.sender === 'system' ? 'sys' : m.sender === mine ? 'me' : ''}">${esc(m.body)}<small>${when(m.created_at)}</small></div>`;
+// รูปโปรไฟล์วงกลม: มีรูป = รูป, ไม่มี = ตัวอักษรแรกของชื่อ
+const av = (w, cls = '') => `<span class="av ${cls}">${w?.img ? `<img src="${esc(w.img)}" alt="">` : esc(String(w?.name || '?').trim()[0] || '?')}</span>`;
+// ข้อความในแชท: ของระบบ = กล่องกลาง; ของคน = รูป + ชื่อ + ข้อความ (t.who = ชื่อและรูปของฝั่งลูกค้าและฝั่งแอดมินในห้องนี้)
+const msgHtml = (m, t) => m.sender === 'system' ? `<div class="cm sys"${m.order_id ? ` data-oid="${+m.order_id}"` : ''}>${esc(m.body)}<small>${when(m.created_at)}</small></div>`
+  : `<div class="cmr${m.sender === t.mine ? ' me' : ''}">${av(t.who?.[m.sender])}<div><small class="cn">${esc(t.who?.[m.sender]?.name || '')}</small><div class="cm${m.sender === t.mine ? ' me' : ''}">${esc(m.body)}<small>${when(m.created_at)}</small></div></div></div>`;
+// ลูกค้าเห็นฝั่งร้านเป็นชื่อร้านและโลโก้ร้าน (ไม่เปิดเผยบัญชีของแอดมินแต่ละคน); แอดมินเห็นชื่อและรูปของลูกค้า
+const shopWho = () => ({name: 'แอดมิน ' + C.settings.shop, img: C.settings.logo});
 async function chatPull(t, reset) {  // reset = เปิดห้องใหม่: โหลด 200 ข้อความล่าสุด; ไม่ reset = เอาเฉพาะข้อความที่ใหม่กว่าที่มีอยู่
   const box = $(t.el), mid = t.mid;
   if (reset) { t.last = 0; box.innerHTML = ''; }
@@ -2105,10 +2145,47 @@ async function chatPull(t, reset) {  // reset = เปิดห้องให�
   if (!t.last) rows.reverse();
   const stick = reset || box.scrollHeight - box.scrollTop - box.clientHeight < 80;
   t.last = rows.at(-1).id;
-  box.insertAdjacentHTML('beforeend', rows.map(m => msgHtml(m, t.mine)).join(''));
+  box.insertAdjacentHTML('beforeend', rows.map(m => msgHtml(m, t)).join(''));
   if (stick) box.scrollTop = box.scrollHeight;
   if (rows.some(m => m.sender !== t.mine)) await sb.rpc('shop_mark_read', {p_member: t.mine === 'admin' ? mid : null});
+  if (rows.some(m => m.order_id)) await orderCards(t);
 }
+// แชทแอดมิน: ข้อความของระบบ "ล่าสุด" ของแต่ละออเดอร์กลายเป็นการ์ดจัดการออเดอร์ (ข้อความก่อนหน้าของออเดอร์เดียวกันยังเป็นบันทึกธรรมดา)
+// ปุ่มในการ์ดเรียก shop_update_order: ส่งมอบ / คืนเงิน ใช้ได้เลย; "รอส่งลูกค้า" และ "ยกเลิก ไม่คืนเงิน" ต้องรัน supabase-order-actions.sql ก่อน
+async function orderCards(t = chat.adm) {  // ฝั่งลูกค้าเห็นการ์ดเดียวกันพร้อมสถานะล่าสุด แต่ไม่มีช่องกรอกและปุ่มจัดการ
+  const mid = t.mid, adm = t === chat.adm, els = $$(t.el + ' .cm[data-oid]'); if (!els.length) return;
+  const orders = ok(await sb.from('shop_orders').select('*').eq('member_id', mid).order('id', {ascending: false}).limit(200));
+  if (mid !== t.mid) return;
+  const lastOf = new Map(els.map(e => [e.dataset.oid, e]));  // ตัวท้ายสุดของแต่ละออเดอร์ชนะ
+  els.forEach(e => { if (lastOf.get(e.dataset.oid) !== e && e.classList.contains('ocard')) e.remove(); });  // การ์ดเก่าของออเดอร์เดียวกัน: เหลือใบล่าสุดใบเดียว
+  for (const [oid, el] of lastOf) {
+    const o = orders.find(x => x.id === +oid); if (!o) continue;
+    const img = C.sections.flatMap(s => s.items).find(p => p.n === o.product)?.img, open = adm && o.status === 'pending';
+    el.className = 'cm ocard'; el.innerHTML = `
+      <div class="rowb" style="align-items:center"><b>🛒 ออเดอร์ #${o.id}</b>${badge(o.status)}</div>
+      <div class="ohead">${img ? `<span class="oimg"><img src="${esc(img)}" alt=""></span>` : ''}<div><small class="muted">สินค้า</small><b>${esc(o.product)}</b><small>${esc(o.package_name)}</small></div><b>${baht(o.price)}</b></div>
+      <div class="oinfo"><small class="muted">${adm ? 'ข้อมูลจากลูกค้า' : 'ข้อมูลที่คุณกรอก'}</small><span class="sel pre">${esc(o.info)}</span>${o.code ? `<small class="muted">ใช้โค้ด ${esc(o.code)} ลด ${baht(o.discount)}</small>` : ''}</div>
+      ${o.admin_note ? `<div class="oinfo"><small class="muted">${adm ? 'ข้อความที่ส่งให้ลูกค้า' : 'ข้อความจากแอดมิน'}</small><span class="sel pre">${esc(o.admin_note)}</span></div>` : ''}
+      ${open ? `<textarea class="onote" rows="3" maxlength="500" placeholder="พิมพ์ข้อมูลส่งมอบ เช่น อีเมล / รหัสผ่าน / PIN / วันหมดอายุ ..." aria-label="ข้อมูลส่งมอบให้ลูกค้า"></textarea>
+        <button class="btn obtn ok" type="button" data-st="done">✅ ยืนยันส่งมอบให้ลูกค้า</button>
+        <button class="btn obtn wait" type="button" data-st="pending">⏳ รอส่งลูกค้า</button>` : ''}
+      ${open || (adm && o.status === 'done') ? `<button class="btn obtn bad" type="button" data-st="refunded">❌ ยกเลิก / คืนเงิน</button>
+        <button class="btn obtn off" type="button" data-st="cancelled">🚫 ยกเลิก · ไม่คืนเงิน</button>` : ''}
+      <small>${when(o.updated_at || o.created_at)}</small>`;
+  }
+}
+$('#cAdmMsgs').onclick = act(async e => {
+  const b = e.target.closest('button[data-st]'); if (!b) return;
+  const card = b.closest('.ocard'), id = +card.dataset.oid, st = b.dataset.st, note = card.querySelector('.onote')?.value.trim() || '';
+  const ask = {refunded: `ยกเลิกออเดอร์ #${id} และคืนเงินเข้ากระเป๋าตังลูกค้า? (ย้อนกลับไม่ได้)`, cancelled: `ยกเลิกออเดอร์ #${id} โดยไม่คืนเงิน? (ย้อนกลับไม่ได้)`,
+    done: note ? '' : `ยืนยันส่งมอบออเดอร์ #${id} โดยไม่ได้พิมพ์ข้อมูลส่งมอบ?`}[st];
+  if (st === 'pending' && !note) throw new Error('พิมพ์ข้อความถึงลูกค้าในช่องด้านบนก่อน');
+  if (ask && !confirm(ask)) return;
+  const r = await sb.rpc('shop_update_order', {p_id: id, p_status: st, p_note: note});
+  if (r.error?.message === 'สถานะไม่ถูกต้อง') throw new Error(SETUP('supabase-order-actions.sql'));  // ฟังก์ชันรุ่นเดิมยังไม่รู้จักสถานะนี้
+  ok(r); toast('บันทึกแล้ว ลูกค้าเห็นในแชททันที');
+  await chatPull(chat.adm); await orderCards(); await adminChat();
+});
 const chatWatch = (t, on) => { clearInterval(t.timer); if (on) t.timer = setInterval(() => chatPull(t).catch(() => {}), 5000); };
 async function chatSend(t, form) {
   const body = form.elements.body.value.trim(); if (!body || !t.mid) return;
@@ -2120,6 +2197,8 @@ async function chatOpen(on) {
   if (on && !user) return openAuth('login');
   $('#chatBox').hidden = !on; $('#fabChat').hidden = on;
   chat.me.mid = on ? user.id : null; chatWatch(chat.me, on);
+  chat.me.who = {member: {name: me?.display_name || 'คุณ', img: me?.avatar}, admin: shopWho()};
+  $('#chatHead').innerHTML = av(shopWho()) + `<b>${esc(shopWho().name)}</b>`;
   if (on) { $('#chatBadge').hidden = true; await chatPull(chat.me, true); $('#chatForm').elements.body.focus(); }
 }
 $('#fabChat').onclick = act(() => chatOpen(true));
@@ -2139,20 +2218,23 @@ setInterval(() => chatBadges().catch(() => {}), 30000);
 let chatRooms = [], chatListT = 0;
 async function adminChat() {
   // ponytail: สร้างรายชื่อห้องจาก 1,000 ข้อความล่าสุด ลูกค้าที่เงียบไปนานจะหลุดจากรายชื่อ ถ้าต้องการครบค่อยทำ view สรุปต่อห้องใน SQL
-  const r = await sb.from('shop_messages').select('*, m:shop_members(display_name, email)').order('id', {ascending: false}).limit(1000);
+  const rooms_q = cols => sb.from('shop_messages').select(`*, m:shop_members(${cols})`).order('id', {ascending: false}).limit(1000);
+  let r = await rooms_q('display_name, email, avatar');
+  if (r.error) r = await rooms_q('display_name, email');  // ยังไม่ได้รัน supabase-avatar.sql: ไม่มีคอลัมน์รูป
   if (r.error) return void ($('#cList').innerHTML = `<p class="muted">${CHAT_SQL}</p>`);
   const rooms = new Map();
-  for (const m of r.data) { const x = rooms.get(m.member_id) || rooms.set(m.member_id, {id: m.member_id, name: m.m?.display_name || m.m?.email || 'สมาชิก', last: m, unread: 0}).get(m.member_id); if (!m.seen_by_admin) x.unread++; }
+  for (const m of r.data) { const x = rooms.get(m.member_id) || rooms.set(m.member_id, {id: m.member_id, name: m.m?.display_name || m.m?.email || 'สมาชิก', img: m.m?.avatar, last: m, unread: 0}).get(m.member_id); if (!m.seen_by_admin) x.unread++; }
   chatRooms = [...rooms.values()];
   $('#cList').innerHTML = chatRooms.map(x => `<button class="crow${x.id === chat.adm.mid ? ' on' : ''}" type="button" data-mid="${esc(x.id)}">
-    <span><b>${esc(x.name)}</b>${x.unread && x.id !== chat.adm.mid ? `<b class="cbadge" style="background:var(--pink);color:#fff">${x.unread}</b>` : `<small>${when(x.last.created_at)}</small>`}</span>
+    <span><span class="chd">${av(x)}<b>${esc(x.name)}</b></span>${x.unread && x.id !== chat.adm.mid ? `<b class="cbadge" style="background:var(--pink);color:#fff">${x.unread}</b>` : `<small>${when(x.last.created_at)}</small>`}</span>
     <small>${x.last.sender === 'admin' ? 'คุณ: ' : ''}${esc(x.last.body.split('\n')[0])}</small></button>`).join('') || EMPTY;
   chatBadges().catch(() => {});
 }
 $('#cList').onclick = act(async e => {
   const b = e.target.closest('[data-mid]'); if (!b) return;
   const x = chatRooms.find(r => r.id === b.dataset.mid);
-  chat.adm.mid = x.id; $('#cAdmHead').innerHTML = `<span>กำลังสนทนากับ <b>${esc(x.name)}</b></span>`; $('#cAdmForm').hidden = false;
+  chat.adm.mid = x.id; $('#cAdmHead').innerHTML = `<span class="chd">${av(x)}<span>กำลังสนทนากับ <b>${esc(x.name)}</b></span></span>`;
+  chat.adm.who = {member: x, admin: {name: me?.display_name || 'แอดมิน', img: me?.avatar || C.settings.logo}}; $('#cAdmForm').hidden = false;
   $$('#cList .crow').forEach(r => r.classList.toggle('on', r === b));
   await chatPull(chat.adm, true); chatWatch(chat.adm, true); await adminChat();
 });
