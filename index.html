@@ -82,7 +82,6 @@ button:disabled{opacity:.5;cursor:wait}
   border:1px solid color-mix(in srgb,var(--pink) 45%,var(--line));background:linear-gradient(180deg,color-mix(in srgb,var(--pink) 16%,var(--panel)),var(--panel))}
 .promo i{font-style:normal;font-size:26px;line-height:1}
 .promo p{font-size:13px;color:var(--muted)}
-.promo .big{font-size:22px}
 .promo .btn{padding:8px 18px;font-size:14px;margin-top:4px}
 
 .topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:12px;height:66px;padding:0 24px;background:color-mix(in srgb,var(--bg) 74%,transparent);backdrop-filter:blur(14px)}
@@ -125,7 +124,9 @@ button:disabled{opacity:.5;cursor:wait}
   .tb-search{order:9;flex-basis:100%}
   .auth .btn{max-width:118px;padding:8px 10px}
 }
-@media (max-width:440px){.auth>a.btn-ghost{display:none}}  /* จอแคบ: ยอดเงินดูได้ในแถบซ้ายแทน */
+/* จอแคบ: ปุ่มยอดเงินบนแถบบนไม่พอที่ ย้ายไปอยู่ในเมนูผู้ใช้แทน */
+@media (max-width:440px){.auth>a.btn-ghost{display:none}}
+@media (min-width:441px){.umenu-list .bal{display:none}}
 
 /* ===== แบนเนอร์ใหญ่ ===== */
 .hero{position:relative;margin-top:8px}
@@ -267,10 +268,12 @@ button:disabled{opacity:.5;cursor:wait}
 .stat b{font-size:26px;font-weight:700;line-height:1.25;overflow-wrap:anywhere}
 .stat small{font-size:13px;color:var(--muted)}
 .stat small.up{color:var(--up)}.stat small.down{color:var(--down)}
-a.stat:hover,.stat.warn{border-color:var(--pink)}
 .key{width:10px;height:10px;border-radius:3px;flex-shrink:0}
-.st-now{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-@media (max-width:760px){.st-now{grid-template-columns:1fr 1fr}}
+/* ข้อมูลของเว็บ: ตัวเลขเรียงในกล่องเดียว กดแล้วไปแท็บที่เกี่ยวข้อง; มีรายการรอจัดการ = ตัวเลขสีชมพู */
+.st-now{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px}
+.st-now .stat{background:none;border:0;border-radius:0;padding:0}
+.st-now .stat b small{font-weight:400}
+.st-now a.stat:hover b,.st-now .stat.warn b{color:var(--pink-t)}
 .st-nav{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .st-nav b{min-width:150px;text-align:center}
 .st-nav input{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:8px 12px;color:var(--text);font:inherit}
@@ -294,9 +297,31 @@ a.stat:hover,.stat.warn{border-color:var(--pink)}
 #stTip div{display:flex;align-items:center;gap:6px;color:var(--muted)}
 #stTip div b{color:var(--text)}
 #stTip i{width:12px;height:2px;border-radius:2px}
-.st-table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums;margin-top:8px}
-.st-table th,.st-table td{padding:5px 8px;text-align:right;border-bottom:1px solid var(--line)}
-.st-table th:first-child,.st-table td:first-child{text-align:left}
+/* ตารางในหน้าแอดมิน: ตัวเลขชิดขวา, คอลัมน์แรกและ .l ชิดซ้าย; จอแคบเลื่อนซ้ายขวาได้ใน .tblwrap */
+.tbl{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums;margin-top:8px}
+.tbl th,.tbl td{padding:5px 8px;text-align:right;border-bottom:1px solid var(--line)}
+.tbl th:first-child,.tbl td:first-child,.tbl .l{text-align:left}
+.tblwrap{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:4px 12px 10px}
+.tblwrap .tbl{font-size:14px;margin:0;white-space:nowrap}
+.tblwrap .tbl th{color:var(--muted);font-weight:600}
+.tblwrap .tbl td{padding:9px 8px}
+.tblwrap tr:last-child td{border-bottom:0}
+.tbl small{display:block;color:var(--muted)}
+.tbl img{width:40px;height:40px;border-radius:10px;object-fit:cover;vertical-align:middle;margin-right:6px}
+.tbl div.r{display:flex;gap:6px;justify-content:flex-end}
+.tbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.tbar .search{flex:1;min-width:220px;margin:0}
+.tbar select{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 10px;color:var(--text);font:inherit}
+.pager{display:flex;gap:10px;align-items:center;justify-content:flex-end;flex-wrap:wrap;margin-top:10px;font-size:14px;color:var(--muted)}
+.mini:disabled{opacity:.4;cursor:default}
+#dlgMember{width:min(480px,92vw)}
+#dlgMember hr{border:0;border-top:1px solid var(--line)}
+#payFields{display:grid;gap:10px}
+/* ข้อมูลบัญชีรับโอนในหน้ากระเป๋าตัง */
+.payrows{display:grid;gap:6px}
+.payrows div{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.payrows span{min-width:76px}
+.payrows img{width:min(220px,100%);border-radius:12px;border:1px solid var(--line);background:#fff}
 
 /* page editor */
 .ed-h{font-weight:600;color:var(--sky-t);margin:18px 0 6px}
@@ -460,6 +485,7 @@ img.ico{display:inline-block;object-fit:contain}
       <div class="panel"><span class="muted">ยอดเงินคงเหลือ</span><div class="big" id="wBal">฿0.00</div><p class="muted">ใช้ซื้อสินค้าในเว็บนี้เท่านั้น</p></div>
       <form class="panel" id="fTopup">
         <b>แจ้งเติมเงิน</b>
+        <div class="payrows" id="payRows"></div>
         <p class="muted pre" id="payInfo"></p>
         <label class="f">จำนวนเงินที่โอน (บาท)<input name="amount" type="number" min="1" max="100000" step="0.01" required></label>
         <label class="f">หมายเหตุ เช่น เวลาที่โอน หรือชื่อบัญชีผู้โอน<input name="note" maxlength="300"></label>
@@ -526,12 +552,15 @@ img.ico{display:inline-block;object-fit:contain}
       <button type="button" data-tab="stats">ภาพรวม</button>
       <button type="button" data-tab="topups">คำขอเติมเงิน</button>
       <button type="button" data-tab="orders">ออเดอร์</button>
-      <button type="button" data-tab="members">สมาชิก / ยอดเงิน</button>
+      <button type="button" data-tab="members">จัดการสมาชิก</button>
       <button type="button" data-tab="subs">ลูกค้าแอป</button>
+      <button type="button" data-tab="products">สินค้า / แพ็กเกจ</button>
+      <button type="button" data-tab="codes">โค้ดส่วนลด</button>
+      <button type="button" data-tab="pay">ช่องทางชำระเงิน</button>
       <button type="button" data-start-edit>✏️ แก้ไขหน้าเว็บ</button>
     </div>
     <div class="apane" id="a-stats">
-      <div class="st-now" id="stNow"></div>
+      <div class="panel"><b>📊 ข้อมูลของเว็บ</b><div class="st-now" id="stNow"></div></div>
       <div class="tabs" id="stMode">
         <button type="button" data-m="hour">รายชั่วโมง</button>
         <button type="button" data-m="day">รายวัน</button>
@@ -563,11 +592,53 @@ img.ico{display:inline-block;object-fit:contain}
       <div class="list" id="aOrders"></div>
     </div>
     <div class="apane" id="a-members">
-      <p class="muted">เพิ่มหรือหักยอดเงินในกระเป๋าตังของสมาชิกได้โดยตรง ทุกครั้งถูกบันทึกในประวัติ และสมาชิกเห็นรายการนั้นในหน้ากระเป๋าตังของตัวเอง</p>
-      <label class="search"><span aria-hidden="true">🔍</span><input id="memQ" type="search" placeholder="ค้นหาชื่อ อีเมล เบอร์โทร หรือ LINE ของสมาชิก" aria-label="ค้นหาสมาชิก"></label>
-      <div class="list" id="memList"></div>
+      <div class="tbar">
+        <label class="search"><span aria-hidden="true">🔍</span><input id="memQ" type="search" placeholder="ค้นหาชื่อ อีเมล เบอร์โทร หรือ LINE ของสมาชิก" aria-label="ค้นหาสมาชิก"></label>
+        <label class="muted">แสดง <select id="memSize" aria-label="จำนวนสมาชิกต่อหน้า"><option>10</option><option>25</option><option>50</option><option>100</option></select> คนต่อหน้า</label>
+      </div>
+      <div class="tblwrap"><table class="tbl" id="memList"></table></div>
+      <div class="pager" id="memPager"></div>
       <div class="h"><h3>ประวัติการปรับยอดล่าสุด</h3></div>
       <div class="list" id="adjList"></div>
+    </div>
+    <div class="apane" id="a-products">
+      <p class="muted">กด "แก้ไข" เพื่อเปิดสินค้านั้นในโหมดแก้ไขหน้าเว็บ แก้ชื่อ รูป รายละเอียด แพ็กเกจ ราคา หรือปิดการขายได้ที่นั่น แล้วกดบันทึก</p>
+      <div class="tbar">
+        <label class="search"><span aria-hidden="true">🔍</span><input id="prodQ" type="search" placeholder="ค้นหาชื่อสินค้า หรือหมวด" aria-label="ค้นหาสินค้า"></label>
+        <select id="prodSec" aria-label="หมวดที่จะเพิ่มสินค้า"></select>
+        <button class="btn btn-main" type="button" id="prodAdd">＋ เพิ่มสินค้า</button>
+      </div>
+      <div class="tblwrap"><table class="tbl" id="prodList"></table></div>
+    </div>
+    <div class="apane" id="a-codes">
+      <form class="panel" id="fCode">
+        <b id="codeTitle"></b>
+        <div class="grid3">
+          <label class="f">โค้ด (A-Z, 0-9, _ และ -)<input name="code" required pattern="[A-Za-z0-9_\-]{2,30}" maxlength="30" autocomplete="off"></label>
+          <label class="f">ประเภท<select name="kind"><option value="percent">ลดเป็น %</option><option value="amount">ลดเป็นบาท</option></select></label>
+          <label class="f">ส่วนลด (% หรือบาท ตามประเภท)<input name="value" type="number" min="0.01" step="0.01" required></label>
+          <label class="f">ใช้ได้ทั้งหมดกี่ครั้ง (เว้นว่าง = ไม่จำกัด)<input name="max_uses" type="number" min="1" step="1" inputmode="numeric"></label>
+          <label class="f">ใช้ได้ถึงวันที่ (เว้นว่าง = ไม่หมดอายุ)<input name="expires_on" type="date"></label>
+          <div style="display:grid;gap:8px;align-content:end">
+            <label class="f chk"><input name="once" type="checkbox" checked>สมาชิกหนึ่งคนใช้ได้ครั้งเดียว</label>
+            <label class="f chk"><input name="active" type="checkbox" checked>เปิดใช้งาน</label>
+          </div>
+        </div>
+        <div class="rowb" style="justify-content:flex-start;flex-wrap:wrap">
+          <button class="btn btn-main" type="submit">บันทึกโค้ด</button>
+          <button class="btn btn-ghost" type="button" id="codeCancel" hidden>ยกเลิกการแก้ไข</button>
+          <button class="btn btn-ghost" type="button" id="codeDelAll">🗑 ลบโค้ดทั้งหมด</button>
+        </div>
+      </form>
+      <div class="tblwrap" style="margin-top:14px"><table class="tbl" id="codeList"></table></div>
+    </div>
+    <div class="apane" id="a-pay">
+      <form class="panel" id="fPay">
+        <b>🏦 ช่องทางชำระเงิน</b>
+        <p class="muted">ข้อมูลนี้แสดงในหน้ากระเป๋าตัง ตอนลูกค้าแจ้งเติมเงิน ช่องไหนเว้นว่างจะไม่แสดง</p>
+        <div id="payFields"></div>
+        <button class="btn btn-main" type="submit">บันทึก</button>
+      </form>
     </div>
     <div class="apane" id="a-subs">
       <form class="panel" id="fCust">
@@ -658,11 +729,32 @@ img.ico{display:inline-block;object-fit:contain}
     <button class="x" type="button" aria-label="ปิด">✕</button>
     <h3 id="oName"></h3>
     <div class="pks" id="oPk"></div>
+    <p class="muted pre" id="oDesc" hidden></p>
     <label class="f"><span id="oHint"></span><input name="info" required maxlength="500" autocomplete="off"></label>
     <p class="muted" id="oSubNote" hidden></p>
+    <label class="f">โค้ดส่วนลด (ถ้ามี)<input name="code" maxlength="30" autocomplete="off" autocapitalize="characters"></label>
     <p class="muted">ยอดเงินคงเหลือ: <b id="oBal"></b></p>
     <button class="btn btn-main" type="submit">ชำระด้วยกระเป๋าตัง</button>
     <a class="btn btn-line" id="oLine" href="#" target="_blank" rel="noopener">หรือสั่งซื้อทาง LINE</a>
+  </form>
+</dialog>
+
+<dialog id="dlgMember" aria-labelledby="mTitle">
+  <form id="fMember">
+    <button class="x" type="button" aria-label="ปิด">✕</button>
+    <h3 id="mTitle">แก้ไขสมาชิก</h3>
+    <p class="muted" id="mEmail"></p>
+    <label class="f">ชื่อที่แสดง<input name="display_name" maxlength="60"></label>
+    <label class="f">เบอร์โทร<input name="phone" maxlength="30"></label>
+    <label class="f">LINE ID<input name="line_id" maxlength="60"></label>
+    <label class="f chk"><input name="is_admin" type="checkbox">เป็นแอดมิน (เข้าหน้าแอดมินและแก้ไขหน้าเว็บได้)</label>
+    <button class="btn btn-main" type="submit">บันทึกข้อมูลสมาชิก</button>
+    <hr>
+    <b>ปรับยอดเงิน <span class="muted" id="mBal"></span></b>
+    <p class="muted">ทุกครั้งถูกบันทึกในประวัติ และสมาชิกเห็นรายการนั้นในหน้ากระเป๋าตังของตัวเอง</p>
+    <label class="f">จำนวนเงิน (บาท)<input name="amt" type="number" min="0.01" max="100000" step="0.01"></label>
+    <label class="f">เหตุผล (ไม่บังคับ สมาชิกเห็น)<input name="why" maxlength="300"></label>
+    <div class="rowb"><button class="btn btn-main" type="button" data-sign="1">＋ เพิ่มเงิน</button><button class="btn btn-ghost" type="button" data-sign="-1">－ หักเงิน</button></div>
   </form>
 </dialog>
 
@@ -687,13 +779,14 @@ const sb = window.supabase?.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const DEFAULT = {
   settings: {
     shop: 'Cat4K', logo: 'logo.png', accent: '#1a82e8', accent2: '#ff2d7a', lineId: '@cat4k', fbUrl: 'https://facebook.com/',
-    payInfo: 'ธนาคาร: (ใส่ชื่อธนาคาร)\nเลขบัญชี: (ใส่เลขบัญชี)\nชื่อบัญชี: (ใส่ชื่อบัญชี)\nโอนแล้วกรอกยอดด้านล่าง และส่งสลิปให้แอดมินทาง LINE',
+    payInfo: 'โอนแล้วกรอกยอดด้านล่าง และส่งสลิปให้แอดมินทาง LINE',
     about: 'Cat4K เป็นตัวแทนจำหน่ายสินค้าดิจิทัลเท่านั้น ไม่มีส่วนเกี่ยวข้องกับเจ้าของเกมหรือแอพใดๆ เครดิตในเว็บใช้ซื้อสินค้าภายในเว็บเท่านั้น ชำระเงินผ่านช่องทางที่ระบุในเว็บหรือ LINE ทางการเท่านั้น ระวังมิจฉาชีพแอบอ้าง',
     hCats: 'สินค้าแนะนำ', hHow: 'วิธีสั่งซื้อ', hNews: 'บทความ-ข่าวสาร',
     lapseDays: 15,  // ลูกค้าที่ทุกแอปหมดอายุมาเกินกี่วัน จะได้รหัสผ่านใหม่เมื่อกลับมาซื้อ/ต่ออายุ
     defaultMode: 'dark', hSide: 'หมวดหมู่',
   },
   nav: {home: 'หน้าหลัก', wallet: 'กระเป๋าตัง', orders: 'ประวัติสั่งซื้อ', account: 'บัญชีของฉัน', check: 'เช็ควันหมดอายุ', how: 'วิธีสั่งซื้อ', contact: 'ติดต่อเรา'},
+  pay: {payBank: '', payNo: '', payName: '', payPromptpay: '', payQr: ''},  // บัญชีรับโอน แก้ที่ แอดมิน > ช่องทางชำระเงิน แสดงในหน้ากระเป๋าตัง
   fab: {fabText: '💬 ติดต่อเรา', fabUrl: '', fabColor: '#06c755'},  // ปุ่มลอยมุมขวาล่าง
   promo: {promoTitle: 'สมัครสมาชิก', promoText: 'เติมเงิน สั่งซื้อ และเช็ควันหมดอายุได้ในที่เดียว', promoBtn: 'สมัครเลย'},  // กล่องล่างสุดของแถบซ้าย
   footer: {hContact: 'ติดต่อเรา', hHelp: 'ช่วยเหลือ', copy: 'สงวนสิทธิ์', links: [
@@ -758,6 +851,10 @@ const abbr = s => { const w = s.match(/[A-Za-z0-9]+/g) || [s]; return (w.length 
 const secId = (s, i) => String(s.id || i).replace(/[^\w-]/g, '');
 const lineUrl = msg => { const id = encodeURIComponent(view().settings.lineId); return `https://line.me/R/${msg ? `oaMessage/${id}/?${encodeURIComponent(msg)}` : `ti/p/${id}`}`; };
 const ok = ({data, error}) => { if (error) throw error; return data; };
+// เหมือน ok แต่ถ้าฟังก์ชัน/ตารางยังไม่มีในฐานข้อมูล (ยังไม่ได้รันไฟล์ SQL ของส่วนนั้น) ให้บอกเป็นข้อความ msg แทน error ภาษาเครื่อง
+const need = (r, msg) => { if (['PGRST202', 'PGRST205', '42883', '42P01'].includes(r.error?.code)) throw new Error(msg); return ok(r); };
+const SETUP = file => `ยังไม่ได้ติดตั้งส่วนนี้ ให้รันไฟล์ ${file} ใน Supabase ก่อน`;
+document.addEventListener('click', e => { const b = e.target.closest('[data-copy]'); if (b) navigator.clipboard.writeText(b.dataset.copy).then(() => toast('คัดลอกแล้ว'), fail); });
 const h = (tag, props = {}, ...kids) => { const e = Object.assign(document.createElement(tag), props); e.append(...kids); return e; };
 const here = location.origin + location.pathname;
 const EMPTY = '<p class="muted" style="padding:16px 0">ยังไม่มีรายการ</p>';
@@ -790,7 +887,8 @@ const act = fn => async e => {
 // ===== เนื้อหาหน้าเว็บ =====
 // รูปร่างข้อมูล: เพิ่ม field ใหม่แค่เติมใน BLANK + LABEL แล้วแผงแก้ไขจะมีช่องนั้นเอง
 const LABEL = {settings: 'ตั้งค่าร้าน', shop: 'ชื่อร้าน', logo: 'โลโก้ (ลิงก์รูป หรืออัปโหลด)', accent: 'สีฟ้าของธีม (พื้นปุ่มและป้าย)', accent2: 'สีชมพูของธีม (พื้นปุ่มและป้าย)', lineId: 'LINE ID ร้าน (มี @)', fbUrl: 'ลิงก์ Facebook',
-  payInfo: 'ข้อมูลบัญชีรับโอน (แสดงในหน้ากระเป๋าตัง)', about: 'ข้อความท้ายเว็บ', hCats: 'หัวข้อเหนือหมวดสินค้า', hHow: 'หัวข้อส่วนวิธีสั่งซื้อ', hNews: 'หัวข้อส่วนข่าวสาร', lapseDays: 'ออกรหัสผ่านใหม่ให้ลูกค้าที่ขาดต่ออายุเกินกี่วัน',
+  payInfo: 'ข้อความถึงลูกค้าในหน้ากระเป๋าตัง (แสดงใต้ข้อมูลบัญชีรับโอน)', pay: 'ช่องทางชำระเงิน', payBank: 'ธนาคาร (เช่น กสิกรไทย)', payNo: 'เลขบัญชี', payName: 'ชื่อบัญชี', payPromptpay: 'เบอร์พร้อมเพย์',
+  payQr: 'QR สำหรับสแกนจ่าย (ลิงก์รูป หรืออัปโหลด)', desc: 'รายละเอียดสินค้า (ลูกค้าเห็นตอนกดสั่งซื้อ)', closed: 'ปิดการขายชั่วคราว (ซ่อนสินค้านี้จากหน้าร้าน)', about: 'ข้อความท้ายเว็บ', hCats: 'หัวข้อเหนือหมวดสินค้า', hHow: 'หัวข้อส่วนวิธีสั่งซื้อ', hNews: 'หัวข้อส่วนข่าวสาร', lapseDays: 'ออกรหัสผ่านใหม่ให้ลูกค้าที่ขาดต่ออายุเกินกี่วัน',
   slides: 'แบนเนอร์', tag: 'ป้ายเล็ก', title: 'หัวข้อ (ในแบนเนอร์ ใส่ *คำ* เพื่อเน้นสี)', text: 'ข้อความ', btn: 'ข้อความบนปุ่ม',
   link: 'ลิงก์ (เช่น #sec-game หรือ https://...)', color: 'สีพื้น', emoji: 'อีโมจิ (ใช้เมื่อไม่มีรูป)', img: 'รูป (ลิงก์รูป หรืออัปโหลด)', sections: 'หมวดสินค้า',
   id: 'รหัสหมวด ภาษาอังกฤษ (ใช้ทำลิงก์ #sec-รหัส)', icon: 'ไอคอน (พิมพ์อีโมจิ หรือใส่รูป: วางลิงก์รูป หรืออัปโหลด)', hint: 'ข้อมูลที่ให้ลูกค้ากรอกตอนสั่งซื้อ', items: 'สินค้า', n: 'ชื่อสินค้า', d: 'ป้ายมุมรูป (เช่น ลด 5%)',
@@ -803,18 +901,18 @@ const LABEL = {settings: 'ตั้งค่าร้าน', shop: 'ชื่�
   bg: 'ภาพพื้นหลังเต็มแบนเนอร์ (ลิงก์รูป หรืออัปโหลด)', rank: 'แสดงอันดับ TOP บนสินค้าในหมวดนี้', defaultMode: 'โหมดเริ่มต้นสำหรับผู้เข้าชมที่ยังไม่เคยเลือก', hSide: 'หัวข้อหมวดในแถบซ้าย',
   promo: 'กล่องชวนสมัครในแถบซ้าย', promoTitle: 'หัวข้อในกล่อง', promoText: 'ข้อความในกล่อง', promoBtn: 'ข้อความบนปุ่มในกล่อง'};
 const BLANK = {
-  settings: DEFAULT.settings, nav: DEFAULT.nav, footer: DEFAULT.footer, fab: DEFAULT.fab, promo: DEFAULT.promo,
+  settings: DEFAULT.settings, nav: DEFAULT.nav, footer: DEFAULT.footer, fab: DEFAULT.fab, promo: DEFAULT.promo, pay: DEFAULT.pay,
   links: {label: '', url: ''},
   slides: {tag: '', title: '', text: '', btn: '', link: '', color: '#1f8fd1', emoji: '', img: '', bg: ''},
   sections: {id: '', icon: '', title: '', hint: '', rank: false, items: []},
-  items: {n: '', d: '', t: '', img: '', packages: []},
+  items: {n: '', d: '', t: '', img: '', desc: '', closed: false, packages: []},
   packages: {name: '', price: 0, months: 0, bonus: 0, app: ''},
   steps: {icon: '', title: '', text: ''},
   news: {icon: '', title: '', date: '', link: ''},
 };
-const NUM = new Set(['price', 'months', 'bonus', 'lapseDays']), LONG = new Set(['text', 'about', 'payInfo']), IMG = new Set(['img', 'logo', 'icon', 'bg']), COLOR = new Set(['color', 'accent', 'accent2', 'fabColor']), TITLE = new Set(['n', 'title', 'name', 'label']);
-const LISTS = ['slides', 'sections', 'steps', 'news'], OBJS = ['settings', 'nav', 'footer', 'fab', 'promo'];
-const OPTS = {defaultMode: [['dark', 'มืด'], ['light', 'สว่าง']]}, BOOL = new Set(['rank']);  // ช่องแบบตัวเลือก / ช่องติ๊ก
+const NUM = new Set(['price', 'months', 'bonus', 'lapseDays']), LONG = new Set(['text', 'about', 'payInfo', 'desc']), IMG = new Set(['img', 'logo', 'icon', 'bg', 'payQr']), COLOR = new Set(['color', 'accent', 'accent2', 'fabColor']), TITLE = new Set(['n', 'title', 'name', 'label']);
+const LISTS = ['slides', 'sections', 'steps', 'news'], OBJS = ['settings', 'nav', 'footer', 'fab', 'promo', 'pay'];
+const OPTS = {defaultMode: [['dark', 'มืด'], ['light', 'สว่าง']]}, BOOL = new Set(['rank', 'closed']);  // ช่องแบบตัวเลือก / ช่องติ๊ก
 // เติม field ที่ขาดให้ครบตามแม่แบบ (เนื้อหาที่บันทึกไว้ก่อนมี field ใหม่จะไม่พัง)
 const fillT = (o, k) => {
   for (const [f, v] of Object.entries(BLANK[k])) {
@@ -829,6 +927,8 @@ const norm = c => {
   // สีเริ่มต้นของธีมรุ่นก่อน -> ใช้ค่าเริ่มต้นของธีมปัจจุบัน; สีที่แอดมินเลือกเองไม่ถูกแตะ
   const OLD = {accent: ['#5db4e6', '#2fb4f5', '#0b7ad6', '#0a72cc'], accent2: ['#ff3d7a', '#ea1a63', '#dc125a']};
   for (const k in OLD) if (OLD[k].includes(o.settings[k])) o.settings[k] = DEFAULT.settings[k];
+  // ข้อความตัวอย่างรุ่นก่อน "ธนาคาร: (ใส่ชื่อธนาคาร)..." ที่ยังไม่เคยถูกแก้ -> ตอนนี้ข้อมูลบัญชีมีช่องของตัวเองแล้ว
+  if (o.settings.payInfo.includes('(ใส่ชื่อธนาคาร)')) o.settings.payInfo = DEFAULT.settings.payInfo;
   return o;
 };
 let C = norm(DEFAULT), user = null, me = null, dbOk = false;
@@ -853,6 +953,9 @@ function renderSite() {
   $('.js-hside').textContent = s.hSide; $('.js-hcats').textContent = s.hCats; $('.js-hhow').textContent = s.hHow; $('.js-hnews').textContent = s.hNews;
   $('#about').textContent = s.about;
   $('#payInfo').textContent = s.payInfo;
+  const payRow = (label, v, copy) => v ? `<div><span class="muted">${label}</span><b class="sel">${esc(v)}</b>${copy ? `<button class="mini" type="button" data-copy="${esc(v)}">คัดลอก</button>` : ''}</div>` : '';
+  $('#payRows').innerHTML = payRow('ธนาคาร', c.pay.payBank) + payRow('เลขบัญชี', c.pay.payNo, 1) + payRow('ชื่อบัญชี', c.pay.payName) + payRow('พร้อมเพย์', c.pay.payPromptpay, 1)
+    + (c.pay.payQr ? `<img src="${esc(c.pay.payQr)}" alt="QR สำหรับสแกนจ่าย" loading="lazy">` : '');
   if (!themeChoice()) setTheme(s.defaultMode === 'dark');
   paintPromo();
   $$('[data-nav]').forEach(a => a.textContent = c.nav[a.dataset.nav]);
@@ -881,11 +984,12 @@ function renderSite() {
       <div class="h" data-edit="sections.${si}"><h2>${ico(x.icon)} ${esc(x.title) || ph('(หมวดใหม่)')}<span class="chev">›</span></h2>
         <span class="hnav"><button class="rarr l" type="button" aria-label="เลื่อนซ้าย">‹</button><button class="rarr r" type="button" aria-label="เลื่อนขวา">›</button></span></div>
       <div class="row">${x.items.map((p, pi) => {
+        if (p.closed && !editing) return '';  // ปิดการขาย: ลูกค้าไม่เห็น แอดมินยังเห็นตอนแก้ไขหน้าเว็บ
         const n = p.n || '', hu = hue(n), min = Math.min(...p.packages.map(k => +k.price).filter(v => v > 0));
         return `
         <a class="card" data-edit="sections.${si}.items.${pi}" data-s="${si}" data-i="${pi}" data-name="${esc(n.toLowerCase())}" href="${esc(lineUrl('สนใจสั่งซื้อ: ' + n))}" target="_blank" rel="noopener">
           <div class="logo" style="background:linear-gradient(160deg,hsl(${hu} 78% 54%),hsl(${(hu + 30) % 360} 70% 26%))">${p.img ? `<img src="${esc(p.img)}" alt="" loading="lazy">` : esc(p.t || abbr(n))}</div>
-          ${p.d ? `<span class="off">${esc(p.d)}</span>` : ''}${x.rank ? (pi < 3 ? `<span class="top">TOP ${pi + 1}</span>` : `<span class="rk" aria-hidden="true">${pi + 1}</span>`) : ''}
+          ${p.closed ? '<span class="off">ปิดการขาย</span>' : p.d ? `<span class="off">${esc(p.d)}</span>` : ''}${x.rank ? (pi < 3 ? `<span class="top">TOP ${pi + 1}</span>` : `<span class="rk" aria-hidden="true">${pi + 1}</span>`) : ''}
           <div class="name">${esc(n) || ph('(ยังไม่มีชื่อ)')}${isFinite(min) ? `<small>เริ่ม ${baht(min)}</small>` : ''}</div>
         </a>`; }).join('')}
         <button class="addtile edonly" type="button" data-add="sections.${si}.items">+ เพิ่มสินค้า</button>
@@ -973,6 +1077,7 @@ function paintAuth() {
     ? `<a class="btn btn-ghost" href="#wallet">💰 ${baht(me?.balance)}</a>
        <details class="umenu"><summary class="btn btn-main" aria-label="เมนูผู้ใช้">${me?.is_admin ? '<b class="adm">ADMIN</b>' : '👤'} ${esc(me?.display_name || 'บัญชี')} ▾</summary>
          <div class="umenu-list">
+           <a class="bal" href="#wallet">💰 ${baht(me?.balance)}</a>
            <a href="#account">👤 <span data-nav="account">${esc(view().nav.account)}</span></a>
            ${me?.is_admin ? '<a href="#admin">⚙️ แอดมิน</a>' : ''}
            <button type="button" data-logout>🚪 ออกจากระบบ</button>
@@ -981,12 +1086,11 @@ function paintAuth() {
     : `<button class="btn btn-ghost" type="button" data-auth="login">เข้าสู่ระบบ</button><button class="btn btn-main" type="button" data-auth="register">สมัครสมาชิก</button>`;
   adminFab(); paintPromo();
 }
-// กล่องล่างสุดของแถบซ้าย: ผู้เยี่ยมชมเห็นคำชวนสมัคร (แอดมินแก้ข้อความได้), สมาชิกเห็นยอดเงิน
+// กล่องล่างสุดของแถบซ้าย: คำชวนสมัครสมาชิก (แอดมินแก้ข้อความได้) — เห็นเฉพาะคนที่ยังไม่เข้าสู่ระบบ และตอนแอดมินกำลังแก้ไขหน้าเว็บ
 function paintPromo() {
-  const p = view().promo;
-  $('#sidePromo').innerHTML = user && !editing
-    ? `<i>💰</i><b>ยอดเงินคงเหลือ</b><span class="big">${baht(me?.balance)}</span><a class="btn btn-main" href="#wallet">เติมเงิน ›</a>`
-    : `<i>👑</i><b>${esc(p.promoTitle)}</b><p>${esc(p.promoText)}</p><button class="btn btn-main" type="button" data-auth="register">${esc(p.promoBtn)} ›</button>`;
+  const p = view().promo, box = $('#sidePromo');
+  box.hidden = !!user && !editing;
+  box.innerHTML = `<i>👑</i><b>${esc(p.promoTitle)}</b><p>${esc(p.promoText)}</p><button class="btn btn-main" type="button" data-auth="register">${esc(p.promoBtn)} ›</button>`;
 }
 // มือถือ: แถบซ้ายเป็นลิ้นชัก เปิด/ปิดด้วยปุ่ม ☰ ปิดเองเมื่อกดลิงก์หรือพื้นที่มืดด้านนอก
 const sideOpen = on => document.body.classList.toggle('side-open', on);
@@ -1141,6 +1245,8 @@ function openOrder(sec, p) {
   $('#oName').textContent = p.n;
   $('#oPk').innerHTML = orderPks().map((k, i) =>
     `<label class="pk"><input type="radio" name="pk" value="${i}" ${i ? '' : 'checked'}><span>${esc(k.name)}</span>${pkDur(k) ? `<small class="muted">${pkDur(k)}</small>` : ''}<b>${baht(k.price)}</b></label>`).join('');
+  $('#oDesc').textContent = p.desc; $('#oDesc').hidden = !p.desc;
+  $('#fOrder').elements.code.value = '';
   $('#oHint').textContent = sec.hint || 'ข้อมูลสำหรับเติม (UID / อีเมล)';
   $('#oBal').textContent = user ? baht(me?.balance) : 'ยังไม่ได้เข้าสู่ระบบ';
   $('#oLine').href = lineUrl('สนใจสั่งซื้อ: ' + p.n);
@@ -1152,8 +1258,12 @@ $('#oPk').addEventListener('change', syncOrderField);
 $('#fOrder').onsubmit = act(async e => {
   const d = new FormData(e.target), k = orderPks()[d.get('pk')];
   if (!user) { $('#dlgOrder').close(); return openAuth('login'); }
-  if (!confirm(`ยืนยันสั่งซื้อ ${orderItem.n} — ${k.name}${pkDur(k) ? ` (${pkDur(k)})` : ''}\nราคา ${baht(k.price)} (หักจากกระเป๋าตัง)`)) return;
-  const r = ok(await sb.rpc('shop_place_order', {p_product: orderItem.n, p_package: k.name, p_price: k.price, p_info: d.get('info')}));
+  // โค้ดส่วนลด: ถามส่วนลดจากฐานข้อมูลก่อนให้ลูกค้ายืนยัน แล้วฐานข้อมูลตรวจซ้ำอีกรอบตอนหักเงินจริง (supabase-codes.sql)
+  const code = String(d.get('code') || '').trim().toUpperCase(), NO_CODE = 'ตอนนี้ยังใช้โค้ดส่วนลดไม่ได้ ลบโค้ดออกแล้วสั่งซื้อได้ตามปกติ';
+  const disc = code ? +need(await sb.rpc('shop_check_code', {p_code: code, p_price: k.price}), NO_CODE) : 0;
+  if (!confirm(`ยืนยันสั่งซื้อ ${orderItem.n} — ${k.name}${pkDur(k) ? ` (${pkDur(k)})` : ''}\nราคา ${baht(k.price)}${disc ? `\nส่วนลดจากโค้ด ${code}: −${baht(disc)}\nยอดที่ต้องจ่าย ${baht(k.price - disc)}` : ''} (หักจากกระเป๋าตัง)`)) return;
+  const args = {p_product: orderItem.n, p_package: k.name, p_price: k.price, p_info: d.get('info')};
+  const r = code ? need(await sb.rpc('shop_place_order_code', {...args, p_code: code}), NO_CODE) : ok(await sb.rpc('shop_place_order', args));
   if (me) me.balance = r.balance;
   paintAuth(); $('#dlgOrder').close();
   if (r.sub) return showDone(r.sub, String(d.get('info')).trim().toLowerCase());
@@ -1180,7 +1290,7 @@ async function loadOrders() {
   const rows = ok(await sb.from('shop_orders').select('*').eq('member_id', user.id).order('created_at', {ascending: false}).limit(100));
   $('#oList').innerHTML = rows.map(r => item(`${esc(r.product)} — ${esc(r.package_name)}`,
     `#${r.id} · ${when(r.created_at)} · ${esc(r.info)}${r.admin_note ? '<br>แอดมิน: ' + esc(r.admin_note) : ''}`,
-    `<b>${baht(r.price)}</b>${badge(r.status)}`)).join('') || EMPTY;
+    `${r.code ? `<span class="muted">โค้ด ${esc(r.code)} −${baht(r.discount)}</span>` : ''}<b>${baht(r.price)}</b>${badge(r.status)}`)).join('') || EMPTY;
 }
 
 // ===== บัญชี =====
@@ -1222,7 +1332,7 @@ async function adminOrders() {
   const st = $('#aStatus').value;
   const rows = ok(await sb.from('shop_orders').select('*, m:shop_members(display_name, email, phone, line_id)').eq('status', st).order('created_at', {ascending: st === 'pending'}).limit(100));
   $('#aOrders').innerHTML = rows.map(r => item(`#${r.id} ${esc(r.product)} — ${esc(r.package_name)} (${baht(r.price)})`,
-    `${when(r.created_at)} · ${who(r.m)}<br>ข้อมูลเติม: <span class="sel">${esc(r.info)}</span>${r.admin_note ? '<br>โน้ต: ' + esc(r.admin_note) : ''}`,
+    `${when(r.created_at)} · ${who(r.m)}<br>ข้อมูลเติม: <span class="sel">${esc(r.info)}</span>${r.code ? `<br>ใช้โค้ด ${esc(r.code)} ลด ${baht(r.discount)}` : ''}${r.admin_note ? '<br>โน้ต: ' + esc(r.admin_note) : ''}`,
     st === 'refunded' ? badge(st) : `<input class="note" placeholder="โน้ตถึงลูกค้า" maxlength="500" aria-label="โน้ตถึงลูกค้า">${st === 'pending' ? `<button class="btn btn-main" type="button" data-id="${r.id}" data-st="done">เสร็จแล้ว</button>` : ''}<button class="btn btn-ghost" type="button" data-id="${r.id}" data-st="refunded">คืนเงิน</button>`)).join('') || EMPTY;
 }
 $('#aStatus').onchange = act(adminOrders);
@@ -1236,10 +1346,16 @@ $('#aOrders').onclick = act(async e => {
 // ===== สมาชิก / ยอดเงิน: แอดมินเพิ่มหรือหักเงินในกระเป๋าตังของสมาชิกเอง (ดู supabase-wallet-admin.sql) =====
 const adjAmt = n => `${n > 0 ? '＋' : '－'}${baht(Math.abs(n))}`;
 const adjBadge = n => `<span class="badge ${n > 0 ? 'g' : 'r'}">${n > 0 ? 'เพิ่มโดยแอดมิน' : 'หักโดยแอดมิน'}</span>`;
-let memRows = [];
+let memRows = [], memTop = {}, memPage = 0, memEdit = null;
+const MEM_SQL = SETUP('supabase-members-admin.sql');
 async function adminMembers() {
-  // ponytail: ดึงสมาชิกมาทั้งหมดแล้วค้นในเบราว์เซอร์ ถ้าเกิน 1,000 คนค่อยย้ายการค้นไปฝั่งฐานข้อมูล
-  memRows = ok(await sb.from('shop_members').select('id, email, display_name, phone, line_id, balance, is_admin, created_at').order('created_at', {ascending: false}).limit(1000));
+  // ponytail: ดึงสมาชิกมาทั้งหมดแล้วค้น/แบ่งหน้าในเบราว์เซอร์ ถ้าเกิน 1,000 คนค่อยย้ายการค้นไปฝั่งฐานข้อมูล
+  // ยอดเติมรวม = รวมรายการเติมเงินที่อนุมัติแล้วของแต่ละคน (ดึงทุกแถวมารวมในเบราว์เซอร์ เหมือนแท็บภาพรวม)
+  const [rows, tops] = await Promise.all([
+    sb.from('shop_members').select('id, email, display_name, phone, line_id, balance, is_admin, created_at').order('created_at', {ascending: false}).limit(1000),
+    stRows('shop_topups', 'member_id, amount', new Date(0), new Date(4e12), q => q.eq('status', 'approved'))]);
+  memRows = ok(rows); memTop = {};
+  for (const t of tops) memTop[t.member_id] = (memTop[t.member_id] || 0) + +t.amount;
   paintMembers();
   const adj = (await sb.from('shop_adjustments').select('*').order('created_at', {ascending: false}).limit(50)).data;
   const who = id => { const m = memRows.find(x => x.id === id); return m ? esc(m.display_name || m.email) : ''; };
@@ -1248,28 +1364,56 @@ async function adminMembers() {
         `${when(a.created_at)} · คงเหลือ ${baht(a.balance_after)}${a.note ? ' · ' + esc(a.note) : ''}${who(a.admin_id) ? ' · โดย ' + who(a.admin_id) : ''}`, adjBadge(a.amount))).join('') || EMPTY;
 }
 function paintMembers() {
-  const q = $('#memQ').value.trim().toLowerCase();
-  $('#memList').innerHTML = memRows.filter(m => !q || [m.display_name, m.email, m.phone, m.line_id].some(v => (v || '').toLowerCase().includes(q))).map(m => `
-    <div class="item" data-mid="${esc(m.id)}">
-      <div><b>${esc(m.display_name || m.email)}</b>${m.is_admin ? ' <b class="adm">ADMIN</b>' : ''}<small>${[m.email, m.phone, m.line_id].filter(Boolean).map(esc).join(' · ')}</small></div>
-      <div class="r"><b>${baht(m.balance)}</b>
-        <input class="note amt" type="number" min="0.01" max="100000" step="0.01" placeholder="จำนวนเงิน" aria-label="จำนวนเงิน">
-        <input class="note why" placeholder="เหตุผล (ไม่บังคับ)" maxlength="300" aria-label="เหตุผล">
-        <button class="btn btn-main" type="button" data-sign="1">＋ เพิ่ม</button><button class="btn btn-ghost" type="button" data-sign="-1">－ หัก</button></div>
-    </div>`).join('') || EMPTY;
+  const q = $('#memQ').value.trim().toLowerCase(), size = +$('#memSize').value;
+  const hit = memRows.filter(m => !q || [m.display_name, m.email, m.phone, m.line_id].some(v => (v || '').toLowerCase().includes(q))), pages = Math.max(1, Math.ceil(hit.length / size));
+  memPage = Math.max(0, Math.min(memPage, pages - 1));
+  const from = memPage * size, page = hit.slice(from, from + size);
+  $('#memList').innerHTML = '<tr><th>#</th><th class="l">สมาชิก</th><th class="l">ติดต่อ</th><th>เงินคงเหลือ</th><th>ยอดเติมรวม</th><th>จัดการ</th></tr>' + (page.map((m, i) => `
+    <tr data-mid="${esc(m.id)}"><td>${from + i + 1}</td>
+      <td class="l"><b>${esc(m.display_name || m.email)}</b>${m.is_admin ? ' <b class="adm">ADMIN</b>' : ''}<small>สมัครเมื่อ ${when(m.created_at)}</small></td>
+      <td class="l">${esc(m.email)}<small>${[m.phone, m.line_id].filter(Boolean).map(esc).join(' · ')}</small></td>
+      <td><b>${baht(m.balance)}</b></td><td>${baht(memTop[m.id])}</td>
+      <td><div class="r"><button class="mini" type="button" data-act="edit">แก้ไข / ปรับยอด</button><button class="mini" type="button" data-act="del">ลบ</button></div></td></tr>`).join('') || `<tr><td colspan="6">${EMPTY}</td></tr>`);
+  $('#memPager').innerHTML = `<span>แสดง ${hit.length ? from + 1 : 0}–${from + page.length} จาก ${hit.length.toLocaleString('th-TH')} คน</span>
+    <button class="mini" type="button" data-pg="-1" ${memPage ? '' : 'disabled'}>‹ ก่อนหน้า</button><span>หน้า ${memPage + 1} / ${pages}</span><button class="mini" type="button" data-pg="1" ${memPage < pages - 1 ? '' : 'disabled'}>ถัดไป ›</button>`;
 }
-$('#memQ').addEventListener('input', paintMembers);
+$('#memQ').addEventListener('input', () => { memPage = 0; paintMembers(); });
+$('#memSize').onchange = () => { memPage = 0; paintMembers(); };
+$('#memPager').onclick = e => { const b = e.target.closest('[data-pg]'); if (b) { memPage += +b.dataset.pg; paintMembers(); } };
 $('#memList').onclick = act(async e => {
-  const b = e.target.closest('button[data-sign]'); if (!b) return;
-  const row = b.closest('[data-mid]'), m = memRows.find(x => x.id === row.dataset.mid), amt = Math.round(+row.querySelector('.amt').value * 100) / 100;
-  if (!(amt > 0)) throw new Error('กรอกจำนวนเงินก่อน');
-  const signed = amt * +b.dataset.sign, name = m.display_name || m.email;
-  if (!confirm(`${signed > 0 ? 'เพิ่มเงิน' : 'หักเงิน'} ${baht(amt)} ${signed > 0 ? 'ให้' : 'จาก'} ${name}?\nยอดเงิน ${baht(m.balance)} → ${baht(+m.balance + signed)}`)) return;
-  ok(await sb.rpc('shop_adjust_balance', {p_member: m.id, p_amount: signed, p_note: row.querySelector('.why').value}));
-  toast(`${signed > 0 ? 'เพิ่มเงิน' : 'หักเงิน'}ให้ ${name} แล้ว`);
+  const b = e.target.closest('button[data-act]'); if (!b) return;
+  const m = memRows.find(x => x.id === b.closest('[data-mid]').dataset.mid), name = m.display_name || m.email;
+  if (b.dataset.act === 'edit') {
+    const el = $('#fMember').elements;
+    memEdit = m; $('#mEmail').textContent = m.email; $('#mBal').textContent = `(คงเหลือ ${baht(m.balance)})`;
+    el.display_name.value = m.display_name || ''; el.phone.value = m.phone || ''; el.line_id.value = m.line_id || ''; el.is_admin.checked = m.is_admin; el.amt.value = el.why.value = '';
+    return $('#dlgMember').showModal();
+  }
+  if (!confirm(`ลบสมาชิก ${name}?\nบัญชีเข้าสู่ระบบของสมาชิกนี้จะถูกลบถาวร ย้อนกลับไม่ได้`)) return;
+  need(await sb.rpc('shop_admin_delete_member', {p_id: m.id}), MEM_SQL);
+  toast(`ลบ ${name} แล้ว`); await adminMembers();
+});
+// กล่องแก้ไขสมาชิก: ปุ่มบันทึก = แก้ชื่อ/เบอร์/LINE/สิทธิ์แอดมิน, ปุ่ม ＋/－ = ปรับยอดเงิน (มีประวัติทุกครั้ง)
+$('#fMember').onsubmit = act(async e => {
+  const el = e.target.elements, m = memEdit, name = m.display_name || m.email;
+  if (m.is_admin !== el.is_admin.checked && !confirm(el.is_admin.checked ? `ตั้ง ${name} เป็นแอดมิน?\nแอดมินเห็นข้อมูลลูกค้าทั้งหมด อนุมัติเติมเงิน ปรับยอดเงิน และแก้ไขหน้าเว็บได้` : `ถอดสิทธิ์แอดมินของ ${name}?`)) return;
+  need(await sb.rpc('shop_admin_update_member', {p_id: m.id, p_name: el.display_name.value, p_phone: el.phone.value, p_line: el.line_id.value, p_is_admin: el.is_admin.checked}), MEM_SQL);
+  $('#dlgMember').close(); toast('บันทึกข้อมูลสมาชิกแล้ว');
   if (m.id === user.id) { await loadMe(); paintAuth(); }
   await adminMembers();
 });
+const memAdjust = act(async e => {
+  const el = $('#fMember').elements, m = memEdit, amt = Math.round(+el.amt.value * 100) / 100;
+  if (!(amt > 0)) throw new Error('กรอกจำนวนเงินก่อน');
+  const signed = amt * +e.target.closest('button').dataset.sign, name = m.display_name || m.email;
+  if (+m.balance + signed < 0) throw new Error(`หักไม่ได้ ${name} มีเงินแค่ ${baht(m.balance)}`);
+  if (!confirm(`${signed > 0 ? 'เพิ่มเงิน' : 'หักเงิน'} ${baht(amt)} ${signed > 0 ? 'ให้' : 'จาก'} ${name}?\nยอดเงิน ${baht(m.balance)} → ${baht(+m.balance + signed)}`)) return;
+  ok(await sb.rpc('shop_adjust_balance', {p_member: m.id, p_amount: signed, p_note: el.why.value}));
+  $('#dlgMember').close(); toast(`${signed > 0 ? 'เพิ่มเงิน' : 'หักเงิน'}ให้ ${name} แล้ว`);
+  if (m.id === user.id) { await loadMe(); paintAuth(); }
+  await adminMembers();
+});
+$('#fMember').addEventListener('click', e => { if (e.target.closest('button[data-sign]')) memAdjust(e); });  // ไม่ครอบ act ทั้งฟอร์ม: จะไปปิดปุ่มบันทึกจนส่งฟอร์มไม่ได้
 
 // ===== ลูกค้าแอป: บัญชีที่ร้านสร้างให้ลูกค้าไว้เช็ควันหมดอายุ (แยกจากสมาชิกเว็บ ดู supabase-subs.sql) =====
 const today = () => new Date().toLocaleDateString('en-CA');  // YYYY-MM-DD ตามเวลาเครื่อง
@@ -1476,14 +1620,15 @@ async function adminStats() {
   box.classList.add('busy');
   try {
     const head = {count: 'exact', head: true};
-    const [top, ord, mem, ...now] = await Promise.all([
+    const [top, ord, mem, nTop, nOrd, nMem, nAdm, nDay] = await Promise.all([
       stRows('shop_topups', 'amount, created_at', from, p.to, q => q.eq('status', 'approved')),
       stRows('shop_orders', 'price, created_at', from, p.to, q => q.neq('status', 'refunded')),
       stRows('shop_members', 'created_at', from, p.to),
       stCount(sb.from('shop_topups').select('id', head).eq('status', 'pending')),
       stCount(sb.from('shop_orders').select('id', head).eq('status', 'pending')),
       stCount(sb.from('shop_members').select('id', head)),
-      stCount(sb.from('shop_members').select('id', head).eq('is_admin', true))]);
+      stCount(sb.from('shop_members').select('id', head).eq('is_admin', true)),
+      stCount(sb.from('shop_orders').select('id', head).neq('status', 'refunded').gte('created_at', new Date(today() + 'T00:00:00').toISOString()))]);
     if (my !== stSeq) return;  // กดเปลี่ยนช่วงไปแล้วระหว่างรอ: ทิ้งผลชุดเก่า
     // ช่วงก่อนหน้านับเท่าที่เวลาผ่านมาเท่ากัน (9 โมงวันนี้ เทียบกับ ถึง 9 โมงเมื่อวาน) ไม่งั้นตอนเช้าจะดูเหมือนยอดตกทุกวัน
     const cut = Math.min(Date.now(), p.to) - p.from;
@@ -1493,14 +1638,15 @@ async function adminStats() {
       return {bars, total: bars.reduce((a, b) => a + b, 0), was, count};
     };
     const d = stData = {p, top: sum(top, r => +r.amount), ord: sum(ord, r => +r.price), mem: sum(mem, () => 1)};
-    $('#stNow').innerHTML = [['เติมเงินรอตรวจ', 'topups'], ['ออเดอร์รอดำเนินการ', 'orders'], ['สมาชิกทั้งหมด', 'members'], ['แอดมิน', 'members']]
-      .map(([label, tab], i) => `<a class="stat${i < 2 && now[i] ? ' warn' : ''}" href="#admin" data-atab="${tab}"><span>${label}</span><b>${now[i].toLocaleString('th-TH')}</b></a>`).join('');
+    // ข้อมูลของเว็บ = ตัวเลข ณ ตอนนี้ ไม่ขึ้นกับช่วงเวลาที่เลือกด้านล่าง; warn = มีงานรอแอดมินจัดการ
+    $('#stNow').innerHTML = [['จำนวนแอดมิน', nAdm, 'คน', 'members'], ['สมาชิกทั้งหมด', nMem, 'คน', 'members'], ['ยอดขายวันนี้', nDay, 'ชิ้น'], ['เติมเงินรอตรวจ', nTop, 'รายการ', 'topups', 1], ['ออเดอร์รอดำเนินการ', nOrd, 'รายการ', 'orders', 1]]
+      .map(([label, n, unit, tab, todo]) => `<${tab ? `a href="#admin" data-atab="${tab}"` : 'div'} class="stat${todo && n ? ' warn' : ''}"><span>${label}</span><b>${n.toLocaleString('th-TH')} <small>${unit}</small></b></${tab ? 'a' : 'div'}>`).join('');
     const delta = s => !prev || !s.was ? '' : `<small class="${s.total >= s.was ? 'up' : 'down'}">${s.total >= s.was ? '▲' : '▼'} ${Math.abs((s.total - s.was) / s.was * 100).toFixed(1)}% จากช่วงก่อน</small>`;
     const tile = (k, label, value, s) => `<div class="stat"><span><i class="key" style="background:var(--${k})"></i>${label}</span><b>${value}</b>${delta(s)}</div>`;
     $('#stTiles').innerHTML = tile('s1', 'ยอดเติมเงิน', baht(d.top.total), d.top) + tile('s2', `ยอดขาย · ${d.ord.count.toLocaleString('th-TH')} ออเดอร์`, baht(d.ord.total), d.ord) + tile('s3', 'สมาชิกใหม่', d.mem.total.toLocaleString('th-TH') + ' คน', d.mem);
     const open = $('#stPlots details')?.open;
     $('#stPlots').innerHTML = stChart('ยอดเติมเงินและยอดขาย (บาท)', [['s1', 'ยอดเติมเงิน', d.top.bars], ['s2', 'ยอดขาย', d.ord.bars]]) + stChart('สมาชิกใหม่ (คน)', [['s3', 'สมาชิกใหม่', d.mem.bars]])
-      + `<details${open ? ' open' : ''}><summary>ดูเป็นตาราง</summary><table class="st-table"><tr><th>ช่วง</th><th>ยอดเติมเงิน</th><th>ยอดขาย</th><th>สมาชิกใหม่</th></tr>${
+      + `<details${open ? ' open' : ''}><summary>ดูเป็นตาราง</summary><table class="tbl"><tr><th>ช่วง</th><th>ยอดเติมเงิน</th><th>ยอดขาย</th><th>สมาชิกใหม่</th></tr>${
         d.top.bars.map((v, i) => `<tr><td>${p.full(i)}</td><td>${baht(v)}</td><td>${baht(d.ord.bars[i])}</td><td>${d.mem.bars[i]}</td></tr>`).join('')}</table></details>`;
     $('#stTip').hidden = true;
   } finally { if (my === stSeq) box.classList.remove('busy'); }
@@ -1527,11 +1673,98 @@ $('#stCharts').addEventListener('pointerleave', e => {
   $('#stTip').hidden = true; $$('#stPlots .col.hot').forEach(x => x.classList.remove('hot'));
 });
 
+// ===== แอดมิน: ช่องทางชำระเงิน — บัญชีรับโอน / พร้อมเพย์ / QR ที่แสดงในหน้ากระเป๋าตัง (เก็บในเนื้อหาหน้าเว็บ ไม่ต้องมีตารางเพิ่ม) =====
+// ไม่เก็บชื่อผู้ใช้/รหัสผ่านธนาคารออนไลน์: เนื้อหาหน้าเว็บเป็นข้อมูลที่ทุกคนอ่านได้
+let payDraft;
+function adminPay() {
+  payDraft = structuredClone({pay: C.pay, settings: C.settings});
+  $('#payFields').replaceChildren(...Object.keys(BLANK.pay).map(k => field(payDraft.pay, k)), field(payDraft.settings, 'payInfo'));
+}
+$('#fPay').onsubmit = act(async () => {
+  if (!dbOk) throw new Error('โหลดเนื้อหาจากฐานข้อมูลไม่สำเร็จ รีเฟรชหน้าแล้วลองใหม่');
+  // อ่านเนื้อหาล่าสุดก่อน แล้วแก้เฉพาะส่วนช่องทางชำระเงิน จะได้ไม่ทับส่วนอื่นที่แอดมินอีกคนเพิ่งแก้
+  const fresh = norm(ok(await sb.from('shop_content').select('content').eq('id', 1).maybeSingle())?.content || C);
+  fresh.pay = payDraft.pay; fresh.settings.payInfo = payDraft.settings.payInfo;
+  ok(await sb.from('shop_content').upsert({id: 1, content: fresh, updated_at: new Date().toISOString(), updated_by: user.id}));
+  setContent(fresh); cacheContent(C);
+  toast('บันทึกแล้ว ลูกค้าเห็นในหน้ากระเป๋าตังทันที');
+});
+
+// ===== แอดมิน: โค้ดส่วนลด (ตาราง shop_codes ดู supabase-codes.sql) — ลูกค้ากรอกโค้ดตอนสั่งซื้อด้วยกระเป๋าตัง =====
+let codeRows = [], codeEdit = null;
+function codeForm(c) {  // ไม่ส่ง c = ล้างฟอร์มกลับเป็น "เพิ่มโค้ดใหม่"
+  const f = $('#fCode'), el = f.elements;
+  f.reset(); codeEdit = c?.id || null;
+  $('#codeTitle').textContent = c ? `✏️ แก้ไขโค้ด ${c.code}` : '🏷️ เพิ่มโค้ดส่วนลด'; $('#codeCancel').hidden = !c;
+  if (!c) return;
+  el.code.value = c.code; el.kind.value = c.kind; el.value.value = +c.value; el.max_uses.value = c.max_uses ?? ''; el.expires_on.value = c.expires_on || ''; el.once.checked = c.once; el.active.checked = c.active;
+  f.scrollIntoView({block: 'nearest', behavior: 'instant'});
+}
+async function adminCodes() {
+  const r = await sb.from('shop_codes').select('*').order('id', {ascending: false}).limit(500);
+  codeRows = r.data || [];
+  if (!codeEdit) codeForm();
+  const st = c => !c.active ? ['ปิดอยู่', 'r'] : c.expires_on && c.expires_on < today() ? ['หมดอายุ', 'r'] : c.max_uses && c.used >= c.max_uses ? ['ใช้ครบแล้ว', 'y'] : ['ใช้งาน', 'g'];
+  $('#codeList').innerHTML = r.error ? `<tr><td class="muted">${SETUP('supabase-codes.sql')}</td></tr>`
+    : '<tr><th>#</th><th class="l">โค้ด</th><th>ส่วนลด</th><th>ใช้ไป / จำกัด</th><th>ใช้ได้ถึง</th><th>สถานะ</th><th>จัดการ</th></tr>' + (codeRows.map(c => `
+    <tr data-cid="${c.id}"><td>${c.id}</td><td class="l"><b class="sel">${esc(c.code)}</b>${c.once ? '<small>คนละ 1 ครั้ง</small>' : ''}</td>
+      <td>${c.kind === 'percent' ? +c.value + '%' : baht(c.value)}</td><td>${c.used.toLocaleString('th-TH')} / ${c.max_uses?.toLocaleString('th-TH') ?? 'ไม่จำกัด'}</td>
+      <td>${c.expires_on ? thDate(c.expires_on) : 'ไม่หมดอายุ'}</td><td><span class="badge ${st(c)[1]}">${st(c)[0]}</span></td>
+      <td><div class="r"><button class="mini" type="button" data-act="edit">แก้ไข</button><button class="mini" type="button" data-act="del">ลบ</button></div></td></tr>`).join('') || `<tr><td colspan="7">${EMPTY}</td></tr>`);
+}
+$('#fCode').onsubmit = act(async e => {
+  const el = e.target.elements;
+  const row = {code: el.code.value.trim().toUpperCase(), kind: el.kind.value, value: +el.value.value, max_uses: +el.max_uses.value || null, expires_on: el.expires_on.value || null, once: el.once.checked, active: el.active.checked};
+  if (row.kind === 'percent' && row.value >= 100) throw new Error('ส่วนลดแบบ % ต้องน้อยกว่า 100');
+  const r = codeEdit ? await sb.from('shop_codes').update(row).eq('id', codeEdit) : await sb.from('shop_codes').insert(row);
+  if (r.error?.code === '23505') throw new Error(`มีโค้ด ${row.code} อยู่แล้ว`);
+  need(r, SETUP('supabase-codes.sql'));
+  toast('บันทึกโค้ดแล้ว'); codeForm(); await adminCodes();
+});
+$('#codeCancel').onclick = () => codeForm();
+$('#codeDelAll').onclick = act(async () => {
+  if (!codeRows.length || !confirm(`ลบโค้ดส่วนลดทั้งหมด ${codeRows.length} โค้ด?\nย้อนกลับไม่ได้ (ออเดอร์ที่เคยใช้โค้ดไปแล้วไม่ถูกแตะ)`)) return;
+  ok(await sb.from('shop_codes').delete().gt('id', 0));
+  toast('ลบโค้ดทั้งหมดแล้ว'); codeForm(); await adminCodes();
+});
+$('#codeList').onclick = act(async e => {
+  const b = e.target.closest('button[data-act]'); if (!b) return;
+  const c = codeRows.find(x => x.id === +b.closest('[data-cid]').dataset.cid);
+  if (b.dataset.act === 'edit') return codeForm(c);
+  if (!confirm(`ลบโค้ด ${c.code}?`)) return;
+  ok(await sb.from('shop_codes').delete().eq('id', c.id));
+  toast('ลบโค้ดแล้ว'); codeForm(); await adminCodes();
+});
+
+// ===== แอดมิน: สินค้า / แพ็กเกจ — ตารางรวมสินค้าทุกหมวด กดแก้ไขแล้วเปิดสินค้านั้นในโหมดแก้ไขหน้าเว็บ (ใช้แผงแก้ไขเดิม ไม่มีฟอร์มซ้ำ) =====
+function adminProducts() {
+  const q = $('#prodQ').value.trim().toLowerCase();
+  $('#prodSec').innerHTML = C.sections.map((s, si) => `<option value="${si}">เพิ่มในหมวด: ${esc(s.title) || '(หมวดใหม่)'}</option>`).join('');
+  $('#prodAdd').disabled = !C.sections.length;
+  $('#prodList').innerHTML = '<tr><th>#</th><th class="l">สินค้า</th><th class="l">หมวด</th><th>แพ็กเกจ</th><th>ราคา</th><th>สถานะ</th><th>จัดการ</th></tr>'
+    + (C.sections.flatMap((s, si) => s.items.map((p, pi) => ({s, p, path: `sections.${si}.items.${pi}`}))).filter(x => !q || `${x.p.n} ${x.s.title}`.toLowerCase().includes(q)).map((x, i) => {
+      const prices = x.p.packages.map(k => +k.price).filter(v => v > 0), lo = Math.min(...prices), hi = Math.max(...prices);
+      return `<tr data-path="${x.path}"><td>${i + 1}</td><td class="l">${x.p.img ? `<img src="${esc(x.p.img)}" alt="" loading="lazy">` : ''}<b>${esc(x.p.n) || '(ยังไม่มีชื่อ)'}</b></td><td class="l">${esc(x.s.title)}</td>
+        <td>${x.p.packages.length} รายการ</td><td>${!prices.length ? '-' : lo === hi ? baht(lo) : `${baht(lo)} – ${baht(hi)}`}</td>
+        <td><span class="badge ${x.p.closed ? 'r' : 'g'}">${x.p.closed ? 'ปิดการขาย' : 'เปิดการขาย'}</span></td>
+        <td><div class="r"><button class="mini" type="button" data-act="edit">แก้ไขสินค้า / แพ็กเกจ</button></div></td></tr>`; }).join('') || `<tr><td colspan="7">${EMPTY}</td></tr>`);
+}
+$('#prodQ').addEventListener('input', adminProducts);
+async function editProduct(path) {  // ไม่ส่ง path = เพิ่มสินค้าใหม่ในหมวดที่เลือก
+  await startEdit(); if (!editing) return;
+  if (!path) { const si = +$('#prodSec').value, arr = draft.sections[si].items; arr.push(structuredClone(BLANK.items)); path = `sections.${si}.items.${arr.length - 1}`; }
+  openDrawer(path, 0);
+}
+$('#a-products').addEventListener('click', e => {
+  const b = e.target.closest('button[data-act], #prodAdd');
+  if (b) editProduct(b.id === 'prodAdd' ? '' : b.closest('[data-path]').dataset.path).catch(fail);
+});
+
 async function showTab(t) {
   $('#view-admin').dataset.tab = t;
   $$('#aTabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === t));
   $$('.apane').forEach(p => p.hidden = p.id !== 'a-' + t);
-  await ({stats: adminStats, topups: adminTopups, orders: adminOrders, members: adminMembers, subs: adminSubs})[t]();
+  await ({stats: adminStats, topups: adminTopups, orders: adminOrders, members: adminMembers, subs: adminSubs, products: adminProducts, codes: adminCodes, pay: adminPay})[t]();
 }
 $('#aTabs').onclick = act(async e => { const t = e.target.closest('button')?.dataset.tab; if (t) await showTab(t); });
 const loadAdmin = () => showTab($('#view-admin').dataset.tab || 'stats');
